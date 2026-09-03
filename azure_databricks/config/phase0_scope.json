@@ -1,0 +1,47 @@
+{
+  "azure": {
+    "default_new_resource_region": "westus",
+    "resource_group": "Databricks",
+    "resource_group_location": "eastus"
+  },
+  "cost_policy": {
+    "allow_paid_resource_creation": false,
+    "azure_budget_amount_usd": null,
+    "azure_budget_notification_recipient_committed": false,
+    "budget_gate": "BLOCKED_PENDING_OWNER_THRESHOLD_AND_RECIPIENT",
+    "free_sku_must_not_fallback_to_paid": true
+  },
+  "data": {
+    "classification": "synthetic_data",
+    "production_data_allowed": false
+  },
+  "databricks": {
+    "catalog": "intellify_databricks_demo",
+    "model_assets_root": "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1",
+    "transfer_landing_root": "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1",
+    "workspace_host": "https://adb-7405618180989330.10.azuredatabricks.net",
+    "workspace_name": "intellify-databricks-demo",
+    "workspace_region": "westus"
+  },
+  "fingerprints": {
+    "resource_group_id": "ee1324cb0d1b0da7f79793920baeffd2789f06898df71ad91bc4dc6e15287e1c",
+    "subscription": "abbac062fec075143b421090466e4ca3164b706288e5226ec80eab5a660a3198",
+    "tenant": "0e6ba1a9be18e7f8aa8e4b32ad33977a5acbb56d124564c652d4e591e1ba4d88",
+    "workspace_arm_id": "b0ce410ef4a0a1d64b8e02ddd6473919f2c93f39b7b116fc5f3be3d1abedac12",
+    "workspace_id": "fd16be8323389de2c04a63069229d6fb8b12be8c69e7f3861568ec7c92f9ab8e"
+  },
+  "policy_version": "azure_phase0_scope_v1",
+  "release": {
+    "policy_version": "adaptive_router_v1",
+    "production_approved": false,
+    "release_id": "retail_hyper_personalization_demo_v1"
+  },
+  "required_tags": {
+    "auto-stop": "true",
+    "cost-profile": "low",
+    "environment": "poc",
+    "managed-by": "codex",
+    "project": "retail-hyper-personalization",
+    "workspace": "intellify-databricks-demo"
+  }
+}

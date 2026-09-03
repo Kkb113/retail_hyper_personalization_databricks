@@ -1,0 +1,16 @@
+{
+  "release_version": "retail_hyper_personalization_demo_v1",
+  "artifacts": {
+    "recommendation_snapshot.parquet": {
+      "sha256": "ca7316d98773f42288b180bac619a31f913e82569362e6595e390e0330b2c4b8",
+      "row_count": 15930,
+      "customer_count": 1593,
+      "canonical_sha256": "eca8b4260dca0243efc05d66796f9ee53d1979a8fba50ca34159526e137ad29b"
+    },
+    "routing_policy.json": {
+      "path": "artifacts/adaptive_router_v1/routing_policy.json",
+      "sha256": "dfc641e77544dd16421a3b47df3996ce6cd602235b1ca8041e5012eff3bee2ae"
+    }
+  },
+  "generated_at_utc": "2026-07-22T16:37:04.166860+00:00"
+}

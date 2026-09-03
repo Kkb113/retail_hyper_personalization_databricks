@@ -1,0 +1,50 @@
+{
+  "budget": {
+    "amount_usd": null,
+    "currency": "USD",
+    "notification_recipient_committed": false,
+    "state": "BLOCKED_PENDING_OWNER_THRESHOLD_AND_RECIPIENT"
+  },
+  "cost_policy_version": "azure_phase0_cost_guardrails_v1",
+  "default_optional_features": {
+    "azure_ai_search_free": false,
+    "continuous_data_quality_monitoring": false,
+    "continuous_jobs": false,
+    "databricks_ai_search": false,
+    "detailed_inference_payload_logging": false,
+    "genie": false,
+    "lakebase": false
+  },
+  "hard_limits": {
+    "all_purpose_clusters": 0,
+    "app_compute_size": "MEDIUM",
+    "app_count": 1,
+    "app_stopped_outside_demo": true,
+    "gpu_endpoints": 0,
+    "lakebase_high_availability": false,
+    "lakebase_max_compute_units": 1,
+    "lakebase_read_replicas": 0,
+    "model_endpoint_count": 1,
+    "model_endpoint_scale_to_zero": true,
+    "model_endpoint_workload_size": "Small",
+    "provisioned_foundation_model_throughput": false,
+    "scheduled_jobs_enabled_at_deploy": false,
+    "sql_warehouse_auto_stop_minutes": 1,
+    "sql_warehouse_count": 1,
+    "sql_warehouse_max_clusters": 1,
+    "vector_search_endpoints": 0
+  },
+  "phase_0": {
+    "cloud_mutations_allowed": false,
+    "incremental_cost_usd": 0,
+    "paid_resource_creation_allowed": false
+  },
+  "principles": [
+    "reuse_existing_before_create",
+    "free_sku_before_paid",
+    "never_fallback_from_free_to_paid",
+    "scale_to_zero_or_auto_stop",
+    "triggered_not_continuous",
+    "record_observed_usage_after_each_demo"
+  ]
+}

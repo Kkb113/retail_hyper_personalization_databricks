@@ -1,0 +1,38 @@
+name: Azure Databricks Phase 0 CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase0-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  phase0-safety:
+    name: phase0-safety
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install locked test dependencies
+        run: python -m pip install -r requirements-dev.lock
+      - name: Rebuild sanitized Phase 0 evidence
+        run: python azure_databricks/scripts/build_phase0.py
+      - name: Lint Azure implementation
+        run: ruff check azure_databricks/scripts tests/azure_databricks
+      - name: Run Phase 0 safety and integrity tests
+        run: pytest tests/azure_databricks -q
+      - name: Scan committed source for credentials
+        run: python azure_databricks/scripts/scan_repository_secrets.py

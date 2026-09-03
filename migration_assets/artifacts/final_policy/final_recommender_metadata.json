@@ -1,0 +1,75 @@
+{
+  "project_version": "LOCAL_POC_V1",
+  "random_seed": 20260714,
+  "selected_policy": "preferred_category_all_known",
+  "routing_rules": {
+    "Known": "preferred_category",
+    "LowHistory": "preferred_category",
+    "ColdStart": "cold_start_fallback",
+    "Inactive": "no_recommendations"
+  },
+  "thresholds": {},
+  "als_artifact": "artifacts/als/best_als_model.npz",
+  "xgboost_artifact": "artifacts/ranker/best_xgboost_ranker.json",
+  "preprocessor": "artifacts/ranker/ranker_preprocessor.joblib",
+  "feature_columns": "artifacts/ranker/ranker_feature_columns.json",
+  "baseline_artifacts": [
+    "reports/recommendations/test_selected_baseline_recommendations.parquet"
+  ],
+  "default_as_of_date": "2025-12-31",
+  "business_rules": {
+    "require_active_product": true,
+    "require_active_brand": true,
+    "require_available_inventory": true,
+    "exclude_duplicate_products": true,
+    "exclude_recent_durable_purchase": true,
+    "recent_durable_purchase_days": 180
+  },
+  "validation_metrics": {
+    "PolicyName": "preferred_category_all_known",
+    "PolicyComplexity": 1,
+    "Thresholds": "{}",
+    "EvaluationScope": "Overall",
+    "EligibleCustomers": 1249,
+    "CustomersWithRecommendations": 1249,
+    "PrecisionAt10": 0.035308246597277826,
+    "RecallAt10": 0.16058955702738842,
+    "HitRateAt10": 0.3026421136909528,
+    "NDCGAt10": 0.1211968158042569,
+    "PurchaseHitRateAt10": 0.1200960768614892,
+    "PurchaseRecallAt10": 0.043482291530141576,
+    "CustomerCoverage": 1.0,
+    "ProductCoverage": 0.325771662328003,
+    "DistinctRecommendedProducts": 876,
+    "Personalization": 0.9856721428459208,
+    "AverageDistinctCategories": 1.4155324259407527,
+    "AverageDistinctBrands": 8.485988791032826,
+    "InventoryValidRate": 1.0
+  },
+  "frozen_test_metrics": {
+    "PolicyName": "preferred_category_all_known",
+    "EvaluationScope": "Overall",
+    "EligibleCustomers": 832,
+    "CustomersWithRecommendations": 832,
+    "PrecisionAt10": 0.03076923076923077,
+    "RecallAt10": 0.14962034493284493,
+    "HitRateAt10": 0.2824519230769231,
+    "NDCGAt10": 0.10668675595035347,
+    "PurchaseHitRateAt10": 0.13341346153846154,
+    "PurchaseRecallAt10": 0.051516297711949884,
+    "CustomerCoverage": 1.0,
+    "ProductCoverage": 0.32725920416511717,
+    "DistinctRecommendedProducts": 880,
+    "Personalization": 0.9862536206776266,
+    "AverageDistinctCategories": 1.3930288461538463,
+    "AverageDistinctBrands": 8.420673076923077,
+    "InventoryValidRate": 1.0
+  },
+  "cold_start_fallback": "regional -> segment -> preferred category -> global fallback",
+  "known_limitations": [
+    "Synthetic data",
+    "Inventory snapshot proxy",
+    "Sparse complementary candidates",
+    "Imbalanced purchases"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "policy_version": "adaptive_router_v1",
+  "rules": {
+    "warm_model_failure": [
+      "cold_start_hybrid",
+      "preferred_category",
+      "regional_popularity",
+      "global_popularity"
+    ],
+    "cold_model_failure": [
+      "preferred_category",
+      "regional_popularity",
+      "segment_popularity",
+      "global_popularity"
+    ],
+    "missing_profile": [
+      "session_intent",
+      "global_popularity"
+    ],
+    "empty_candidate_pool": [
+      "global_popularity"
+    ],
+    "unavailable_inventory": [
+      "filter_and_refill",
+      "global_popularity"
+    ]
+  },
+  "controls": [
+    "Filter inactive and unavailable products before ranking",
+    "Exclude recent durable purchases before assigning final ranks",
+    "Deduplicate products before assigning final rank",
+    "Record fallback reason on every affected recommendation",
+    "Never replace an empty list with an unvalidated or unavailable product"
+  ]
+}

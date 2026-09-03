@@ -1,0 +1,67 @@
+{
+  "baseline_version": "azure_phase0_local_baseline_v1",
+  "captured_at": "2026-09-03T11:14:15Z",
+  "package_versions": {
+    "joblib": "1.5.3",
+    "numpy": "2.5.1",
+    "pandas": "3.0.3",
+    "pyarrow": "24.0.0",
+    "scikit-learn": "1.9.0",
+    "xgboost": "3.3.0"
+  },
+  "python_version": "3.12.13",
+  "release": {
+    "blocking_reasons": [
+      "Future holdout data package is incomplete",
+      "Future holdout access approval is missing",
+      "One-time future holdout evaluation has not completed",
+      "Required owner approvals are incomplete"
+    ],
+    "decision": "HOLD_PENDING_FUTURE_HOLDOUT",
+    "release_approved": false,
+    "synthetic_data_warning": "Results are not proof of live commercial uplift"
+  },
+  "repository": {
+    "target_azure_subtree_initially_present": true,
+    "tracked_artifact_file_count": 26,
+    "tracked_data_file_count": 19,
+    "tracked_file_count": 78
+  },
+  "review_findings": {
+    "legacy_catalog_hardcoding_present": true,
+    "legacy_free_edition_assumptions_present": true,
+    "legacy_model_training_notebook_is_snapshot_wrapper": true,
+    "legacy_personal_identity_config_present": true,
+    "legacy_vector_search_enabled_by_default": true,
+    "new_functional_mlflow_package_required": true
+  },
+  "scope": {
+    "catalog": "intellify_databricks_demo",
+    "resource_group": "Databricks",
+    "workspace": "intellify-databricks-demo"
+  },
+  "selected_candidate": "adaptive_router_v1",
+  "selected_validation_metrics": {
+    "CustomerCoverage": 1.0,
+    "EligibleCustomers": 1593,
+    "HitRateAt10": 0.4438166980539862,
+    "NDCGAt10": 0.1768528204702373,
+    "ProductCoverage": 0.4228337671997025,
+    "PurchaseHitRateAt10": 0.12115505335844319,
+    "RecallAt10": 0.2471537897023363
+  },
+  "source_branch": "main",
+  "source_commit": "2341c7c631fbefa28d6861bc23eeaa24ac3c9c59",
+  "transfer": {
+    "cross_role_overlap_count": 1,
+    "data_file_count": 20,
+    "declared_data_rows": 275630,
+    "hash_mismatch_count": 0,
+    "missing_file_count": 0,
+    "model_file_count": 26,
+    "observed_data_rows": 275630,
+    "row_mismatch_count": 0,
+    "total_unique_bytes": 12733215,
+    "unique_file_count": 45
+  }
+}

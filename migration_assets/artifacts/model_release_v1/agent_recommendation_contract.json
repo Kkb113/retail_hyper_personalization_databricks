@@ -1,0 +1,40 @@
+{
+  "contract_version": "agent_recommendation_contract_v1",
+  "release_version": "retail_hyper_personalization_demo_v1",
+  "policy_version": "adaptive_router_v1",
+  "supported_demo_mode": "frozen_snapshot",
+  "request": {
+    "required": [
+      "customer_id"
+    ],
+    "optional": [
+      "top_n",
+      "temporary_profile",
+      "location_override",
+      "session_context"
+    ],
+    "maximum_top_n": 10
+  },
+  "response_fields": [
+    "customer_id",
+    "product_id",
+    "rank",
+    "recommendation_score",
+    "model_route",
+    "policy_version",
+    "profile_version",
+    "decision_time",
+    "routing_reason",
+    "fallback_reason",
+    "explanation",
+    "limitations"
+  ],
+  "agent_rule": "The agent explains frozen outputs; deterministic services retrieve and filter recommendations.",
+  "unsupported_until_agent_service": [
+    "Live inventory reservation",
+    "Autonomous purchase",
+    "Causal uplift claims",
+    "Production use",
+    "Recommendations outside the frozen demo population"
+  ]
+}

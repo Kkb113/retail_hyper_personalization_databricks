@@ -1,0 +1,27 @@
+{
+  "captured_at": "2026-09-03T10:44:39Z",
+  "cloud_mutations_performed": false,
+  "inventory_version": "azure_phase0_resource_inventory_v1",
+  "items": [
+    {
+      "id_fingerprint": "ee1324cb0d1b0da7f79793920baeffd2789f06898df71ad91bc4dc6e15287e1c",
+      "kind": "azure_resource_group",
+      "lifecycle": "existing_retain",
+      "location": "eastus",
+      "name": "Databricks"
+    },
+    {
+      "id_fingerprint": "b0ce410ef4a0a1d64b8e02ddd6473919f2c93f39b7b116fc5f3be3d1abedac12",
+      "kind": "azure_databricks_workspace",
+      "lifecycle": "existing_retain",
+      "location": "westus",
+      "name": "intellify-databricks-demo",
+      "sku": "premium"
+    }
+  ],
+  "new_resources_created_in_phase_0": 0,
+  "scope": {
+    "resource_group": "Databricks",
+    "workspace": "intellify-databricks-demo"
+  }
+}

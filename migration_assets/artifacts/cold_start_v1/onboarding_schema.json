@@ -1,0 +1,45 @@
+{
+  "all_fields_optional": true,
+  "questions": [
+    {
+      "field": "goal",
+      "why": "Clarifies the immediate shopping need",
+      "allowed_values": [
+        "Explore products",
+        "Find essentials",
+        "Find a gift",
+        "Save money",
+        "Discover new items"
+      ]
+    },
+    {
+      "field": "category_interests",
+      "why": "Provides the strongest early preference signal",
+      "maximum_answers": 5
+    },
+    {
+      "field": "brand_interests",
+      "why": "Improves brand matching when voluntarily provided",
+      "maximum_answers": 5
+    },
+    {
+      "field": "budget_minimum",
+      "why": "Avoids products below the desired range"
+    },
+    {
+      "field": "budget_maximum",
+      "why": "Avoids products above the desired range"
+    },
+    {
+      "field": "excluded_categories",
+      "why": "Respects products the customer does not want"
+    }
+  ],
+  "prohibited_fields": [
+    "name",
+    "email",
+    "phone",
+    "street_address",
+    "precise_location"
+  ]
+}

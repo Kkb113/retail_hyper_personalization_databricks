@@ -1,0 +1,26 @@
+{
+  "ranker_version": "warm_low_history_ranker_v2",
+  "selected_design": "shared_model",
+  "selected_run": "lambda_early_02",
+  "feature_cutoff_rule": "All event features use timestamps strictly before ServedTime",
+  "query_group": "One recommendation batch per customer and serving time",
+  "required_candidate_fields": [
+    "CustomerID",
+    "ProductID",
+    "CandidateRank",
+    "PreRankScore",
+    "CandidateSources",
+    "RetrievalCohort"
+  ],
+  "score_calibration": "Within-customer percentile rank",
+  "blend_weight": 0.1,
+  "routing": "Shared model",
+  "output_fields": [
+    "CustomerID",
+    "ProductID",
+    "Rank",
+    "RankerScore",
+    "NormalizedRankerScore",
+    "FinalScore"
+  ]
+}

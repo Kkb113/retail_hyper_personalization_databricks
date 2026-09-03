@@ -1,0 +1,248 @@
+{
+  "contract_version": "azure_source_asset_inventory_v1",
+  "application_name": "Retail Hyper-Personalization Assistant",
+  "audit_scope": "Approved synthetic data inputs retained only for migration into the Azure Databricks POC.",
+  "bootstrap_source": {
+    "type": "parquet_and_json_snapshot",
+    "root": "migration_assets",
+    "one_time_load_target": "Unity Catalog managed tables and volumes",
+    "runtime_source_of_truth": "Unity Catalog after Phase 2 ingestion",
+    "databricks_runtime_dependency": true
+  },
+  "integrity_contract": {
+    "algorithm": "sha256-path-digest-v1",
+    "description": "SHA256 is calculated for every unique data and model path, formatted as path:sha256, sorted by path, joined with a trailing newline, and hashed again.",
+    "expected_data_asset_count": 20,
+    "transfer_manifest_path": "azure_databricks/contracts/transfer_manifest.json",
+    "required_release_paths": [
+      "migration_assets/artifacts/model_release_v1/recommendation_snapshot.parquet",
+      "migration_assets/artifacts/adaptive_router_v1/routing_policy.json"
+    ]
+  },
+  "data_assets": [
+    {
+      "name": "customers",
+      "path": "data_cache/base/customers.parquet",
+      "domain": "customer",
+      "purpose": "Core customer profile, segment, loyalty, channel and status.",
+      "expected_rows": 5000,
+      "required_columns": ["CustomerID", "RegionID", "LoyaltyTier", "CreatedDate", "CustomerSegment", "PreferredChannel", "CustomerStatus"],
+      "capabilities": ["customer_360", "existing_customer_routing", "new_customer_context"]
+    },
+    {
+      "name": "customer_preferences",
+      "path": "data_cache/base/customer_preferences.parquet",
+      "domain": "customer",
+      "purpose": "Explicit category, brand, price and colour preferences with affinity scores.",
+      "expected_rows": 5000,
+      "required_columns": ["CustomerID", "FavoriteCategoryID", "FavoriteBrandID", "PriceSensitivity", "ColorPreference", "CategoryAffinityScore", "BrandAffinityScore"],
+      "capabilities": ["personalized_recommendations", "recommendation_explanations", "new_customer_context"]
+    },
+    {
+      "name": "customer_product_audit",
+      "path": "data_cache/base/customer_product_audit.parquet",
+      "domain": "behaviour",
+      "purpose": "Customer-product event counts and recency summary.",
+      "expected_rows": 56610,
+      "required_columns": ["CustomerID", "ProductID", "TotalEventCount", "DistinctEventTypes", "FirstInteractionDate", "LastInteractionDate", "BrowseCount", "CartAddCount", "PurchaseCount", "RatingCount", "SearchClickCount", "WishlistCount"],
+      "capabilities": ["long_term_affinity", "recent_intent", "cross_sell_context"]
+    },
+    {
+      "name": "browsing_events",
+      "path": "data_cache/base/browsing_events.parquet",
+      "domain": "session_behaviour",
+      "purpose": "Product browsing sessions, duration, channel and device.",
+      "expected_rows": 45000,
+      "required_columns": ["EventID", "SessionID", "CustomerID", "ProductID", "EventTime", "DurationSec", "Channel", "DeviceType"],
+      "capabilities": ["session_context", "recent_intent", "channel_context"]
+    },
+    {
+      "name": "search_events",
+      "path": "data_cache/base/search_events.parquet",
+      "domain": "session_behaviour",
+      "purpose": "Search intent, clicked product, result count, channel and device.",
+      "expected_rows": 12000,
+      "required_columns": ["SearchID", "SessionID", "CustomerID", "Keyword", "EventTime", "ClickedProductID", "ResultCount", "Channel", "DeviceType"],
+      "capabilities": ["session_intent", "recent_intent", "search_explanation"]
+    },
+    {
+      "name": "cart_events",
+      "path": "data_cache/base/cart_events.parquet",
+      "domain": "session_behaviour",
+      "purpose": "Cart additions and removals with quantity, price, channel and device.",
+      "expected_rows": 12000,
+      "required_columns": ["CartEventID", "SessionID", "CustomerID", "ProductID", "Action", "EventTime", "Quantity", "UnitPrice", "Channel", "DeviceType"],
+      "capabilities": ["high_intent", "session_context", "notification_opportunities"]
+    },
+    {
+      "name": "wishlist",
+      "path": "data_cache/base/wishlist.parquet",
+      "domain": "behaviour",
+      "purpose": "Wishlist additions, active status and removals.",
+      "expected_rows": 5000,
+      "required_columns": ["WishlistID", "CustomerID", "ProductID", "AddedDate", "WishlistStatus", "RemovedDate"],
+      "capabilities": ["long_term_affinity", "high_intent", "notification_opportunities"]
+    },
+    {
+      "name": "sales_orders",
+      "path": "data_cache/base/sales_orders.parquet",
+      "domain": "purchase_history",
+      "purpose": "Order-level purchase history and commercial values.",
+      "expected_rows": 12000,
+      "required_columns": ["OrderID", "CustomerID", "StoreID", "OrderChannel", "OrderDate", "OrderStatus", "GrossAmount", "DiscountAmount", "NetAmount"],
+      "capabilities": ["purchase_history", "customer_value_context", "recommendation_evaluation"]
+    },
+    {
+      "name": "sales_order_lines",
+      "path": "data_cache/base/sales_order_lines.parquet",
+      "domain": "purchase_history",
+      "purpose": "Product-level purchase history and promotion linkage.",
+      "expected_rows": 30000,
+      "required_columns": ["OrderLineID", "OrderID", "ProductID", "Qty", "UnitPrice", "DiscountAmount", "PromotionID", "LineAmount"],
+      "capabilities": ["product_affinity", "cross_sell_context", "recommendation_evaluation"]
+    },
+    {
+      "name": "products",
+      "path": "data_cache/base/products.parquet",
+      "domain": "product",
+      "purpose": "Product catalogue attributes and active status.",
+      "expected_rows": 3000,
+      "required_columns": ["ProductID", "SKU", "ProductName", "CategoryID", "BrandID", "BasePrice", "CostPrice", "MarginPct", "Season", "Color", "Size", "ActiveFlag"],
+      "capabilities": ["product_cards", "candidate_filtering", "recommendation_explanations"]
+    },
+    {
+      "name": "product_categories",
+      "path": "data_cache/base/product_categories.parquet",
+      "domain": "product",
+      "purpose": "Business category and department names.",
+      "expected_rows": 80,
+      "required_columns": ["CategoryID", "ParentCategoryID", "CategoryName", "CategoryLevel", "DepartmentName"],
+      "capabilities": ["business_language", "category_opportunities", "product_cards"]
+    },
+    {
+      "name": "brands",
+      "path": "data_cache/base/brands.parquet",
+      "domain": "product",
+      "purpose": "Brand names, tiers and active status.",
+      "expected_rows": 150,
+      "required_columns": ["BrandID", "BrandName", "BrandTier", "ActiveFlag"],
+      "capabilities": ["product_cards", "brand_explanations", "brand_opportunities"]
+    },
+    {
+      "name": "inventory",
+      "path": "data_cache/base/inventory.parquet",
+      "domain": "commercial_context",
+      "purpose": "Inventory snapshot and availability eligibility.",
+      "expected_rows": 15000,
+      "required_columns": ["InventoryID", "StoreID", "ProductID", "SnapshotDate", "AvailableQty", "StockStatus"],
+      "capabilities": ["inventory_validation", "product_cards", "availability_notifications"]
+    },
+    {
+      "name": "promotions",
+      "path": "data_cache/base/promotions.parquet",
+      "domain": "commercial_context",
+      "purpose": "Promotion name, discount, season and active period.",
+      "expected_rows": 200,
+      "required_columns": ["PromotionID", "PromotionName", "CategoryID", "DiscountPct", "Season", "StartDate", "EndDate", "ActiveFlag"],
+      "capabilities": ["promotion_context", "product_cards", "commercial_opportunities"]
+    },
+    {
+      "name": "regions",
+      "path": "data_cache/base/regions.parquet",
+      "domain": "context",
+      "purpose": "Business region, state, climate and timezone mapping.",
+      "expected_rows": 10,
+      "required_columns": ["RegionID", "RegionName", "State", "ClimateZone", "TimeZone"],
+      "capabilities": ["regional_personalization", "business_language", "scenario_simulation"]
+    },
+    {
+      "name": "weather",
+      "path": "data_cache/base/weather.parquet",
+      "domain": "context",
+      "purpose": "Synthetic historical weather by region and date.",
+      "expected_rows": 3650,
+      "required_columns": ["WeatherID", "RegionID", "Date", "TemperatureF", "Condition", "PrecipitationIn", "SnowfallIn", "HumidityPct"],
+      "capabilities": ["seasonal_context", "weather_context"]
+    },
+    {
+      "name": "recommendation_log",
+      "path": "data_cache/base/recommendation_log.parquet",
+      "domain": "recommendation_history",
+      "purpose": "Previously served recommendation events and serving context.",
+      "expected_rows": 25000,
+      "required_columns": ["RecommendationID", "RecommendationBatchID", "CustomerID", "ProductID", "Score", "ServedTime", "SessionID", "Channel", "RankPosition", "RecommendationStrategy", "ModelVersion", "InventoryAvailable", "PromotionID"],
+      "capabilities": ["recommendation_history", "response_analysis", "session_context"]
+    },
+    {
+      "name": "recommendation_response",
+      "path": "data_cache/base/recommendation_response.parquet",
+      "domain": "recommendation_history",
+      "purpose": "Click, cart and purchase outcomes for served recommendations.",
+      "expected_rows": 25000,
+      "required_columns": ["ResponseID", "RecommendationID", "Clicked", "AddedToCart", "Purchased", "ResponseTime", "OrderID"],
+      "capabilities": ["recommendation_metrics", "feedback_readiness", "outcome_analysis"]
+    },
+    {
+      "name": "customer_profile_history",
+      "path": "data_cache/profiles/customer_profile_history.parquet",
+      "domain": "customer",
+      "purpose": "Point-in-time profile contract and freshness/consent metadata.",
+      "expected_rows": 5000,
+      "required_columns": ["CustomerID", "ProfileVersion", "EffectiveFrom", "RegionID", "CustomerSegment", "PreferredChannel", "FavoriteCategoryID", "FavoriteBrandID", "PriceSensitivity", "RegionName", "State", "ClimateZone", "FreshnessStatus", "TemporalQuality", "ConsentStatus", "ModelUseStatus"],
+      "capabilities": ["customer_360", "profile_freshness", "governed_personalization"]
+    },
+    {
+      "name": "recommendation_snapshot",
+      "path": "artifacts/model_release_v1/recommendation_snapshot.parquet",
+      "domain": "model_output",
+      "purpose": "Frozen ranked recommendations and routing evidence for the independent application.",
+      "expected_rows": 15930,
+      "expected_customer_count": 1593,
+      "required_columns": ["CustomerID", "ProductID", "RecommendationScore", "ExpertSources", "Rank", "FallbackReason", "HistoryBand", "Route", "RoutingReason", "BehavioralConfidence", "MetadataConfidence", "ProfileVersion", "EventCount", "EventDiversity", "DaysSinceLastEvent", "PurchaseCount", "DecisionTime", "PolicyVersion", "ModelRoute", "InventoryValid"],
+      "capabilities": ["current_recommendations", "recommendation_explanations", "customer_routing", "app_demo"]
+    }
+  ],
+  "model_artifacts": [
+    {
+      "name": "adaptive_router_v1",
+      "paths": ["artifacts/adaptive_router_v1/routing_policy.json", "artifacts/adaptive_router_v1/routing_contract.json", "artifacts/adaptive_router_v1/fallback_matrix.json"],
+      "purpose": "Selects the appropriate recommendation approach by history and context."
+    },
+    {
+      "name": "hybrid_retrieval_v2",
+      "paths": ["artifacts/retrieval_v2/retrieval_metadata.json", "artifacts/retrieval_v2/als_factors.npz", "artifacts/retrieval_v2/content_matrix.npz", "artifacts/retrieval_v2/content_neighbor_model.joblib", "artifacts/retrieval_v2/metadata_factor_model.joblib"],
+      "purpose": "Retrieves collaborative, content and metadata candidates."
+    },
+    {
+      "name": "warm_low_history_ranker_v2",
+      "paths": ["artifacts/ranker_v2/known_ranker.json", "artifacts/ranker_v2/lowhistory_ranker.json", "artifacts/ranker_v2/shared_ranker.json", "artifacts/ranker_v2/ranker_preprocessor.joblib", "artifacts/ranker_v2/inference_contract.json"],
+      "purpose": "Ranks known and low-history candidates using point-in-time features."
+    },
+    {
+      "name": "cold_start_ranker_v1",
+      "paths": ["artifacts/cold_start_v1/cold_start_ranker.json", "artifacts/cold_start_v1/cold_start_preprocessor.joblib", "artifacts/cold_start_v1/inference_reference.joblib", "artifacts/cold_start_v1/no_purchase_api_contract.json", "artifacts/cold_start_v1/onboarding_schema.json"],
+      "purpose": "Recommends without a known customer ID or purchase history."
+    },
+    {
+      "name": "frozen_release",
+      "paths": ["artifacts/model_release_v1/release_manifest.json", "artifacts/model_release_v1/model_selection.json", "artifacts/model_release_v1/agent_recommendation_contract.json", "artifacts/final_policy/final_policy.json", "artifacts/final_policy/final_recommender_metadata.json"],
+      "purpose": "Pins the release, policy, metrics, model lineage and serving boundary."
+    }
+  ],
+  "existing_contracts": [
+    "agent/contracts/recommendation_service_contract.json",
+    "agent/contracts/recommendation_response.schema.json",
+    "agent/contracts/explanation_schema.json",
+    "agent/contracts/reason_code_dictionary.json",
+    "agent/contracts/tool_catalogue.json",
+    "agent/contracts/scenario_comparison_schema.json",
+    "agent/contracts/notification_schema.json"
+  ],
+  "known_limitations": [
+    "Weather is a synthetic historical context table; current live weather is not available.",
+    "Inventory is a snapshot proxy, not a live inventory feed.",
+    "The frozen recommendation snapshot covers 1,593 customers; new-customer inference requires the cold-start model package.",
+    "A contextual signal must not be described as influential unless it is returned in the evidence payload.",
+    "The application must not claim causal effects, purchase probability or revenue uplift from offline metrics."
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "release_version": "retail_hyper_personalization_demo_v1",
+  "selected_policy_version": "adaptive_router_v1",
+  "selection_population": "chronological validation customers",
+  "selection_metric": "NDCGAt10",
+  "selected_metrics": {
+    "EligibleCustomers": 1593,
+    "CustomersWithRecommendations": 1593,
+    "PrecisionAt10": 0.0578782172002511,
+    "RecallAt10": 0.2471537897023363,
+    "HitRateAt10": 0.4438166980539862,
+    "NDCGAt10": 0.1768528204702373,
+    "PurchaseHitRateAt10": 0.12115505335844319,
+    "PurchaseRecallAt10": 0.047343061137788064,
+    "CustomerCoverage": 1.0,
+    "ProductCoverage": 0.4228337671997025,
+    "DistinctRecommendedProducts": 1137
+  },
+  "strongest_comparable_routing_baseline": {
+    "name": "hard_history_router",
+    "EligibleCustomers": 1593,
+    "CustomersWithRecommendations": 1593,
+    "PrecisionAt10": 0.056748273697426244,
+    "RecallAt10": 0.24183712652314956,
+    "HitRateAt10": 0.4325172630257376,
+    "NDCGAt10": 0.17336297182909677,
+    "PurchaseHitRateAt10": 0.11927181418706842,
+    "PurchaseRecallAt10": 0.04680499280310956,
+    "CustomerCoverage": 1.0,
+    "ProductCoverage": 0.44179992562290815,
+    "DistinctRecommendedProducts": 1188
+  },
+  "relative_ndcg_lift": 0.020130300053813333,
+  "paired_significance": {
+    "NDCGAt10": {
+      "MeanDifference": 0.00348984864114054,
+      "ConfidenceLower": 0.00019859536423998022,
+      "ConfidenceUpper": 0.006862432312871994,
+      "PValue": 0.043195680431956804,
+      "StatisticallySignificant": true,
+      "CustomerCount": 1593
+    },
+    "HitRateAt10": {
+      "MeanDifference": 0.011299435028248588,
+      "ConfidenceLower": 0.0018832391713747645,
+      "ConfidenceUpper": 0.02071563088512241,
+      "PValue": 0.021097890210978902,
+      "StatisticallySignificant": true,
+      "CustomerCount": 1593
+    }
+  },
+  "selected_components": {
+    "retrieval": "hybrid_retrieval_v2",
+    "collaborative_filtering": "implicit_als_v2",
+    "warm_ranker": "lambda_mart_ranker_v2",
+    "new_customer_model": "cold_start_ranker_v1",
+    "router": "adaptive_router_v1"
+  },
+  "selection_reason": "Adaptive routing produced statistically supported NDCG@10 and Hit Rate@10 improvements over hard history routing while retaining complete customer and inventory coverage.",
+  "production_holdout_status": "HOLD_PENDING_FUTURE_HOLDOUT",
+  "generated_at_utc": "2026-07-22T16:37:04.166860+00:00"
+}

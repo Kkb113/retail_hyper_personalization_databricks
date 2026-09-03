@@ -1,0 +1,20 @@
+{
+  "required_output_fields": [
+    "CustomerID",
+    "ProductID",
+    "Rank",
+    "RecommendationScore",
+    "ModelRoute",
+    "ColdWeight",
+    "WarmWeight",
+    "BehavioralConfidence",
+    "MetadataConfidence",
+    "ProfileVersion",
+    "RoutingReason",
+    "FallbackReason",
+    "PolicyVersion",
+    "DecisionTime"
+  ],
+  "profile_change_behavior": "Recompute features, adjust expert weights for 30 days, record the reason, and preserve portable preferences after location changes.",
+  "identity_is_not_a_predictive_feature": true
+}

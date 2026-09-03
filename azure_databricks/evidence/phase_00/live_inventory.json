@@ -1,0 +1,151 @@
+{
+  "azure": {
+    "budgets": {
+      "count": 0,
+      "error_type": null,
+      "items": [],
+      "notification_recipients_committed": false,
+      "query_status": "available"
+    },
+    "resource_count": 1,
+    "resource_group": {
+      "location": "eastus",
+      "name": "Databricks",
+      "provisioning_state": "Succeeded",
+      "resource_id_fingerprint": "ee1324cb0d1b0da7f79793920baeffd2789f06898df71ad91bc4dc6e15287e1c"
+    },
+    "resources": [
+      {
+        "location": "westus",
+        "name": "intellify-databricks-demo",
+        "resource_id_fingerprint": "b0ce410ef4a0a1d64b8e02ddd6473919f2c93f39b7b116fc5f3be3d1abedac12",
+        "sku_name": "premium",
+        "type": "Microsoft.Databricks/workspaces"
+      }
+    ],
+    "subscription_fingerprint": "abbac062fec075143b421090466e4ca3164b706288e5226ec80eab5a660a3198",
+    "subscription_state": "Enabled",
+    "tenant_fingerprint": "0e6ba1a9be18e7f8aa8e4b32ad33977a5acbb56d124564c652d4e591e1ba4d88",
+    "workspace": {
+      "arm_id_fingerprint": "b0ce410ef4a0a1d64b8e02ddd6473919f2c93f39b7b116fc5f3be3d1abedac12",
+      "compute_mode": "Serverless",
+      "host": "https://adb-7405618180989330.10.azuredatabricks.net",
+      "location": "westus",
+      "name": "intellify-databricks-demo",
+      "provisioning_state": "Succeeded",
+      "public_network_access": "Enabled",
+      "sku": "premium",
+      "unity_catalog_enabled": true,
+      "workspace_id_fingerprint": "fd16be8323389de2c04a63069229d6fb8b12be8c69e7f3861568ec7c92f9ab8e"
+    }
+  },
+  "captured_at": "2026-09-03T10:44:39Z",
+  "cloud_mutations_performed": false,
+  "collection_mode": "read_only",
+  "databricks": {
+    "apps": {
+      "count": 0,
+      "names": [],
+      "status": "available"
+    },
+    "catalogs": {
+      "count": 3,
+      "names": [
+        "intellify_databricks_demo",
+        "samples",
+        "system"
+      ],
+      "status": "available"
+    },
+    "default_schema_functions": {
+      "count": 0,
+      "names": [],
+      "status": "available"
+    },
+    "identity": {
+      "active": true,
+      "group_names": [
+        "admins",
+        "users"
+      ],
+      "principal_name_redacted": true
+    },
+    "jobs": {
+      "count": 0,
+      "names": [],
+      "status": "available"
+    },
+    "project_schemas": {
+      "count": 2,
+      "names": [
+        "intellify_databricks_demo.default",
+        "intellify_databricks_demo.information_schema"
+      ],
+      "status": "available"
+    },
+    "project_volumes": {
+      "count": 0,
+      "error_types": [],
+      "names": [],
+      "status": "available"
+    },
+    "registered_models": {
+      "count": 0,
+      "names": [],
+      "status": "available"
+    },
+    "serving_endpoints": {
+      "custom_count": 0,
+      "custom_names": [],
+      "foundation_count": 22,
+      "foundation_names": [
+        "databricks-bge-large-en",
+        "databricks-claude-haiku-4-5",
+        "databricks-claude-opus-4-1",
+        "databricks-claude-opus-4-5",
+        "databricks-claude-opus-4-6",
+        "databricks-claude-opus-4-7",
+        "databricks-claude-opus-4-8",
+        "databricks-claude-opus-5",
+        "databricks-claude-sonnet-4",
+        "databricks-claude-sonnet-4-5",
+        "databricks-claude-sonnet-4-6",
+        "databricks-claude-sonnet-5",
+        "databricks-gemma-3-12b",
+        "databricks-gpt-oss-120b",
+        "databricks-gpt-oss-20b",
+        "databricks-gte-large-en",
+        "databricks-llama-4-maverick",
+        "databricks-meta-llama-3-1-8b-instruct",
+        "databricks-meta-llama-3-3-70b-instruct",
+        "databricks-qwen3-embedding-0-6b",
+        "databricks-qwen3-next-80b-a3b-instruct",
+        "databricks-qwen35-122b-a10b"
+      ],
+      "status": "available",
+      "total_count": 22
+    },
+    "sql_warehouses": {
+      "count": 0,
+      "names": [],
+      "status": "available"
+    }
+  },
+  "inventory_version": "azure_phase0_live_inventory_v1",
+  "raw_identifiers_committed": false,
+  "scope_validation": {
+    "all_fingerprints_match": true,
+    "catalog_visible": true,
+    "fingerprint_checks": {
+      "resource_group_id": true,
+      "subscription": true,
+      "tenant": true,
+      "workspace_arm_id": true,
+      "workspace_id": true
+    },
+    "resource_group_match": true,
+    "workspace_host_match": true,
+    "workspace_match": true,
+    "workspace_region_match": true
+  }
+}

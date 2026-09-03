@@ -1,0 +1,31 @@
+{
+  "decision": "HOLD_PENDING_FUTURE_HOLDOUT",
+  "release_approved": false,
+  "blocking_reasons": [
+    "Future holdout data package is incomplete",
+    "Future holdout access approval is missing",
+    "One-time future holdout evaluation has not completed",
+    "Required owner approvals are incomplete"
+  ],
+  "pre_release_checks": {
+    "validation_business_validity": true,
+    "validation_security": true,
+    "frozen_package_reproducible": true
+  },
+  "final_release_gates": {
+    "future_holdout_available": false,
+    "future_holdout_access_approved": false,
+    "future_holdout_evaluated_once": false
+  },
+  "owner_approvals": {
+    "roles": {
+      "business": false,
+      "data": false,
+      "model": false,
+      "security": false,
+      "product": false
+    },
+    "all_approved": false
+  },
+  "synthetic_data_warning": "Results are not proof of live commercial uplift"
+}

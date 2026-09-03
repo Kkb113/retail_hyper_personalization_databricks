@@ -1,0 +1,19 @@
+{
+  "operation": "recommend_new_customer",
+  "inputs": {
+    "customer_profile": "required object; unknown values accepted",
+    "onboarding": "optional object",
+    "session_events": "optional list",
+    "top_n": "1 to 50"
+  },
+  "outputs": [
+    "ProductID",
+    "Rank",
+    "RecommendationScore",
+    "Confidence",
+    "CandidateSources",
+    "MatchedPreferences",
+    "FallbackReason"
+  ],
+  "behavior": "New browse, search, wishlist, and cart events may be supplied immediately; purchase history and a known customer ID are not required."
+}

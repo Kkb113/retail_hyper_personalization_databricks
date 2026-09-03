@@ -1,0 +1,105 @@
+{
+  "policy_version": "adaptive_router_v1",
+  "selected_base_cold_weights": {
+    "NoEvents": 1.0,
+    "FirstSignals": 0.75,
+    "EarlyBehavior": 0.75,
+    "LowHistory": 0.75,
+    "Established": 0.25
+  },
+  "behavioral_confidence": {
+    "event_count_reference": 30,
+    "event_diversity_reference": 5,
+    "recency_half_life_days": 90,
+    "inactive_after_days": 90,
+    "behavioral_weights": {
+      "event_count": 0.35,
+      "event_diversity": 0.2,
+      "recency": 0.25,
+      "stability": 0.2
+    },
+    "metadata_weights": {
+      "completeness": 0.45,
+      "freshness": 0.2,
+      "consent": 0.2,
+      "calibration": 0.15
+    },
+    "assumed_static_freshness_score": 0.65,
+    "unknown_consent_score": 0.5,
+    "calibrated_model_score": 0.85
+  },
+  "metadata_confidence": {
+    "event_count_reference": 30,
+    "event_diversity_reference": 5,
+    "recency_half_life_days": 90,
+    "inactive_after_days": 90,
+    "behavioral_weights": {
+      "event_count": 0.35,
+      "event_diversity": 0.2,
+      "recency": 0.25,
+      "stability": 0.2
+    },
+    "metadata_weights": {
+      "completeness": 0.45,
+      "freshness": 0.2,
+      "consent": 0.2,
+      "calibration": 0.15
+    },
+    "assumed_static_freshness_score": 0.65,
+    "unknown_consent_score": 0.5,
+    "calibrated_model_score": 0.85
+  },
+  "adaptation": {
+    "inactive_cold_weight_boost": 0.2,
+    "location_change_cold_weight_boost": 0.25,
+    "declared_preference_change_cold_weight_boost": 0.15,
+    "profile_change_effect_days": 30,
+    "location_history_decay": 0.5,
+    "portable_preferences": [
+      "FavoriteCategoryID",
+      "FavoriteBrandID",
+      "PriceSensitivity",
+      "ColorPreference"
+    ]
+  },
+  "fallback_order": {
+    "warm_model_failure": [
+      "cold_start_hybrid",
+      "preferred_category",
+      "regional_popularity",
+      "global_popularity"
+    ],
+    "cold_model_failure": [
+      "preferred_category",
+      "regional_popularity",
+      "segment_popularity",
+      "global_popularity"
+    ],
+    "missing_profile": [
+      "session_intent",
+      "global_popularity"
+    ],
+    "empty_candidate_pool": [
+      "global_popularity"
+    ],
+    "unavailable_inventory": [
+      "filter_and_refill",
+      "global_popularity"
+    ]
+  },
+  "business_rules": {
+    "exclude_recent_durable_purchase": true,
+    "recent_durable_purchase_days": 180,
+    "durable_category_keywords": [
+      "Electronics",
+      "Tent",
+      "Furniture",
+      "Appliance",
+      "Equipment"
+    ]
+  },
+  "warm_expert": "artifacts/ranker_v2/shared_ranker.json",
+  "cold_expert": "artifacts/cold_start_v1/cold_start_metadata.json",
+  "historical_test_used": false,
+  "future_holdout_used": false
+}

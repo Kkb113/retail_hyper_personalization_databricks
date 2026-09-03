@@ -1,0 +1,1142 @@
+{
+  "bundle_sha256": "976b7d0cf2390869d78af3bce95842f6f30e09d5c64c4bdd7fddfb46c9a3bc0b",
+  "classification": "synthetic_data",
+  "data_bundle_sha256": "b8422c3124f8edb83209c92b756dfaeb646aa2d40a44f8fb95151bdc6f0a4af7",
+  "destination": {
+    "catalog": "intellify_databricks_demo",
+    "model_assets_root": "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1",
+    "transfer_landing_root": "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1",
+    "workspace": "intellify-databricks-demo"
+  },
+  "files": [
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/adaptive_router_v1/fallback_matrix.json"
+      ],
+      "logical_path": "artifacts/adaptive_router_v1/fallback_matrix.json",
+      "model_contract": {
+        "approved_sha256": "0c1ac6c99ec54119598c65afd8482b9d1c753668b7cd48afc1449010cfe90b82",
+        "component": "adaptive_router_v1"
+      },
+      "path": "migration_assets/artifacts/adaptive_router_v1/fallback_matrix.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "0c1ac6c99ec54119598c65afd8482b9d1c753668b7cd48afc1449010cfe90b82",
+      "size_bytes": 971
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/adaptive_router_v1/routing_contract.json"
+      ],
+      "logical_path": "artifacts/adaptive_router_v1/routing_contract.json",
+      "model_contract": {
+        "approved_sha256": "67cf0fee92be38f3dc6ab86580a58cb0078b9cad8fc3093584f75efb082ed266",
+        "component": "adaptive_router_v1"
+      },
+      "path": "migration_assets/artifacts/adaptive_router_v1/routing_contract.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "67cf0fee92be38f3dc6ab86580a58cb0078b9cad8fc3093584f75efb082ed266",
+      "size_bytes": 555
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/adaptive_router_v1/routing_policy.json"
+      ],
+      "logical_path": "artifacts/adaptive_router_v1/routing_policy.json",
+      "model_contract": {
+        "approved_sha256": "dfc641e77544dd16421a3b47df3996ce6cd602235b1ca8041e5012eff3bee2ae",
+        "component": "adaptive_router_v1"
+      },
+      "path": "migration_assets/artifacts/adaptive_router_v1/routing_policy.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "dfc641e77544dd16421a3b47df3996ce6cd602235b1ca8041e5012eff3bee2ae",
+      "size_bytes": 2781
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/cold_start_v1/cold_start_metadata.json"
+      ],
+      "logical_path": "artifacts/cold_start_v1/cold_start_metadata.json",
+      "model_contract": {
+        "approved_sha256": "a4dd60ca95b7064bbe8352014248626c5af0dee1039df9faeed6d31ca52ac09f",
+        "component": "cold_start_v1"
+      },
+      "path": "migration_assets/artifacts/cold_start_v1/cold_start_metadata.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "a4dd60ca95b7064bbe8352014248626c5af0dee1039df9faeed6d31ca52ac09f",
+      "size_bytes": 1331
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/cold_start_v1/cold_start_preprocessor.joblib"
+      ],
+      "logical_path": "artifacts/cold_start_v1/cold_start_preprocessor.joblib",
+      "model_contract": {
+        "approved_sha256": "6c4eb4fc04c1da08c2d30ab081dfb66567b234fbaca660cd454d650c8988306e",
+        "component": "cold_start_v1"
+      },
+      "path": "migration_assets/artifacts/cold_start_v1/cold_start_preprocessor.joblib",
+      "roles": [
+        "model"
+      ],
+      "sha256": "6c4eb4fc04c1da08c2d30ab081dfb66567b234fbaca660cd454d650c8988306e",
+      "size_bytes": 17726
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/cold_start_v1/cold_start_ranker.json"
+      ],
+      "logical_path": "artifacts/cold_start_v1/cold_start_ranker.json",
+      "model_contract": {
+        "approved_sha256": "3f5e913d31f274751b85620bf7fde80edd9e19af89f736fb910287c27c7a009e",
+        "component": "cold_start_v1"
+      },
+      "path": "migration_assets/artifacts/cold_start_v1/cold_start_ranker.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "3f5e913d31f274751b85620bf7fde80edd9e19af89f736fb910287c27c7a009e",
+      "size_bytes": 222096
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/cold_start_v1/inference_reference.joblib"
+      ],
+      "logical_path": "artifacts/cold_start_v1/inference_reference.joblib",
+      "model_contract": {
+        "approved_sha256": "880d0919db0ab9a05ddb47243b3ba568db56f4cb663deb4829992a25f50fbdfc",
+        "component": "cold_start_v1"
+      },
+      "path": "migration_assets/artifacts/cold_start_v1/inference_reference.joblib",
+      "roles": [
+        "model"
+      ],
+      "sha256": "880d0919db0ab9a05ddb47243b3ba568db56f4cb663deb4829992a25f50fbdfc",
+      "size_bytes": 2551066
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/cold_start_v1/no_purchase_api_contract.json"
+      ],
+      "logical_path": "artifacts/cold_start_v1/no_purchase_api_contract.json",
+      "model_contract": {
+        "approved_sha256": "fc4f3c4079dc354e94694cf5ba2e02db24a4fd4e70610013fd09fd56c1440024",
+        "component": "cold_start_v1"
+      },
+      "path": "migration_assets/artifacts/cold_start_v1/no_purchase_api_contract.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "fc4f3c4079dc354e94694cf5ba2e02db24a4fd4e70610013fd09fd56c1440024",
+      "size_bytes": 563
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/cold_start_v1/onboarding_schema.json"
+      ],
+      "logical_path": "artifacts/cold_start_v1/onboarding_schema.json",
+      "model_contract": {
+        "approved_sha256": "fe5c32fb1ee93d8ed48e4c2235469cce079937e3e32d06cc01ff95593f1f334a",
+        "component": "cold_start_v1"
+      },
+      "path": "migration_assets/artifacts/cold_start_v1/onboarding_schema.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "fe5c32fb1ee93d8ed48e4c2235469cce079937e3e32d06cc01ff95593f1f334a",
+      "size_bytes": 1057
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/final_policy/final_policy.json"
+      ],
+      "logical_path": "artifacts/final_policy/final_policy.json",
+      "model_contract": {
+        "approved_sha256": "8e0e0021f5c5fea60e46f34f2cd457c51bda402edfd4a860f4750f13d77aa539",
+        "component": "final_policy"
+      },
+      "path": "migration_assets/artifacts/final_policy/final_policy.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "8e0e0021f5c5fea60e46f34f2cd457c51bda402edfd4a860f4750f13d77aa539",
+      "size_bytes": 1782
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/final_policy/final_recommender_metadata.json"
+      ],
+      "logical_path": "artifacts/final_policy/final_recommender_metadata.json",
+      "model_contract": {
+        "approved_sha256": "c0072705e54ce272916f1bf35c72667df8ef9768b31a27a2fb68545b01b2192c",
+        "component": "final_policy"
+      },
+      "path": "migration_assets/artifacts/final_policy/final_recommender_metadata.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "c0072705e54ce272916f1bf35c72667df8ef9768b31a27a2fb68545b01b2192c",
+      "size_bytes": 2797
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/model_release_v1/agent_recommendation_contract.json"
+      ],
+      "logical_path": "artifacts/model_release_v1/agent_recommendation_contract.json",
+      "model_contract": {
+        "approved_sha256": "80e66decb3d9d5a48689d112f196b696c14aaac0a9bf8c1ab2d7b953b7c20489",
+        "component": "model_release_v1"
+      },
+      "path": "migration_assets/artifacts/model_release_v1/agent_recommendation_contract.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "80e66decb3d9d5a48689d112f196b696c14aaac0a9bf8c1ab2d7b953b7c20489",
+      "size_bytes": 1051
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/model_release_v1/model_selection.json"
+      ],
+      "logical_path": "artifacts/model_release_v1/model_selection.json",
+      "model_contract": {
+        "approved_sha256": "5cfcdbf7be5ff00c8f8bb0cf239bb5a4afb27aabea47a639491542e83b85bf22",
+        "component": "model_release_v1"
+      },
+      "path": "migration_assets/artifacts/model_release_v1/model_selection.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "5cfcdbf7be5ff00c8f8bb0cf239bb5a4afb27aabea47a639491542e83b85bf22",
+      "size_bytes": 2451
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "current_recommendations",
+          "recommendation_explanations",
+          "customer_routing",
+          "app_demo"
+        ],
+        "domain": "model_output",
+        "expected_rows": 15930,
+        "name": "recommendation_snapshot",
+        "observed_column_count": 24,
+        "observed_rows": 15930,
+        "required_columns": [
+          "CustomerID",
+          "ProductID",
+          "RecommendationScore",
+          "ExpertSources",
+          "Rank",
+          "FallbackReason",
+          "HistoryBand",
+          "Route",
+          "RoutingReason",
+          "BehavioralConfidence",
+          "MetadataConfidence",
+          "ProfileVersion",
+          "EventCount",
+          "EventDiversity",
+          "DaysSinceLastEvent",
+          "PurchaseCount",
+          "DecisionTime",
+          "PolicyVersion",
+          "ModelRoute",
+          "InventoryValid"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/artifacts/model_release_v1/recommendation_snapshot.parquet",
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/model_release_v1/recommendation_snapshot.parquet"
+      ],
+      "logical_path": "artifacts/model_release_v1/recommendation_snapshot.parquet",
+      "model_contract": {
+        "approved_sha256": "ca7316d98773f42288b180bac619a31f913e82569362e6595e390e0330b2c4b8",
+        "component": "model_release_v1"
+      },
+      "path": "migration_assets/artifacts/model_release_v1/recommendation_snapshot.parquet",
+      "roles": [
+        "data",
+        "model"
+      ],
+      "sha256": "ca7316d98773f42288b180bac619a31f913e82569362e6595e390e0330b2c4b8",
+      "size_bytes": 226959
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/model_release_v1/release_manifest.json"
+      ],
+      "logical_path": "artifacts/model_release_v1/release_manifest.json",
+      "model_contract": {
+        "approved_sha256": "e8218178412219e2746d86ba516cfe031510d2d038886290ba4057a870757208",
+        "component": "model_release_v1"
+      },
+      "path": "migration_assets/artifacts/model_release_v1/release_manifest.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "e8218178412219e2746d86ba516cfe031510d2d038886290ba4057a870757208",
+      "size_bytes": 623
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/ranker_v2/inference_contract.json"
+      ],
+      "logical_path": "artifacts/ranker_v2/inference_contract.json",
+      "model_contract": {
+        "approved_sha256": "f65f49d34a7ed0650597d904cc52f486c25a497e5fb95c31a7be847e034bc8e2",
+        "component": "ranker_v2"
+      },
+      "path": "migration_assets/artifacts/ranker_v2/inference_contract.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "f65f49d34a7ed0650597d904cc52f486c25a497e5fb95c31a7be847e034bc8e2",
+      "size_bytes": 723
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/ranker_v2/known_ranker.json"
+      ],
+      "logical_path": "artifacts/ranker_v2/known_ranker.json",
+      "model_contract": {
+        "approved_sha256": "37b0dbbf7fd468be748ff8628b7c27ee00cc993374aa429fb0baa5dfcb010c46",
+        "component": "ranker_v2"
+      },
+      "path": "migration_assets/artifacts/ranker_v2/known_ranker.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "37b0dbbf7fd468be748ff8628b7c27ee00cc993374aa429fb0baa5dfcb010c46",
+      "size_bytes": 81491
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/ranker_v2/lowhistory_ranker.json"
+      ],
+      "logical_path": "artifacts/ranker_v2/lowhistory_ranker.json",
+      "model_contract": {
+        "approved_sha256": "ff6652d7b5b6e7fadb7b4c28322c29e24ad5b4c70d12bc3688d604e7d8c3c69f",
+        "component": "ranker_v2"
+      },
+      "path": "migration_assets/artifacts/ranker_v2/lowhistory_ranker.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "ff6652d7b5b6e7fadb7b4c28322c29e24ad5b4c70d12bc3688d604e7d8c3c69f",
+      "size_bytes": 130012
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/ranker_v2/ranker_preprocessor.joblib"
+      ],
+      "logical_path": "artifacts/ranker_v2/ranker_preprocessor.joblib",
+      "model_contract": {
+        "approved_sha256": "54d9b701c0081be28b3f65dc61059b13f24d30a4454d2852e736104356ca54b7",
+        "component": "ranker_v2"
+      },
+      "path": "migration_assets/artifacts/ranker_v2/ranker_preprocessor.joblib",
+      "roles": [
+        "model"
+      ],
+      "sha256": "54d9b701c0081be28b3f65dc61059b13f24d30a4454d2852e736104356ca54b7",
+      "size_bytes": 15811
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/ranker_v2/shared_ranker.json"
+      ],
+      "logical_path": "artifacts/ranker_v2/shared_ranker.json",
+      "model_contract": {
+        "approved_sha256": "c1c9cbe01bac872e3cad3e9231f335221542abf7b356cafc866401de0017b8d9",
+        "component": "ranker_v2"
+      },
+      "path": "migration_assets/artifacts/ranker_v2/shared_ranker.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "c1c9cbe01bac872e3cad3e9231f335221542abf7b356cafc866401de0017b8d9",
+      "size_bytes": 167166
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/retrieval_v2/als_factors.npz"
+      ],
+      "logical_path": "artifacts/retrieval_v2/als_factors.npz",
+      "model_contract": {
+        "approved_sha256": "18e8d046a7a3e0a443bbe6dcf8a5dd2983e93f255a71d85ac0f2722a4cebef98",
+        "component": "retrieval_v2"
+      },
+      "path": "migration_assets/artifacts/retrieval_v2/als_factors.npz",
+      "roles": [
+        "model"
+      ],
+      "sha256": "18e8d046a7a3e0a443bbe6dcf8a5dd2983e93f255a71d85ac0f2722a4cebef98",
+      "size_bytes": 1664947
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/retrieval_v2/content_matrix.npz"
+      ],
+      "logical_path": "artifacts/retrieval_v2/content_matrix.npz",
+      "model_contract": {
+        "approved_sha256": "14a441c71e9685ede7a39391b4396e613088373d858eee675e58c7227f48227c",
+        "component": "retrieval_v2"
+      },
+      "path": "migration_assets/artifacts/retrieval_v2/content_matrix.npz",
+      "roles": [
+        "model"
+      ],
+      "sha256": "14a441c71e9685ede7a39391b4396e613088373d858eee675e58c7227f48227c",
+      "size_bytes": 489674
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/retrieval_v2/content_neighbor_model.joblib"
+      ],
+      "logical_path": "artifacts/retrieval_v2/content_neighbor_model.joblib",
+      "model_contract": {
+        "approved_sha256": "d953275b168e9868b89ac2b003a7fa4471aec87bc1bcfef41bd5c7d1df6e8e43",
+        "component": "retrieval_v2"
+      },
+      "path": "migration_assets/artifacts/retrieval_v2/content_neighbor_model.joblib",
+      "roles": [
+        "model"
+      ],
+      "sha256": "d953275b168e9868b89ac2b003a7fa4471aec87bc1bcfef41bd5c7d1df6e8e43",
+      "size_bytes": 1022614
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/retrieval_v2/factor_mappings.json"
+      ],
+      "logical_path": "artifacts/retrieval_v2/factor_mappings.json",
+      "model_contract": {
+        "approved_sha256": "12e0e50cb72414c101f24ef5456dae384326a5bbba69accd26d8a54be1c6d4af",
+        "component": "retrieval_v2"
+      },
+      "path": "migration_assets/artifacts/retrieval_v2/factor_mappings.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "12e0e50cb72414c101f24ef5456dae384326a5bbba69accd26d8a54be1c6d4af",
+      "size_bytes": 164620
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/retrieval_v2/metadata_factor_model.joblib"
+      ],
+      "logical_path": "artifacts/retrieval_v2/metadata_factor_model.joblib",
+      "model_contract": {
+        "approved_sha256": "6a14634ad9184b0a587528fa8f546c919b46eee1a7891aa1ea629375573bf66d",
+        "component": "retrieval_v2"
+      },
+      "path": "migration_assets/artifacts/retrieval_v2/metadata_factor_model.joblib",
+      "roles": [
+        "model"
+      ],
+      "sha256": "6a14634ad9184b0a587528fa8f546c919b46eee1a7891aa1ea629375573bf66d",
+      "size_bytes": 144137
+    },
+    {
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/ml/model_assets/retail_hp_transfer_v1/artifacts/retrieval_v2/retrieval_metadata.json"
+      ],
+      "logical_path": "artifacts/retrieval_v2/retrieval_metadata.json",
+      "model_contract": {
+        "approved_sha256": "e5e7e45f8fbdfa3ea6016d96266f348d39b14cbaca455f7d987d5f41f46ecb63",
+        "component": "retrieval_v2"
+      },
+      "path": "migration_assets/artifacts/retrieval_v2/retrieval_metadata.json",
+      "roles": [
+        "model"
+      ],
+      "sha256": "e5e7e45f8fbdfa3ea6016d96266f348d39b14cbaca455f7d987d5f41f46ecb63",
+      "size_bytes": 1773
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "product_cards",
+          "brand_explanations",
+          "brand_opportunities"
+        ],
+        "domain": "product",
+        "expected_rows": 150,
+        "name": "brands",
+        "observed_column_count": 4,
+        "observed_rows": 150,
+        "required_columns": [
+          "BrandID",
+          "BrandName",
+          "BrandTier",
+          "ActiveFlag"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/brands.parquet"
+      ],
+      "logical_path": "data_cache/base/brands.parquet",
+      "path": "migration_assets/data_cache/base/brands.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "442d7b836596e0648563051a33070f50b9029861ad0a85b661d957c10f1f1d1e",
+      "size_bytes": 4631
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "session_context",
+          "recent_intent",
+          "channel_context"
+        ],
+        "domain": "session_behaviour",
+        "expected_rows": 45000,
+        "name": "browsing_events",
+        "observed_column_count": 8,
+        "observed_rows": 45000,
+        "required_columns": [
+          "EventID",
+          "SessionID",
+          "CustomerID",
+          "ProductID",
+          "EventTime",
+          "DurationSec",
+          "Channel",
+          "DeviceType"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/browsing_events.parquet"
+      ],
+      "logical_path": "data_cache/base/browsing_events.parquet",
+      "path": "migration_assets/data_cache/base/browsing_events.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "85ffc365c4b70e60d61348faf2a214aca1b4b7ca96623d907abace89e617c8cb",
+      "size_bytes": 1180139
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "high_intent",
+          "session_context",
+          "notification_opportunities"
+        ],
+        "domain": "session_behaviour",
+        "expected_rows": 12000,
+        "name": "cart_events",
+        "observed_column_count": 10,
+        "observed_rows": 12000,
+        "required_columns": [
+          "CartEventID",
+          "SessionID",
+          "CustomerID",
+          "ProductID",
+          "Action",
+          "EventTime",
+          "Quantity",
+          "UnitPrice",
+          "Channel",
+          "DeviceType"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/cart_events.parquet"
+      ],
+      "logical_path": "data_cache/base/cart_events.parquet",
+      "path": "migration_assets/data_cache/base/cart_events.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "933d9aacac5405c930cf74e14af8b7b717a98b745e1b29bdc0755d0090231a57",
+      "size_bytes": 363162
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "personalized_recommendations",
+          "recommendation_explanations",
+          "new_customer_context"
+        ],
+        "domain": "customer",
+        "expected_rows": 5000,
+        "name": "customer_preferences",
+        "observed_column_count": 8,
+        "observed_rows": 5000,
+        "required_columns": [
+          "CustomerID",
+          "FavoriteCategoryID",
+          "FavoriteBrandID",
+          "PriceSensitivity",
+          "ColorPreference",
+          "CategoryAffinityScore",
+          "BrandAffinityScore"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/customer_preferences.parquet"
+      ],
+      "logical_path": "data_cache/base/customer_preferences.parquet",
+      "path": "migration_assets/data_cache/base/customer_preferences.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "3bf5bc6d3230dfd94bf8e9452a4349da2424fc94f42c46c9e824bacf9ddced53",
+      "size_bytes": 168772
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "long_term_affinity",
+          "recent_intent",
+          "cross_sell_context"
+        ],
+        "domain": "behaviour",
+        "expected_rows": 56610,
+        "name": "customer_product_audit",
+        "observed_column_count": 15,
+        "observed_rows": 56610,
+        "required_columns": [
+          "CustomerID",
+          "ProductID",
+          "TotalEventCount",
+          "DistinctEventTypes",
+          "FirstInteractionDate",
+          "LastInteractionDate",
+          "BrowseCount",
+          "CartAddCount",
+          "PurchaseCount",
+          "RatingCount",
+          "SearchClickCount",
+          "WishlistCount"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/customer_product_audit.parquet"
+      ],
+      "logical_path": "data_cache/base/customer_product_audit.parquet",
+      "path": "migration_assets/data_cache/base/customer_product_audit.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "63552421ffc93a125131d313bd45e99485fe43b093b36882176934051dc7843f",
+      "size_bytes": 934208
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "customer_360",
+          "existing_customer_routing",
+          "new_customer_context"
+        ],
+        "domain": "customer",
+        "expected_rows": 5000,
+        "name": "customers",
+        "observed_column_count": 7,
+        "observed_rows": 5000,
+        "required_columns": [
+          "CustomerID",
+          "RegionID",
+          "LoyaltyTier",
+          "CreatedDate",
+          "CustomerSegment",
+          "PreferredChannel",
+          "CustomerStatus"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/customers.parquet"
+      ],
+      "logical_path": "data_cache/base/customers.parquet",
+      "path": "migration_assets/data_cache/base/customers.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "e3fb6c466957eeafa25193766f379ce42e894e83a0b191c465832626041a91ad",
+      "size_bytes": 68095
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "inventory_validation",
+          "product_cards",
+          "availability_notifications"
+        ],
+        "domain": "commercial_context",
+        "expected_rows": 15000,
+        "name": "inventory",
+        "observed_column_count": 13,
+        "observed_rows": 15000,
+        "required_columns": [
+          "InventoryID",
+          "StoreID",
+          "ProductID",
+          "SnapshotDate",
+          "AvailableQty",
+          "StockStatus"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/inventory.parquet"
+      ],
+      "logical_path": "data_cache/base/inventory.parquet",
+      "path": "migration_assets/data_cache/base/inventory.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "10b295f0273653d548ba8815e64880f6447fd9548121920f69eb96136ea8b989",
+      "size_bytes": 223466
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "business_language",
+          "category_opportunities",
+          "product_cards"
+        ],
+        "domain": "product",
+        "expected_rows": 80,
+        "name": "product_categories",
+        "observed_column_count": 5,
+        "observed_rows": 80,
+        "required_columns": [
+          "CategoryID",
+          "ParentCategoryID",
+          "CategoryName",
+          "CategoryLevel",
+          "DepartmentName"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/product_categories.parquet"
+      ],
+      "logical_path": "data_cache/base/product_categories.parquet",
+      "path": "migration_assets/data_cache/base/product_categories.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "fabbe452f3b42462dc48c5efaa0c392c452f585ae37fc4e30da34d09b906b858",
+      "size_bytes": 5295
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "product_cards",
+          "candidate_filtering",
+          "recommendation_explanations"
+        ],
+        "domain": "product",
+        "expected_rows": 3000,
+        "name": "products",
+        "observed_column_count": 12,
+        "observed_rows": 3000,
+        "required_columns": [
+          "ProductID",
+          "SKU",
+          "ProductName",
+          "CategoryID",
+          "BrandID",
+          "BasePrice",
+          "CostPrice",
+          "MarginPct",
+          "Season",
+          "Color",
+          "Size",
+          "ActiveFlag"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/products.parquet"
+      ],
+      "logical_path": "data_cache/base/products.parquet",
+      "path": "migration_assets/data_cache/base/products.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "b9ef1155780e589c4e59ecae5cdc700a802081575c0bdd644e840b193c31099b",
+      "size_bytes": 141814
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "promotion_context",
+          "product_cards",
+          "commercial_opportunities"
+        ],
+        "domain": "commercial_context",
+        "expected_rows": 200,
+        "name": "promotions",
+        "observed_column_count": 8,
+        "observed_rows": 200,
+        "required_columns": [
+          "PromotionID",
+          "PromotionName",
+          "CategoryID",
+          "DiscountPct",
+          "Season",
+          "StartDate",
+          "EndDate",
+          "ActiveFlag"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/promotions.parquet"
+      ],
+      "logical_path": "data_cache/base/promotions.parquet",
+      "path": "migration_assets/data_cache/base/promotions.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "8cce4956b4113f24a200bbebefc0238cbe3c8160533ea107d1180af5dd6e9b49",
+      "size_bytes": 11818
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "recommendation_history",
+          "response_analysis",
+          "session_context"
+        ],
+        "domain": "recommendation_history",
+        "expected_rows": 25000,
+        "name": "recommendation_log",
+        "observed_column_count": 13,
+        "observed_rows": 25000,
+        "required_columns": [
+          "RecommendationID",
+          "RecommendationBatchID",
+          "CustomerID",
+          "ProductID",
+          "Score",
+          "ServedTime",
+          "SessionID",
+          "Channel",
+          "RankPosition",
+          "RecommendationStrategy",
+          "ModelVersion",
+          "InventoryAvailable",
+          "PromotionID"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/recommendation_log.parquet"
+      ],
+      "logical_path": "data_cache/base/recommendation_log.parquet",
+      "path": "migration_assets/data_cache/base/recommendation_log.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "ddf5c8dfa2689c851f2cbe3d81c17e12a8e846966fc007f96b109a5a051e3c72",
+      "size_bytes": 589008
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "recommendation_metrics",
+          "feedback_readiness",
+          "outcome_analysis"
+        ],
+        "domain": "recommendation_history",
+        "expected_rows": 25000,
+        "name": "recommendation_response",
+        "observed_column_count": 7,
+        "observed_rows": 25000,
+        "required_columns": [
+          "ResponseID",
+          "RecommendationID",
+          "Clicked",
+          "AddedToCart",
+          "Purchased",
+          "ResponseTime",
+          "OrderID"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/recommendation_response.parquet"
+      ],
+      "logical_path": "data_cache/base/recommendation_response.parquet",
+      "path": "migration_assets/data_cache/base/recommendation_response.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "a7c984b034560bceb29db45180291f285b1ddecc244160a9e25b9a1d1296a7e9",
+      "size_bytes": 386883
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "regional_personalization",
+          "business_language",
+          "scenario_simulation"
+        ],
+        "domain": "context",
+        "expected_rows": 10,
+        "name": "regions",
+        "observed_column_count": 5,
+        "observed_rows": 10,
+        "required_columns": [
+          "RegionID",
+          "RegionName",
+          "State",
+          "ClimateZone",
+          "TimeZone"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/regions.parquet"
+      ],
+      "logical_path": "data_cache/base/regions.parquet",
+      "path": "migration_assets/data_cache/base/regions.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "fe1525f8a2a554ea07ec99d2f0cb0530e53a31ed29f4b9c1a702a75367446242",
+      "size_bytes": 3866
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "product_affinity",
+          "cross_sell_context",
+          "recommendation_evaluation"
+        ],
+        "domain": "purchase_history",
+        "expected_rows": 30000,
+        "name": "sales_order_lines",
+        "observed_column_count": 8,
+        "observed_rows": 30000,
+        "required_columns": [
+          "OrderLineID",
+          "OrderID",
+          "ProductID",
+          "Qty",
+          "UnitPrice",
+          "DiscountAmount",
+          "PromotionID",
+          "LineAmount"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/sales_order_lines.parquet"
+      ],
+      "logical_path": "data_cache/base/sales_order_lines.parquet",
+      "path": "migration_assets/data_cache/base/sales_order_lines.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "5a45c080c50c41a3ffbcd4ec4c752efc5caac82e9ec44863ef525363dd19e2db",
+      "size_bytes": 580290
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "purchase_history",
+          "customer_value_context",
+          "recommendation_evaluation"
+        ],
+        "domain": "purchase_history",
+        "expected_rows": 12000,
+        "name": "sales_orders",
+        "observed_column_count": 11,
+        "observed_rows": 12000,
+        "required_columns": [
+          "OrderID",
+          "CustomerID",
+          "StoreID",
+          "OrderChannel",
+          "OrderDate",
+          "OrderStatus",
+          "GrossAmount",
+          "DiscountAmount",
+          "NetAmount"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/sales_orders.parquet"
+      ],
+      "logical_path": "data_cache/base/sales_orders.parquet",
+      "path": "migration_assets/data_cache/base/sales_orders.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "d8669384143b06e728b6af06b3a0de2b89f6dc0c2e812d5e222201a5c999ea4f",
+      "size_bytes": 371493
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "session_intent",
+          "recent_intent",
+          "search_explanation"
+        ],
+        "domain": "session_behaviour",
+        "expected_rows": 12000,
+        "name": "search_events",
+        "observed_column_count": 9,
+        "observed_rows": 12000,
+        "required_columns": [
+          "SearchID",
+          "SessionID",
+          "CustomerID",
+          "Keyword",
+          "EventTime",
+          "ClickedProductID",
+          "ResultCount",
+          "Channel",
+          "DeviceType"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/search_events.parquet"
+      ],
+      "logical_path": "data_cache/base/search_events.parquet",
+      "path": "migration_assets/data_cache/base/search_events.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "308ee37a08eb52a2cf2538bc29cbb914cb18ec15eabb0a09645cf62efed1d36e",
+      "size_bytes": 408461
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "seasonal_context",
+          "weather_context"
+        ],
+        "domain": "context",
+        "expected_rows": 3650,
+        "name": "weather",
+        "observed_column_count": 8,
+        "observed_rows": 3650,
+        "required_columns": [
+          "WeatherID",
+          "RegionID",
+          "Date",
+          "TemperatureF",
+          "Condition",
+          "PrecipitationIn",
+          "SnowfallIn",
+          "HumidityPct"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/weather.parquet"
+      ],
+      "logical_path": "data_cache/base/weather.parquet",
+      "path": "migration_assets/data_cache/base/weather.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "2ee230d9d5c2d1462652107357f3ecb26e74354a041be7c74b2e752d5257b73b",
+      "size_bytes": 60936
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "long_term_affinity",
+          "high_intent",
+          "notification_opportunities"
+        ],
+        "domain": "behaviour",
+        "expected_rows": 5000,
+        "name": "wishlist",
+        "observed_column_count": 6,
+        "observed_rows": 5000,
+        "required_columns": [
+          "WishlistID",
+          "CustomerID",
+          "ProductID",
+          "AddedDate",
+          "WishlistStatus",
+          "RemovedDate"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/base/wishlist.parquet"
+      ],
+      "logical_path": "data_cache/base/wishlist.parquet",
+      "path": "migration_assets/data_cache/base/wishlist.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "e0c0c2b0398ec93c614f5c580f4be4c85afed027ac4ee02544bde6ec4bf61710",
+      "size_bytes": 86681
+    },
+    {
+      "data_contract": {
+        "capabilities": [
+          "customer_360",
+          "profile_freshness",
+          "governed_personalization"
+        ],
+        "domain": "customer",
+        "expected_rows": 5000,
+        "name": "customer_profile_history",
+        "observed_column_count": 27,
+        "observed_rows": 5000,
+        "required_columns": [
+          "CustomerID",
+          "ProfileVersion",
+          "EffectiveFrom",
+          "RegionID",
+          "CustomerSegment",
+          "PreferredChannel",
+          "FavoriteCategoryID",
+          "FavoriteBrandID",
+          "PriceSensitivity",
+          "RegionName",
+          "State",
+          "ClimateZone",
+          "FreshnessStatus",
+          "TemporalQuality",
+          "ConsentStatus",
+          "ModelUseStatus"
+        ]
+      },
+      "destinations": [
+        "/Volumes/intellify_databricks_demo/bronze/transfer_landing/retail_hp_transfer_v1/data/data_cache/profiles/customer_profile_history.parquet"
+      ],
+      "logical_path": "data_cache/profiles/customer_profile_history.parquet",
+      "path": "migration_assets/data_cache/profiles/customer_profile_history.parquet",
+      "roles": [
+        "data"
+      ],
+      "sha256": "5572997349332f56a70b8cfb15ac9d82b96ce9d3e962e01a4eb356d1265bd4a5",
+      "size_bytes": 227420
+    }
+  ],
+  "generated_at": "2026-09-03T11:14:15Z",
+  "integrity_algorithm": "sha256-path-digest-v1",
+  "manifest_version": "azure_phase0_transfer_v1",
+  "model_bundle_sha256": "0b26f6746056d24768e9c89ce5f9721fa84b9b869d11985f4d40914950d2b6a7",
+  "policy_version": "adaptive_router_v1",
+  "production_approved": false,
+  "release_id": "retail_hyper_personalization_demo_v1",
+  "source_contracts": [
+    "azure_databricks/contracts/source_asset_inventory.json",
+    "azure_databricks/contracts/approved_model_hashes.json"
+  ],
+  "summary": {
+    "cross_role_overlap_count": 1,
+    "data_file_count": 20,
+    "declared_data_rows": 275630,
+    "hash_mismatch_count": 0,
+    "missing_file_count": 0,
+    "model_file_count": 26,
+    "observed_data_rows": 275630,
+    "row_mismatch_count": 0,
+    "total_unique_bytes": 12733215,
+    "unique_file_count": 45
+  }
+}

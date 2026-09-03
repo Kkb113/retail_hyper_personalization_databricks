@@ -1,0 +1,65 @@
+{
+  "retrieval_version": "hybrid_retrieval_v2",
+  "selected_als_run": "als_v2_64f",
+  "selected_metadata_ridge_alpha": 100.0,
+  "training_data": "temporally_weighted_interactions v2",
+  "masked_customers_excluded_from_als_training": 211,
+  "source_quotas": {
+    "Known": {
+      "als": 130,
+      "metadata": 0,
+      "preferred_category": 40,
+      "content": 50,
+      "session_intent": 30,
+      "regional_popularity": 30,
+      "segment_popularity": 30,
+      "global_popularity": 20
+    },
+    "LowHistory": {
+      "als": 80,
+      "metadata": 100,
+      "preferred_category": 50,
+      "content": 40,
+      "session_intent": 30,
+      "regional_popularity": 35,
+      "segment_popularity": 35,
+      "global_popularity": 25
+    },
+    "ColdStartMasked": {
+      "als": 0,
+      "metadata": 140,
+      "preferred_category": 60,
+      "content": 0,
+      "session_intent": 0,
+      "regional_popularity": 40,
+      "segment_popularity": 40,
+      "global_popularity": 30
+    },
+    "ColdStartNatural": {
+      "als": 0,
+      "metadata": 140,
+      "preferred_category": 60,
+      "content": 0,
+      "session_intent": 0,
+      "regional_popularity": 40,
+      "segment_popularity": 40,
+      "global_popularity": 30
+    }
+  },
+  "source_weights": {
+    "als": 1.0,
+    "metadata": 0.95,
+    "preferred_category": 0.75,
+    "content": 0.65,
+    "session_intent": 0.7,
+    "regional_popularity": 0.45,
+    "segment_popularity": 0.45,
+    "global_popularity": 0.25
+  },
+  "known_limitations": [
+    "Synthetic data",
+    "Metadata model maps profile features to ALS factors",
+    "No item cold-start evaluation",
+    "No two-tower model because current data volume does not justify added complexity"
+  ]
+}

@@ -1,0 +1,14 @@
+* text=auto eol=lf
+
+# Frozen migration inputs are integrity-pinned byte-for-byte, including JSON.
+/migration_assets/** binary -eol
+
+*.joblib binary
+*.npz binary
+*.parquet binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.pptx binary

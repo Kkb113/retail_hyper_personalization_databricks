@@ -1,0 +1,44 @@
+{
+  "selected_policy": "preferred_category_all_known",
+  "routing_rules": {
+    "Known": "preferred_category",
+    "LowHistory": "preferred_category",
+    "ColdStart": "cold_start_fallback",
+    "Inactive": "no_recommendations"
+  },
+  "thresholds": {},
+  "validation_metrics": {
+    "PolicyName": "preferred_category_all_known",
+    "PolicyComplexity": 1,
+    "Thresholds": "{}",
+    "EvaluationScope": "Overall",
+    "EligibleCustomers": 1249,
+    "CustomersWithRecommendations": 1249,
+    "PrecisionAt10": 0.035308246597277826,
+    "RecallAt10": 0.16058955702738842,
+    "HitRateAt10": 0.3026421136909528,
+    "NDCGAt10": 0.1211968158042569,
+    "PurchaseHitRateAt10": 0.1200960768614892,
+    "PurchaseRecallAt10": 0.043482291530141576,
+    "CustomerCoverage": 1.0,
+    "ProductCoverage": 0.325771662328003,
+    "DistinctRecommendedProducts": 876,
+    "Personalization": 0.9856721428459208,
+    "AverageDistinctCategories": 1.4155324259407527,
+    "AverageDistinctBrands": 8.485988791032826,
+    "InventoryValidRate": 1.0
+  },
+  "selection_explanation": "Selected preferred_category_all_known using validation NDCG@10, Recall@10, Purchase Hit Rate@10, product coverage, simpler policy, then name; test metrics were not used.",
+  "selection_used_test_data": false,
+  "cold_start_behavior": "regional -> segment -> preferred category -> global fallback",
+  "model_artifacts": {
+    "als": "artifacts/als/best_als_model.npz",
+    "xgboost": "artifacts/ranker/best_xgboost_ranker.json",
+    "preprocessor": "artifacts/ranker/ranker_preprocessor.joblib"
+  },
+  "baseline_artifacts": {
+    "preferred_category": "reports/recommendations/validation_baseline_recommendations.parquet"
+  },
+  "random_seed": 20260714,
+  "version": "LOCAL_POC_V1"
+}

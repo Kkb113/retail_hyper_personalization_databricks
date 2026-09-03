@@ -1,0 +1,33 @@
+# This repository intentionally tracks only the Azure Databricks implementation.
+/*
+
+!/.github/
+!/.github/**
+!/.editorconfig
+!/.gitattributes
+!/.gitignore
+!/CONTRIBUTING.md
+!/README.md
+!/SECURITY.md
+!/azure_databricks_implementation.md
+!/pyproject.toml
+!/requirements-dev.lock
+
+!/azure_databricks/
+!/azure_databricks/**
+!/migration_assets/
+!/migration_assets/**
+!/tests/
+/tests/*
+!/tests/azure_databricks/
+!/tests/azure_databricks/**
+
+# Never commit local credentials, environments, caches, or generated output.
+.env
+.env.*
+.venv/
+**/__pycache__/
+**/*.pyc
+.pytest_cache/
+.ruff_cache/
+*.log

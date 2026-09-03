@@ -1,0 +1,86 @@
+{
+  "contract_version": "1.0.0",
+  "migration_id": "databricks_model_migration_v1",
+  "release_id": "retail_hyper_personalization_demo_v1",
+  "policy_version": "adaptive_router_v1",
+  "dataset_version": "governed_training_v1",
+  "data_snapshot": "phase6_governed_train_validation_2026_07_27",
+  "code_revision": "ba581b80c2483b41820a0a25a4e3b86f9cb6bad7+phase7",
+  "feature_versions": {
+    "customer_profile": "point_in_time_profile_v1",
+    "interaction_labels": "temporally_weighted_labels_v1",
+    "candidate_retrieval": "hybrid_candidate_pool_v2",
+    "ranking_features": "warm_cold_ranker_features_v2"
+  },
+  "random_seed": 20260714,
+  "production_approved": false,
+  "training_mode": "frozen_artifact_migration_with_validation_only_selection",
+  "selection_policy": {
+    "parity_must_pass_before_improvement": true,
+    "fitting_partition": "train",
+    "selection_partition": "validation",
+    "historical_test_allowed": false,
+    "future_holdout_allowed": false,
+    "selected_candidate": "adaptive_router_v1",
+    "rejected_candidates": ["hard_history_router"],
+    "selection_metric": "NDCGAt10",
+    "absolute_metric_tolerance": 0.000000001
+  },
+  "components": [
+    {"name": "implicit_als", "version": "implicit_als_v2", "kind": "collaborative_retrieval"},
+    {"name": "hybrid_retrieval", "version": "hybrid_retrieval_v2", "kind": "multi_source_retrieval"},
+    {"name": "warm_ranker", "version": "warm_low_history_ranker_v2", "kind": "lambda_mart"},
+    {"name": "cold_start_ranker", "version": "cold_start_ranker_v1", "kind": "lambda_mart"},
+    {"name": "adaptive_router", "version": "adaptive_router_v1", "kind": "deterministic_policy"},
+    {"name": "recommender_bundle", "version": "retail_hyper_personalization_demo_v1", "kind": "mlflow_pyfunc"}
+  ],
+  "validation_metrics": {
+    "adaptive_router_v1": {
+      "EligibleCustomers": 1593,
+      "NDCGAt10": 0.1768528204702373,
+      "RecallAt10": 0.2471537897023363,
+      "HitRateAt10": 0.4438166980539862,
+      "PurchaseHitRateAt10": 0.12115505335844319,
+      "CustomerCoverage": 1.0,
+      "ProductCoverage": 0.4228337671997025
+    },
+    "hard_history_router": {
+      "EligibleCustomers": 1593,
+      "NDCGAt10": 0.17336297182909677,
+      "RecallAt10": 0.24183712652314956,
+      "HitRateAt10": 0.4325172630257376,
+      "PurchaseHitRateAt10": 0.11927181418706842,
+      "CustomerCoverage": 1.0,
+      "ProductCoverage": 0.44179992562290815
+    }
+  },
+  "business_rules": {
+    "inventory_required": true,
+    "active_product_required": true,
+    "duplicate_products_allowed": false,
+    "durable_repeat_exclusion_days": 180,
+    "maximum_top_n": 10,
+    "deterministic_tie_breaker": ["Rank", "ProductID"]
+  },
+  "artifacts": [
+    {"path": "artifacts/als/best_als_model_metadata.json", "sha256": "39cb23be5f47f7e7bb32404a3beeef12658fe9d3f17e46e16a91c66d969f3b1a"},
+    {"path": "artifacts/mappings/customer_mapping.json", "sha256": "533c9cec9ada343cc7ad76ba5a6813565380d68bec321485dbc2631cf169c827"},
+    {"path": "artifacts/mappings/product_mapping.json", "sha256": "02265754a1b6564f5612ebd042c175c0b3763aeecc01c998dad7fc8c64ddace3"},
+    {"path": "artifacts/retrieval_v2/metadata_factor_model.joblib", "sha256": "6a14634ad9184b0a587528fa8f546c919b46eee1a7891aa1ea629375573bf66d"},
+    {"path": "artifacts/retrieval_v2/factor_mappings.json", "sha256": "12e0e50cb72414c101f24ef5456dae384326a5bbba69accd26d8a54be1c6d4af"},
+    {"path": "artifacts/retrieval_v2/content_vectorizer.joblib", "sha256": "acd905c21b1b86cdb78dbc0a450cd6ec121a2d74ec4e373ed1823d5298df919d"},
+    {"path": "artifacts/retrieval_v2/content_product_mapping.json", "sha256": "7a90b27d501a52b9daf1475c259266d32c9d992bdd2dd8d9e27853f97d2ddf2f"},
+    {"path": "artifacts/retrieval_v2/content_neighbor_model.joblib", "sha256": "d953275b168e9868b89ac2b003a7fa4471aec87bc1bcfef41bd5c7d1df6e8e43"},
+    {"path": "artifacts/ranker_v2/shared_ranker.json", "sha256": "c1c9cbe01bac872e3cad3e9231f335221542abf7b356cafc866401de0017b8d9"},
+    {"path": "artifacts/ranker_v2/ranker_preprocessor.joblib", "sha256": "54d9b701c0081be28b3f65dc61059b13f24d30a4454d2852e736104356ca54b7"},
+    {"path": "artifacts/ranker_v2/ranker_metadata.json", "sha256": "2efd2d75648a9d1ff33b7603f2efe158d291990605fd388108f5f9ee738bb041"},
+    {"path": "artifacts/ranker_v2/ranker_feature_columns.json", "sha256": "eb08033a62af84604b700726c9b95facd36c6749eecd29aa87ba942c76f184b1"},
+    {"path": "artifacts/cold_start_v1/cold_start_ranker.json", "sha256": "3f5e913d31f274751b85620bf7fde80edd9e19af89f736fb910287c27c7a009e"},
+    {"path": "artifacts/cold_start_v1/cold_start_preprocessor.joblib", "sha256": "6c4eb4fc04c1da08c2d30ab081dfb66567b234fbaca660cd454d650c8988306e"},
+    {"path": "artifacts/cold_start_v1/cold_start_metadata.json", "sha256": "a4dd60ca95b7064bbe8352014248626c5af0dee1039df9faeed6d31ca52ac09f"},
+    {"path": "artifacts/cold_start_v1/feature_columns.json", "sha256": "d0f1030224815a86d20240296a512dcbbbef70efd20af891a9e72201988dd45d"},
+    {"path": "artifacts/adaptive_router_v1/routing_policy.json", "sha256": "dfc641e77544dd16421a3b47df3996ce6cd602235b1ca8041e5012eff3bee2ae"},
+    {"path": "artifacts/model_release_v1/recommendation_snapshot.parquet", "sha256": "ca7316d98773f42288b180bac619a31f913e82569362e6595e390e0330b2c4b8"},
+    {"path": "artifacts/model_release_v1/model_selection.json", "sha256": "5cfcdbf7be5ff00c8f8bb0cf239bb5a4afb27aabea47a639491542e83b85bf22"}
+  ]
+}

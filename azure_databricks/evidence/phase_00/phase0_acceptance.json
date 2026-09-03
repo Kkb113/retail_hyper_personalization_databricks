@@ -1,0 +1,20 @@
+{
+  "acceptance_version": "azure_phase0_acceptance_v1",
+  "budget_gate": "BLOCKED_PENDING_OWNER_THRESHOLD_AND_RECIPIENT",
+  "cloud_mutations_performed": false,
+  "completed_at": "2026-09-03",
+  "engineering_status": "PASS",
+  "paid_resource_creation_allowed": false,
+  "phase": 0,
+  "phase_1_code_work_allowed": true,
+  "production_claim": false,
+  "release_status": "POC_ONLY",
+  "tests": {
+    "app_frontend_build": "PASS",
+    "bundle_contract": "PASS_22_FILES_113_RESOURCES_5_TARGETS",
+    "custom_frontend": "PASS_10_TESTS_AND_BUILD",
+    "full_repository": "PASS_503_SKIPPED_3",
+    "phase0_focused": "PASS_43",
+    "secret_scan": "PASS"
+  }
+}

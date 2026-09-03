@@ -1,0 +1,32 @@
+{
+  "contract_version": "azure_model_payload_hashes_v1",
+  "algorithm": "sha256",
+  "assets": {
+    "artifacts/adaptive_router_v1/fallback_matrix.json": "0c1ac6c99ec54119598c65afd8482b9d1c753668b7cd48afc1449010cfe90b82",
+    "artifacts/adaptive_router_v1/routing_contract.json": "67cf0fee92be38f3dc6ab86580a58cb0078b9cad8fc3093584f75efb082ed266",
+    "artifacts/adaptive_router_v1/routing_policy.json": "dfc641e77544dd16421a3b47df3996ce6cd602235b1ca8041e5012eff3bee2ae",
+    "artifacts/cold_start_v1/cold_start_metadata.json": "a4dd60ca95b7064bbe8352014248626c5af0dee1039df9faeed6d31ca52ac09f",
+    "artifacts/cold_start_v1/cold_start_preprocessor.joblib": "6c4eb4fc04c1da08c2d30ab081dfb66567b234fbaca660cd454d650c8988306e",
+    "artifacts/cold_start_v1/cold_start_ranker.json": "3f5e913d31f274751b85620bf7fde80edd9e19af89f736fb910287c27c7a009e",
+    "artifacts/cold_start_v1/inference_reference.joblib": "880d0919db0ab9a05ddb47243b3ba568db56f4cb663deb4829992a25f50fbdfc",
+    "artifacts/cold_start_v1/no_purchase_api_contract.json": "fc4f3c4079dc354e94694cf5ba2e02db24a4fd4e70610013fd09fd56c1440024",
+    "artifacts/cold_start_v1/onboarding_schema.json": "fe5c32fb1ee93d8ed48e4c2235469cce079937e3e32d06cc01ff95593f1f334a",
+    "artifacts/final_policy/final_policy.json": "8e0e0021f5c5fea60e46f34f2cd457c51bda402edfd4a860f4750f13d77aa539",
+    "artifacts/final_policy/final_recommender_metadata.json": "c0072705e54ce272916f1bf35c72667df8ef9768b31a27a2fb68545b01b2192c",
+    "artifacts/model_release_v1/agent_recommendation_contract.json": "80e66decb3d9d5a48689d112f196b696c14aaac0a9bf8c1ab2d7b953b7c20489",
+    "artifacts/model_release_v1/model_selection.json": "5cfcdbf7be5ff00c8f8bb0cf239bb5a4afb27aabea47a639491542e83b85bf22",
+    "artifacts/model_release_v1/recommendation_snapshot.parquet": "ca7316d98773f42288b180bac619a31f913e82569362e6595e390e0330b2c4b8",
+    "artifacts/model_release_v1/release_manifest.json": "e8218178412219e2746d86ba516cfe031510d2d038886290ba4057a870757208",
+    "artifacts/ranker_v2/inference_contract.json": "f65f49d34a7ed0650597d904cc52f486c25a497e5fb95c31a7be847e034bc8e2",
+    "artifacts/ranker_v2/known_ranker.json": "37b0dbbf7fd468be748ff8628b7c27ee00cc993374aa429fb0baa5dfcb010c46",
+    "artifacts/ranker_v2/lowhistory_ranker.json": "ff6652d7b5b6e7fadb7b4c28322c29e24ad5b4c70d12bc3688d604e7d8c3c69f",
+    "artifacts/ranker_v2/ranker_preprocessor.joblib": "54d9b701c0081be28b3f65dc61059b13f24d30a4454d2852e736104356ca54b7",
+    "artifacts/ranker_v2/shared_ranker.json": "c1c9cbe01bac872e3cad3e9231f335221542abf7b356cafc866401de0017b8d9",
+    "artifacts/retrieval_v2/als_factors.npz": "18e8d046a7a3e0a443bbe6dcf8a5dd2983e93f255a71d85ac0f2722a4cebef98",
+    "artifacts/retrieval_v2/content_matrix.npz": "14a441c71e9685ede7a39391b4396e613088373d858eee675e58c7227f48227c",
+    "artifacts/retrieval_v2/content_neighbor_model.joblib": "d953275b168e9868b89ac2b003a7fa4471aec87bc1bcfef41bd5c7d1df6e8e43",
+    "artifacts/retrieval_v2/factor_mappings.json": "12e0e50cb72414c101f24ef5456dae384326a5bbba69accd26d8a54be1c6d4af",
+    "artifacts/retrieval_v2/metadata_factor_model.joblib": "6a14634ad9184b0a587528fa8f546c919b46eee1a7891aa1ea629375573bf66d",
+    "artifacts/retrieval_v2/retrieval_metadata.json": "e5e7e45f8fbdfa3ea6016d96266f348d39b14cbaca455f7d987d5f41f46ecb63"
+  }
+}

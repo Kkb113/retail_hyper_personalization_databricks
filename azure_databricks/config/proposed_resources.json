@@ -1,0 +1,245 @@
+{
+  "plan_version": "azure_phase0_proposed_resources_v1",
+  "scope": {
+    "azure_resource_group": "Databricks",
+    "default_region": "westus",
+    "workspace": "intellify-databricks-demo"
+  },
+  "resources": [
+    {
+      "name": "Databricks",
+      "kind": "azure_resource_group",
+      "phase": 0,
+      "state": "existing_retain",
+      "azure_resource_group": "Databricks",
+      "workspace": null,
+      "incremental_cost_class": "existing",
+      "enabled_by_default": true,
+      "lifecycle_controls": ["never_delete_without_explicit_approval"]
+    },
+    {
+      "name": "intellify-databricks-demo",
+      "kind": "azure_databricks_workspace",
+      "phase": 0,
+      "state": "existing_retain",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "existing",
+      "enabled_by_default": true,
+      "lifecycle_controls": ["reuse_premium_workspace", "no_workspace_resize"]
+    },
+    {
+      "name": "retail-hp-poc-budget",
+      "kind": "azure_cost_management_budget",
+      "phase": 2,
+      "state": "blocked_pending_owner_input",
+      "azure_resource_group": "Databricks",
+      "workspace": null,
+      "incremental_cost_class": "free_control",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "requires_numeric_threshold",
+        "requires_notification_recipient",
+        "alerts_do_not_hard_stop_spend"
+      ]
+    },
+    {
+      "name": "bronze,silver,features,ml,gold,serving,agent,monitoring",
+      "kind": "unity_catalog_managed_schemas",
+      "phase": 2,
+      "state": "planned",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "platform_metadata",
+      "enabled_by_default": false,
+      "lifecycle_controls": ["existing_catalog_only", "least_privilege"]
+    },
+    {
+      "name": "transfer_landing,model_assets",
+      "kind": "unity_catalog_managed_volumes",
+      "phase": 2,
+      "state": "planned",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "marginal_storage",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "managed_storage",
+        "versioned_small_transfer",
+        "retention_review"
+      ]
+    },
+    {
+      "name": "retail-hp-poc-warehouse",
+      "kind": "serverless_sql_warehouse",
+      "phase": 2,
+      "state": "planned_paid_blocked",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "usage_based",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "smallest_size",
+        "min_clusters_1",
+        "max_clusters_1",
+        "api_auto_stop_1_minute"
+      ]
+    },
+    {
+      "name": "retail-hp-poc-triggered-jobs",
+      "kind": "serverless_lakeflow_jobs",
+      "phase": 3,
+      "state": "planned_paid_blocked",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "usage_based",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "triggered_only",
+        "schedules_paused_at_deploy",
+        "bounded_concurrency"
+      ]
+    },
+    {
+      "name": "adaptive_recommender",
+      "kind": "unity_catalog_registered_model",
+      "phase": 5,
+      "state": "planned",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "marginal_storage",
+      "enabled_by_default": false,
+      "lifecycle_controls": ["candidate_before_champion", "version_retention"]
+    },
+    {
+      "name": "retail-hp-poc-recommender",
+      "kind": "custom_model_serving_endpoint",
+      "phase": 6,
+      "state": "planned_paid_blocked",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "usage_based",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "small_cpu",
+        "one_served_model",
+        "scale_to_zero",
+        "demo_warmup_only"
+      ]
+    },
+    {
+      "name": "retail-hp-poc",
+      "kind": "lakebase_autoscaling_project",
+      "phase": 7,
+      "state": "optional_disabled",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "usage_based",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "maximum_1_cu",
+        "scale_to_zero_5_minutes",
+        "no_high_availability",
+        "no_read_replica",
+        "delta_fallback"
+      ]
+    },
+    {
+      "name": "product_embeddings_delta",
+      "kind": "delta_embedding_table",
+      "phase": 8,
+      "state": "planned_paid_blocked",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "pay_per_token_once",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "changed_rows_only",
+        "bounded_in_process_search",
+        "no_vector_endpoint"
+      ]
+    },
+    {
+      "name": "azure-ai-search-free",
+      "kind": "azure_ai_search",
+      "phase": 8,
+      "state": "optional_disabled",
+      "azure_resource_group": "Databricks",
+      "workspace": null,
+      "incremental_cost_class": "free_if_available",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "free_sku_only",
+        "one_per_subscription_preflight",
+        "never_fallback_to_basic"
+      ]
+    },
+    {
+      "name": "databricks-ai-search",
+      "kind": "databricks_ai_search",
+      "phase": 8,
+      "state": "rejected_by_default",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "base_plus_usage",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "do_not_create_for_3000_product_catalog",
+        "requires_scale_evidence_and_approval"
+      ]
+    },
+    {
+      "name": "retail-hp-agent-foundation-model",
+      "kind": "pay_per_token_foundation_endpoint",
+      "phase": 9,
+      "state": "planned_paid_blocked",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "pay_per_token",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "live_model_bakeoff",
+        "token_ceiling",
+        "rate_limit",
+        "one_primary_one_fallback_maximum"
+      ]
+    },
+    {
+      "name": "retail-hp-poc-app",
+      "kind": "databricks_app",
+      "phase": 10,
+      "state": "planned_paid_blocked",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "hourly_while_running",
+      "enabled_by_default": false,
+      "lifecycle_controls": ["medium_compute", "one_app", "stop_outside_demo"]
+    },
+    {
+      "name": "retail-hp-poc-dashboard",
+      "kind": "ai_bi_dashboard",
+      "phase": 11,
+      "state": "planned",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "uses_auto_stopped_warehouse",
+      "enabled_by_default": false,
+      "lifecycle_controls": ["on_demand_refresh", "shared_warehouse"]
+    },
+    {
+      "name": "retail-hp-poc-genie",
+      "kind": "genie_space",
+      "phase": 11,
+      "state": "optional_disabled",
+      "azure_resource_group": "Databricks",
+      "workspace": "intellify-databricks-demo",
+      "incremental_cost_class": "pricing_must_be_rechecked",
+      "enabled_by_default": false,
+      "lifecycle_controls": [
+        "human_demo_only",
+        "no_service_principal_automation",
+        "current_pricing_recheck"
+      ]
+    }
+  ]
+}
