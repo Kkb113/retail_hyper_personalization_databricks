@@ -5,8 +5,8 @@
 | Field | Value |
 |---|---|
 | Document status | Implementation source of truth |
-| Initial delivery status | Phase 0 complete; Phase 1 is next |
-| Last verified | 2026-09-03 |
+| Initial delivery status | Phase 0 complete; Phase 1 foundation implemented and live-validated |
+| Last verified | 2026-09-04 |
 | Azure resource group boundary | **Databricks** only |
 | Azure Databricks workspace | **intellify-databricks-demo** |
 | Azure region | **West US** |
@@ -537,6 +537,24 @@ Turn the current assessment into a controlled implementation contract before any
 ---
 
 ## Phase 1 — Azure project foundation
+
+**Implemented:** Azure-only Python package, one `poc` bundle with no resources,
+strict scope/cost preflight, four hash-locked foundation runtimes, local app
+health skeleton, schema, tests and read-only live validation. See
+`azure_databricks/evidence/phase_01/` for the review, research and evidence.
+No cloud deployment, compute creation or artifact upload occurs in this phase.
+The runtime locks are foundation-only; functional model dependencies and parity
+remain Phase 5 work. The bundle uses a private runtime-resolved user root and
+only a harmless marker is eligible for future synchronization.
+
+**Current owner decisions override earlier planning assumptions:** INR 12,000
+monthly target, INR 9,000 internal stop target, INR 3,000 reserve, at most four
+occasional demos per month, and a 20-minute human-idle objective. Both alert
+recipients are supplied privately. Azure budgets are not hard billing caps.
+Budget delivery and shutdown controllers are not deployed; all optional features
+and cloud mutations remain disabled in `azure_databricks/config/poc.json`.
+Custom serving stays disabled while its native 30-minute idle scale-down cannot
+meet that objective. No Premium add-ons or free-to-paid fallback is authorized.
 
 ### Objective
 
@@ -2035,4 +2053,9 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-Begin **Phase 1** by creating the clean Azure bundle and package foundation. Phase 0 permits code-only work, but paid resource creation remains blocked until the budget threshold and notification recipient are approved. No compute or optional service should be created before its specific cost and boundary gate passes.
+Review the Phase 1 acceptance and proceed to **Phase 2 — Governance and platform
+bootstrap** only when requested. First address scoped tags, least privilege,
+Azure billing-currency verification, budget notifications to both private
+recipients and tested shutdown controls. The owner budget decision is recorded,
+but a budget and cost controller are not active. No paid compute or optional
+service should be created before its specific cost and boundary gate passes.

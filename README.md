@@ -14,8 +14,9 @@ this Azure solution.
 
 ## Current status
 
-Phase 0 is complete and tested. It established a read-only scope, safety and
-cost baseline for:
+Phase 0 established the scope and migration baseline. Phase 1 adds an installable
+Azure-only package, resource-free bundle, strict preflight, runtime locks and app
+health skeleton. The boundary remains:
 
 - Azure resource group `Databricks`
 - Azure Databricks workspace `intellify-databricks-demo`
@@ -23,13 +24,18 @@ cost baseline for:
 - synthetic POC data only
 - zero new Azure resources and zero incremental Phase 0 cloud cost
 
-Paid resource creation remains blocked until the owner supplies a monthly
-budget threshold and notification recipient. Model release remains POC-only and
-blocked pending a future holdout and owner approvals.
+The agreed monthly target is INR 12,000, with an internal stop target of INR
+9,000 and INR 3,000 reserve. Two notification recipients were provided privately.
+**Budget alerts and the shutdown controller are not deployed.** Azure budgets
+are not hard billing caps. Paid deployment remains blocked until those controls
+and current pricing are verified. Model release remains POC-only, pending a
+future holdout and owner approvals.
 
-There is deliberately no deployable `databricks.yml` yet. Phase 1 will create
-the first Azure-specific Databricks Asset Bundle; retaining the legacy bundle
-would make an accidental deployment to the wrong catalog too easy.
+The only bundle is `azure_databricks/databricks.yml`, with target `poc`, **zero
+resources**, no build hooks and marker-only sync eligibility. No sync is run in
+Phase 1. Do not deploy a legacy
+root bundle. No app, endpoint, warehouse, job or Azure service is created in
+Phase 1. The existing Premium workspace is reused without upgrades or add-ons.
 
 ## Repository layout
 
@@ -52,17 +58,22 @@ Python 3.12 is the reference CI runtime.
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.lock
-.\.venv\Scripts\python.exe azure_databricks\scripts\build_phase0.py
-.\.venv\Scripts\python.exe -m pytest tests\azure_databricks -q
+.\.venv\Scripts\python.exe -m pip install --no-deps -e .
+.\.venv\Scripts\python.exe azure_databricks\scripts\generate_phase1.py
+.\.venv\Scripts\python.exe -m pytest -c pyproject.toml tests\azure_databricks -q
+.\.venv\Scripts\python.exe -m mypy
+.\.venv\Scripts\python.exe -m ruff check azure_databricks/src azure_databricks/scripts tests/azure_databricks
 .\.venv\Scripts\python.exe azure_databricks\scripts\scan_repository_secrets.py
 ```
 
-For a refreshed read-only Azure inventory, authenticate with Azure CLI and run:
+Use a new environment rather than overwriting an existing legacy environment.
+For read-only Azure verification, authenticate with Azure CLI and supply the
+checksum-verified CLI version from `azure_databricks/config/toolchain.json`:
 
 ```powershell
-.\.venv\Scripts\python.exe azure_databricks\scripts\build_phase0.py --collect-live
+.\.venv\Scripts\python.exe -m retail_hp_azure.cli verify-live --databricks-cli <path-to-databricks-cli>
 ```
 
 See [azure_databricks_implementation.md](azure_databricks_implementation.md)
 for the complete roadmap and [azure_databricks/README.md](azure_databricks/README.md)
-for Phase 0 details.
+for the foundation runbook and evidence.

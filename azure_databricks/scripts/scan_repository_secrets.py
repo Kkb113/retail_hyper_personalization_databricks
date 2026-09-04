@@ -33,7 +33,12 @@ def _files():
             yield path
         elif path.is_dir():
             for candidate in path.rglob("*"):
-                if candidate.is_file() and candidate.suffix in TEXT_SUFFIXES:
+                if (
+                    candidate.is_file() and candidate.suffix in TEXT_SUFFIXES
+                    and not {".databricks", ".build", "build", "dist", "__pycache__"}
+                    .intersection(candidate.parts)
+                    and not candidate.name.endswith(".local.json")
+                ):
                     yield candidate
 
 

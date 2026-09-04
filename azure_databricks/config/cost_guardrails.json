@@ -1,9 +1,16 @@
 {
   "budget": {
     "amount_usd": null,
-    "currency": "USD",
+    "currency": "INR",
+    "amount_inr": 12000,
+    "internal_stop_target_inr": 9000,
+    "reserve_inr": 3000,
     "notification_recipient_committed": false,
-    "state": "BLOCKED_PENDING_OWNER_THRESHOLD_AND_RECIPIENT"
+    "state": "OWNER_DECISIONS_RECORDED_DEPLOYMENT_BLOCKED_PENDING_CONTROLS",
+    "current_policy": "config/poc.json",
+    "azure_budget_deployed": false,
+    "shutdown_controller_deployed": false,
+    "hard_billing_cap_available": false
   },
   "cost_policy_version": "azure_phase0_cost_guardrails_v1",
   "default_optional_features": {

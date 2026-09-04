@@ -2,29 +2,33 @@
 
 ## Policy
 
-- Currency: USD for planning.
+- Owner planning currency: INR; Azure billing currency must be verified before
+  creating the budget (do not assume INR or use an unverified conversion).
 - Azure scope: resource group **Databricks** only.
 - Free or existing capability is always evaluated before a paid resource.
 - Contract/list prices are refreshed immediately before a paid creation.
-- Azure budget amount: pending owner approval.
-- Budget notification recipient: pending owner approval and intentionally not
-  committed.
-- Paid resource creation: blocked.
+- Owner monthly target: INR 12,000; internal stop target INR 9,000; reserve INR 3,000.
+- Two notification recipients supplied privately; addresses are not committed.
+- Budget alerts and shutdown controller: not deployed.
+- Paid resource creation: blocked pending controls, current pricing and approval
+  of the specific resource. No premium add-ons or automatic paid fallback.
 
 ## Phase ledger
 
 | Phase | Cloud mutations | Incremental cost | State | Evidence |
 |---:|---|---:|---|---|
 | 0 | None; read-only inventory only | USD 0.00 | Complete | live_inventory.json and resource_inventory.json |
-| 1 | Code and bundle validation only | USD 0.00 target | Planned | Not started |
-| 2+ | Governed resources and bounded compute | Not yet estimated | Blocked | Fresh pricing and owner budget decision required |
+| 1 | Local code and read-only bundle validation | INR 0 new compute | Foundation | evidence/phase_01 |
+| 2+ | Governed resources and bounded compute | Not yet estimated | Blocked | Current pricing, budget notifications and shutdown controls required |
 
-## Hard technical controls
+## Required future controls (not deployed in Phase 1)
 
 - Zero all-purpose clusters.
 - One smallest serverless SQL warehouse with one-minute API auto-stop.
 - Triggered jobs with schedules paused at deployment.
-- One Small CPU model endpoint with scale-to-zero.
+- Custom model serving is disabled: native 30-minute scale-to-zero conflicts
+  with the requested 20-minute human-idle limit. Prefer triggered/batch inference
+  until an affordable compliant serving design passes its gate.
 - No GPU and no provisioned foundation-model throughput.
 - One MEDIUM app, stopped outside development and demo windows.
 - Lakebase off by default; if approved, maximum 1 CU, rapid scale-to-zero, no
@@ -32,13 +36,22 @@
 - Zero vector-search endpoints by default.
 - Pay-per-token model calls with token and rate limits.
 
-## Budget decision required before Phase 2 paid deployment
+## Remaining budget work before paid deployment
 
-The owner must provide:
+The owner has approved the target and supplied two recipients. Implementation must:
 
-1. Monthly alert amount.
-2. Notification recipient or action group.
-3. Whether alerts should be set at multiple thresholds.
+1. Verify Azure billing currency and current regional prices.
+2. Create scoped actual/forecast notifications and test delivery to both recipients.
+3. Build/test an idempotent, scoped stop controller with an INR 9,000 internal target.
+4. Test human inactivity, session expiry, job timeout and manual shutdown independently.
+5. Verify all billable compute is stopped after development/demo sessions.
 
 Source control records only the state and amount, never personal notification
-details. Budget alerts are not treated as an automatic spending stop.
+details. Budget alerts do not stop resources and are evaluated using delayed cost
+data. No custom PAYG resource-group hard billing cap exists, so even a stop
+controller cannot guarantee an exact INR 12,000 invoice. Small storage/log costs
+can remain while compute is off. Do not describe these future controls as active.
+
+Sources: [Azure budgets](https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-acm-create-budgets),
+[spending limits](https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/spending-limit),
+[custom-model scaling](https://learn.microsoft.com/en-us/azure/databricks/machine-learning/model-serving/custom-models).

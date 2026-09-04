@@ -31,3 +31,10 @@
 .pytest_cache/
 .ruff_cache/
 *.log
+.databricks/
+.build/
+build/
+dist/
+*.egg-info/
+.mypy_cache/
+*.local.json
