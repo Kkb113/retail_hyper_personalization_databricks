@@ -340,6 +340,19 @@ def test_build_tool_pins_include_verified_security_fixes():
     assert project["build-system"]["requires"] == ["setuptools==83.0.0", "wheel==0.46.2"]
 
 
+def test_installed_development_dependencies_match_declared_pins():
+    from importlib.metadata import version
+
+    from packaging.requirements import Requirement
+
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    for declaration in project["project"]["optional-dependencies"]["dev"]:
+        requirement = Requirement(declaration)
+        assert version(requirement.name) in requirement.specifier, (
+            f"Stale development lock or environment: {requirement.name}"
+        )
+
+
 def test_idle_flexibility_does_not_authorize_paid_deployment(config):
     assert config.cost.idle_policy == "service_specific_session_bounded"
     assert config.cost.hard_idle_limit_required is False
