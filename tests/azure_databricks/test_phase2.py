@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
@@ -185,6 +187,21 @@ def test_unmanaged_existing_schema_is_not_modified(fake_context):
 def test_existing_schema_marker_is_explicit():
     assert "Phase 2" in MARKER
     assert "synthetic" in MARKER
+
+
+def test_owner_budget_deferral_does_not_authorize_paid_platform_activation():
+    root = Path(__file__).resolve().parents[2] / "azure_databricks"
+    acceptance = json.loads((root / "evidence/phase_02/acceptance.json").read_text())
+    assert acceptance["governance_complete"] is True
+    assert acceptance["phase2_complete"] is False
+    assert acceptance["phase3_authorized"] is False
+    assert acceptance["paid_deployment_allowed"] is False
+    decision = acceptance["owner_budget_deferral"]
+    assert decision["decision"] == "DEFER_BUDGET_UNTIL_IT_CONFIRMS_CURRENCY"
+    assert decision["budget_deployed"] is False
+    assert decision["paid_compute_authorized_by_deferral"] is False
+    policy = json.loads((root / "config/poc.json").read_text())
+    assert policy["cost"]["paid_resource_creation_allowed"] is False
 
 
 def test_second_governance_apply_is_noop_with_scim_list_omitting_members(fake_context):

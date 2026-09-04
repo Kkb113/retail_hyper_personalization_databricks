@@ -10,6 +10,8 @@
 - Owner monthly target: INR 12,000; internal stop target INR 9,000; reserve INR 3,000.
 - Two notification recipients supplied privately; addresses are not committed.
 - Budget alerts and shutdown controller: not deployed.
+- Owner decision: budget setup deferred until IT confirms the currency. This is
+  a scheduling deferral, not authorization to bypass paid-deployment controls.
 - Paid resource creation: blocked pending controls, current pricing and approval
   of the specific resource. No premium add-ons or automatic paid fallback.
 

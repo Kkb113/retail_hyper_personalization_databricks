@@ -3,10 +3,18 @@
   "reviewed_on": "2026-09-04",
   "status": "PARTIAL_GOVERNANCE_VERIFIED_COST_GATE_BLOCKED",
   "phase2_complete": false,
+  "governance_complete": true,
+  "owner_budget_deferral": {
+    "decision": "DEFER_BUDGET_UNTIL_IT_CONFIRMS_CURRENCY",
+    "scope": "Budget scheduling only; no waiver of paid-deployment or permission gates",
+    "currency_confirmation_owner": "IT administrator",
+    "budget_deployed": false,
+    "paid_compute_authorized_by_deferral": false
+  },
   "phase3_authorized": false,
   "paid_deployment_allowed": false,
   "local_validation": {
-    "pytest_passed": 97,
+    "pytest_passed": 98,
     "pytest_failed": 0,
     "pytest_warnings": 2,
     "warnings": "Existing Starlette/httpx and AnyIO deprecations; no dependency change in Phase 2",
@@ -36,7 +44,7 @@
     "azure_billing_currency_and_current_cost": "BLOCKED_HTTP_429",
     "databricks_system_billing_visibility": "BLOCKED_PERMISSION_DENIED",
     "managed_resource_group_cost_coverage": "NOT_VERIFIED",
-    "budget_notifications": "NOT_DEPLOYED",
+    "budget_notifications": "OWNER_DEFERRED_PENDING_IT_CURRENCY_CONFIRMATION",
     "shutdown_controller": "NOT_DEPLOYED",
     "warehouse_idle_shutdown_test": "NOT_RUN_NO_WAREHOUSE",
     "viewer_app_engineer_execution_tests": "NOT_RUN_IDENTITIES_AND_COMPUTE_REQUIRED",

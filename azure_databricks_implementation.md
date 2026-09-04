@@ -616,6 +616,11 @@ budget/controller deployment and non-admin execution tests remain unresolved.
 No paid compute was created. See
 [Phase 2 evidence and runbook](azure_databricks/evidence/phase_02/README.md).
 
+**Owner follow-up decision:** defer budget setup until IT confirms the currency.
+The metadata-governance deliverable is complete. Full platform activation still
+requires the remaining cost, identity and execution gates; this scheduling
+decision does not authorize paid compute or mark those tests passed.
+
 ### Objective
 
 Create the minimum governed Databricks foundation for data, models, jobs, the app, and observability.

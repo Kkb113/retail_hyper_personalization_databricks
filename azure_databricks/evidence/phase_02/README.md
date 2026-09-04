@@ -7,9 +7,20 @@ Live verification passed **85 checks**. Reapplying the bootstrap produced **zero
 actions**. This is **partial Phase 2 completion**, not permission to start Phase 3
 or paid compute.
 
-The full local suite passed **97 tests** (two existing dependency-deprecation
+The full local suite passed **98 tests** (two existing dependency-deprecation
 warnings), plus Ruff, mypy, dependency compatibility and the credential scan.
 See `acceptance.json` for the separate passed and blocked gates.
+
+### Owner decision — budget deferred
+
+The owner has asked to set the budget later and will obtain currency confirmation
+from IT. The completed metadata-governance work is closed out independently of
+that administrative follow-up. Budget deployment is explicitly deferred, not
+failed or secretly enabled. This decision does not authorize paid compute,
+waive the INR 12,000 target, resolve Databricks billing permissions, or turn
+unexecuted identity/warehouse/shutdown tests into passes. Full Phase 2 platform
+activation remains pending; `governance_complete` is true and `phase2_complete`
+remains false. No additional cloud operations are needed for this decision.
 
 Created/configured:
 
@@ -90,7 +101,8 @@ Phase 1's resource-free bundle, configuration and historical evidence are unchan
    billing view in monitoring (usage plus approved price information), or explicit
    approval for narrowly scoped billing access. System billing contains other
    workspaces' usage; do not self-grant broad account/metastore administration.
-3. **Budget and controller:** still not deployed. After currency and price checks,
+3. **Budget and controller:** budget deferred by the owner until IT confirms the
+   currency; controller still not deployed. After currency and price checks,
    configure actual/forecast notifications to the two privately supplied recipients,
    test delivery, implement/test scoped admission and shutdown controls, and then
    evaluate a single smallest suitable serverless warehouse with one-minute idle

@@ -32,6 +32,10 @@ not complete:** Azure cost queries are throttled and Databricks billing access
 is denied; paid deployment and Phase 3 remain blocked. See the
 [Phase 2 status and runbook](azure_databricks/evidence/phase_02/README.md).
 
+The owner has deferred budget setup until IT confirms the currency. Metadata
+governance is complete independently of that follow-up; paid deployment and the
+remaining platform-activation tests are not waived by this decision.
+
 The agreed monthly target is INR 12,000, with an internal stop target of INR
 9,000 and INR 3,000 reserve. Two notification recipients were provided privately.
 **Budget alerts and the shutdown controller are not deployed.** Azure budgets
