@@ -5,10 +5,12 @@
     "budget_deployed": false,
     "cloud_mutations_allowed": false,
     "currency": "INR",
-    "custom_serving_blocked_by_idle_policy": true,
+    "custom_serving_blocked_by_idle_policy": false,
     "demonstrations_per_month_max": 4,
     "free_to_paid_fallback": false,
-    "human_idle_limit_minutes": 20,
+    "hard_idle_limit_required": false,
+    "human_idle_reference_minutes": 20,
+    "idle_policy": "service_specific_session_bounded",
     "internal_stop_target": 9000,
     "monthly_target": 12000,
     "notification_recipient_count": 2,
@@ -52,7 +54,7 @@
     "workspace": "intellify-databricks-demo"
   },
   "source_hashes": {
-    "config/poc.json": "ad87262cf49928262e10d5c8643f2460803821f4dc33c55a4542958d0c25a1b2",
+    "config/poc.json": "312022b6dfedd9a981d4f3b3813de28d7dc175a39775de3085f9f38c9bac097a",
     "databricks.yml": "e469440f0dca850618490fc2fd291573af279b49b73d72de349c3e9df0fdb39a"
   },
   "target": "poc",
@@ -75,5 +77,5 @@
     "raw_identifiers_or_recipients_recorded": false,
     "resolved_scope_validation": "PASS"
   },
-  "verified_at": "2026-09-04T04:58:16.950949+00:00"
+  "verified_at": "2026-09-04T05:15:38.457897+00:00"
 }
