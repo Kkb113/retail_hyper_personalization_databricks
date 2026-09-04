@@ -14,7 +14,7 @@ jobs = ["databricks-sdk==0.81.0"]
 serving = []
 agent = ["databricks-sdk==0.81.0"]
 app = ["fastapi==0.141.1", "uvicorn==0.51.0"]
-dev = ["pyarrow==17.0.0", "pytest==8.4.1", "ruff==0.12.5", "mypy==1.17.1",
+dev = ["pyarrow==23.0.1", "pytest==8.4.1", "ruff==0.12.5", "mypy==1.17.1",
        "types-PyYAML==6.0.12.20250516", "build==1.2.2.post1", "httpx==0.28.1",
        "jsonschema==4.25.1"]
 
