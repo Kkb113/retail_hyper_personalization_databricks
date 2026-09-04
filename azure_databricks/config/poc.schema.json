@@ -24,7 +24,7 @@
           "type": "string"
         },
         "custom_serving_blocked_by_idle_policy": {
-          "const": true,
+          "const": false,
           "title": "Custom Serving Blocked By Idle Policy",
           "type": "boolean"
         },
@@ -38,10 +38,20 @@
           "title": "Free To Paid Fallback",
           "type": "boolean"
         },
-        "human_idle_limit_minutes": {
+        "hard_idle_limit_required": {
+          "const": false,
+          "title": "Hard Idle Limit Required",
+          "type": "boolean"
+        },
+        "human_idle_reference_minutes": {
           "const": 20,
-          "title": "Human Idle Limit Minutes",
+          "title": "Human Idle Reference Minutes",
           "type": "integer"
+        },
+        "idle_policy": {
+          "const": "service_specific_session_bounded",
+          "title": "Idle Policy",
+          "type": "string"
         },
         "internal_stop_target": {
           "const": 9000,
@@ -97,7 +107,9 @@
         "free_to_paid_fallback",
         "paid_resource_creation_allowed",
         "cloud_mutations_allowed",
-        "human_idle_limit_minutes",
+        "idle_policy",
+        "human_idle_reference_minutes",
+        "hard_idle_limit_required",
         "sql_auto_stop_minutes",
         "custom_serving_blocked_by_idle_policy",
         "demonstrations_per_month_max"

@@ -549,12 +549,16 @@ only a harmless marker is eligible for future synchronization.
 
 **Current owner decisions override earlier planning assumptions:** INR 12,000
 monthly target, INR 9,000 internal stop target, INR 3,000 reserve, at most four
-occasional demos per month, and a 20-minute human-idle objective. Both alert
+occasional demos per month, and service-specific idle optimization. Twenty
+minutes was an example, not a hard limit. Both alert
 recipients are supplied privately. Azure budgets are not hard billing caps.
 Budget delivery and shutdown controllers are not deployed; all optional features
 and cloud mutations remain disabled in `azure_databricks/config/poc.json`.
-Custom serving stays disabled while its native 30-minute idle scale-down cannot
-meet that objective. No Premium add-ons or free-to-paid fallback is authorized.
+Custom serving's native 30-minute idle scale-down may now be evaluated if its
+full session cost and cold-start behavior fit the POC. It remains disabled until
+the deployment gate passes. Require pre-start cost checks, bounded sessions,
+runtime/token limits and explicit cleanup; do not rely only on delayed budget
+alerts. No Premium add-ons or free-to-paid fallback is authorized.
 
 ### Objective
 

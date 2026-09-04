@@ -26,9 +26,15 @@
 - Zero all-purpose clusters.
 - One smallest serverless SQL warehouse with one-minute API auto-stop.
 - Triggered jobs with schedules paused at deployment.
-- Custom model serving is disabled: native 30-minute scale-to-zero conflicts
-  with the requested 20-minute human-idle limit. Prefer triggered/batch inference
-  until an affordable compliant serving design passes its gate.
+- Twenty minutes is illustrative, not mandatory. Optimize idle settings per
+  service using measured cost and acceptable cold-start behavior. Native
+  30-minute serving scale-to-zero may be evaluated alongside triggered/batch
+  inference; all serving remains disabled until the cost/deployment gate passes.
+- Explicitly bounded development/demo sessions, end-of-session cleanup and
+  maximum runtime/token limits are required in addition to idle shutdown.
+- Reject a session start if its conservative full cost estimate would exhaust
+  the remaining operating allowance. Include applicable taxes, storage and
+  currency conversion in planning, and reserve for delayed usage reporting.
 - No GPU and no provisioned foundation-model throughput.
 - One MEDIUM app, stopped outside development and demo windows.
 - Lakebase off by default; if approved, maximum 1 CU, rapid scale-to-zero, no
