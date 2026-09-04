@@ -3,6 +3,11 @@
 Researched 2026-09-04 using primary documentation. These are engineering choices
 for an occasional synthetic POC, not production or cost guarantees.
 
+Subsequent owner clarification: twenty minutes was illustrative. The strict-idle
+decision in item 14 below is historical and superseded by
+`cost_policy_clarification.md`; service-specific timeouts may now be evaluated.
+All deployment gates remain closed.
+
 ## Databricks foundation
 
 1. [Bundle configuration reference](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/bundles/reference):

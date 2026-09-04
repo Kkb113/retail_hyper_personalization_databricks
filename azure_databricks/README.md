@@ -115,9 +115,15 @@ Databricks App yet. Authentication and real user journeys belong to later phases
 - No cloud mutations or new billable resources in Phase 1.
 - All optional features are disabled; free-to-paid fallback is forbidden.
 - Budget alerts, idle watchdog and cost stop controller are **not deployed**.
-- Twenty-minute human inactivity is the target for interactive components.
-  Custom serving remains disabled because its native scale-to-zero is 30 minutes.
-  Jobs need runtime limits, and apps need separate session/idle controls.
+- Twenty minutes was an example, not a hard limit. Select service-specific idle
+  settings to balance measured cost, cold starts and demo quality. A 30-minute
+  native serving idle window is eligible for evaluation, not permission to deploy.
+  Jobs need runtime limits, and apps need separate session/idle controls. All
+  compute must be stopped outside explicitly bounded development/demo sessions.
+- Before enabling compute, estimate the full session cost against the remaining
+  operating allowance and enforce runtime/token limits. Reserve headroom for
+  storage, billing delay, currency changes and applicable taxes. Exact rates and
+  usable session hours must be verified before paid deployment.
 - Azure budgets do not guarantee a hard INR 12,000 cap; storage and delayed usage
   can still be charged while compute is stopped. See `cost_ledger.md`.
 

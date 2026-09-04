@@ -73,9 +73,11 @@ class Cost(StrictModel):
     free_to_paid_fallback: Literal[False]
     paid_resource_creation_allowed: Literal[False]
     cloud_mutations_allowed: Literal[False]
-    human_idle_limit_minutes: Literal[20]
+    idle_policy: Literal["service_specific_session_bounded"]
+    human_idle_reference_minutes: Literal[20]
+    hard_idle_limit_required: Literal[False]
     sql_auto_stop_minutes: Literal[1]
-    custom_serving_blocked_by_idle_policy: Literal[True]
+    custom_serving_blocked_by_idle_policy: Literal[False]
     demonstrations_per_month_max: Literal[4]
 
 

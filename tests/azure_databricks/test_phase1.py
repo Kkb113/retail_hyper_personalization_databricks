@@ -75,7 +75,7 @@ def test_authoritative_contract_matches_schema_and_source(config):
     ("cost", "free_to_paid_fallback", True),
     ("cost", "monthly_target", 12001),
     ("cost", "monthly_target", "12000"),
-    ("cost", "human_idle_limit_minutes", 30),
+    ("cost", "hard_idle_limit_required", True),
     ("cost", "budget_deployed", True),
     ("features", "app", "false"),
     ("features", "app", 0),
@@ -338,3 +338,27 @@ def test_package_has_no_legacy_or_cloud_side_effect_imports():
 def test_build_tool_pins_include_verified_security_fixes():
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     assert project["build-system"]["requires"] == ["setuptools==83.0.0", "wheel==0.46.2"]
+
+
+def test_installed_development_dependencies_match_declared_pins():
+    from importlib.metadata import version
+
+    from packaging.requirements import Requirement
+
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    for declaration in project["project"]["optional-dependencies"]["dev"]:
+        requirement = Requirement(declaration)
+        assert version(requirement.name) in requirement.specifier, (
+            f"Stale development lock or environment: {requirement.name}"
+        )
+
+
+def test_idle_flexibility_does_not_authorize_paid_deployment(config):
+    assert config.cost.idle_policy == "service_specific_session_bounded"
+    assert config.cost.hard_idle_limit_required is False
+    assert config.cost.custom_serving_blocked_by_idle_policy is False
+    assert config.features.model_serving is False
+    assert config.cost.paid_resource_creation_allowed is False
+    assert config.cost.cloud_mutations_allowed is False
+    assert config.cost.monthly_target == 12000
+    assert config.cost.internal_stop_target == 9000
