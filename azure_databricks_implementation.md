@@ -467,7 +467,7 @@ The workspace already exposes governed foundation endpoints and managed storage.
 |---:|---|---|---|
 | 0 | Scope, safety, and cost baseline | Frozen scope, live inventory, cost guardrails, and decision log | Complete |
 | 1 | Azure project foundation | Clean bundle-based repository, environments, tests, and CI-ready structure | Implemented; local and live gates pass |
-| 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Not started |
+| 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Metadata verified; cost/identity execution gates blocked |
 | 3 | Immutable data and model transfer | Complete, hash-verified transfer package in Unity Catalog volumes | Not started |
 | 4 | Lakehouse and feature foundation | Bronze, Silver, Feature, Gold, lineage, and data-quality gates | Not started |
 | 5 | Functional MLflow recommender | Real composite inference package with Azure parity evidence | Not started |
@@ -610,6 +610,12 @@ The bundle is reproducible, validates against the live workspace, and cannot tar
 
 ## Phase 2 — Governance and platform bootstrap
 
+**Current status (2026-09-04):** metadata governance applied and verified with
+85 live checks; repeat apply produced zero actions. Billing/currency visibility,
+budget/controller deployment and non-admin execution tests remain unresolved.
+No paid compute was created. See
+[Phase 2 evidence and runbook](azure_databricks/evidence/phase_02/README.md).
+
 ### Objective
 
 Create the minimum governed Databricks foundation for data, models, jobs, the app, and observability.
@@ -620,18 +626,24 @@ Create the minimum governed Databricks foundation for data, models, jobs, the ap
 2. Define least-privilege groups:
    - retail_hp_admins
    - retail_hp_engineers
-   - retail_hp_viewers
+     - retail_hp_viewers
+     - retail_hp_app_runtime
 3. Retain the current admin identity for bootstrap only; prepare a workload identity for automated deployments when the client identity model is confirmed.
-4. Provision the smallest serverless SQL warehouse:
+4. After billing visibility, current pricing, budget notifications and tested
+   shutdown/admission controls pass, provision the smallest suitable serverless SQL warehouse:
    - Min clusters: 1
    - Max clusters: 1
    - Auto-stop through API: 1 minute
    - No prewarming outside a demo
 5. Define grants at catalog, schema, table, volume, model, warehouse, and app-resource levels.
 6. Configure audit-friendly naming and required tags.
-7. Create a resource-group budget after the numeric alert amount is approved.
+7. Create a resource-group budget after the Azure billing currency is verified.
+   The owner has approved INR 12,000 monthly, INR 9,000 internal stop and INR 3,000
+   reserve; the two recipients are private. Alerts are not a hard billing cap.
 8. Add a POC expiry field to the inventory, but do not automate deletion.
 9. Validate that Databricks system billing tables are visible for later usage reporting.
+10. Disable background predictive optimization on the project schemas while paid
+    background maintenance is not approved. Do not alter unrelated schemas.
 
 ### Deliverables
 
@@ -2057,9 +2069,8 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-Review the Phase 1 acceptance and proceed to **Phase 2 — Governance and platform
-bootstrap** only when requested. First address scoped tags, least privilege,
-Azure billing-currency verification, budget notifications to both private
-recipients and tested shutdown controls. The owner budget decision is recorded,
-but a budget and cost controller are not active. No paid compute or optional
-service should be created before its specific cost and boundary gate passes.
+Complete the remaining **Phase 2** billing, budget/controller and identity gates.
+Metadata governance is applied and verified; see evidence/phase_02. Azure cost
+queries are throttled and Databricks billing-table access is denied. Resolve
+these before creating budget notifications, testing shutdown controls or starting
+paid compute. Do not advance to Phase 3 merely because the metadata checks pass.

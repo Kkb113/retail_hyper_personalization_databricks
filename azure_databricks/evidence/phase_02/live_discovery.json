@@ -1,0 +1,110 @@
+{
+  "captured_at": "2026-09-04T06:02:17.667610+00:00",
+  "checks": {
+    "account_groups_api": {
+      "status": "PASS",
+      "value": {
+        "count": 5
+      }
+    },
+    "budget_inventory": {
+      "status": "PASS",
+      "value": {
+        "count": 0
+      }
+    },
+    "catalog": {
+      "status": "PASS",
+      "value": {
+        "has_managed_storage": true,
+        "name": "intellify_databricks_demo"
+      }
+    },
+    "catalog_grants": {
+      "status": "PASS",
+      "value": [
+        {
+          "principal_kind": "other_redacted",
+          "privileges": [
+            "USE_CATALOG"
+          ]
+        },
+        {
+          "principal_kind": "project_group",
+          "privileges": [
+            "CREATE_SCHEMA",
+            "USE_CATALOG"
+          ]
+        },
+        {
+          "principal_kind": "project_group",
+          "privileges": [
+            "USE_CATALOG"
+          ]
+        },
+        {
+          "principal_kind": "project_group",
+          "privileges": [
+            "USE_CATALOG"
+          ]
+        },
+        {
+          "principal_kind": "project_group",
+          "privileges": [
+            "USE_CATALOG"
+          ]
+        }
+      ]
+    },
+    "month_to_date_cost": {
+      "error_type": "SafetyError",
+      "reason": "Scoped ARM request failed: HTTP 429 429; retry_after_seconds=unknown",
+      "status": "UNAVAILABLE"
+    },
+    "schemas": {
+      "status": "PASS",
+      "value": [
+        "agent",
+        "bronze",
+        "default",
+        "features",
+        "gold",
+        "information_schema",
+        "ml",
+        "monitoring",
+        "serving",
+        "silver"
+      ]
+    },
+    "system_billing_tables": {
+      "error_type": "PermissionDenied",
+      "status": "UNAVAILABLE"
+    },
+    "system_schema_states": {
+      "error_type": "PermissionDenied",
+      "status": "UNAVAILABLE"
+    },
+    "volumes": {
+      "status": "PASS",
+      "value": [
+        "intellify_databricks_demo.bronze.transfer_landing",
+        "intellify_databricks_demo.ml.model_assets"
+      ]
+    },
+    "warehouses": {
+      "status": "PASS",
+      "value": []
+    }
+  },
+  "cloud_mutations_performed": false,
+  "existing_workspace_tags": [
+    "auto-stop",
+    "cost-profile",
+    "environment",
+    "managed-by",
+    "project",
+    "workspace"
+  ],
+  "mode": "read_only",
+  "scope_verified": true
+}

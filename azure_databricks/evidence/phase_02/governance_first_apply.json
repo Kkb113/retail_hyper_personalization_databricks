@@ -1,0 +1,219 @@
+{
+  "actions": [
+    {
+      "action": "create_account_group",
+      "name": "retail_hp_admins"
+    },
+    {
+      "action": "create_account_group",
+      "name": "retail_hp_engineers"
+    },
+    {
+      "action": "create_account_group",
+      "name": "retail_hp_viewers"
+    },
+    {
+      "action": "create_account_group",
+      "name": "retail_hp_app_runtime"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "catalog:intellify_databricks_demo:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "catalog:intellify_databricks_demo:retail_hp_engineers"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "catalog:intellify_databricks_demo:retail_hp_viewers"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "catalog:intellify_databricks_demo:retail_hp_app_runtime"
+    },
+    {
+      "action": "create_managed_schema",
+      "name": "intellify_databricks_demo.bronze"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.bronze:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.bronze:retail_hp_engineers"
+    },
+    {
+      "action": "create_managed_schema",
+      "name": "intellify_databricks_demo.silver"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.silver:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.silver:retail_hp_engineers"
+    },
+    {
+      "action": "create_managed_schema",
+      "name": "intellify_databricks_demo.features"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.features:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.features:retail_hp_engineers"
+    },
+    {
+      "action": "create_managed_schema",
+      "name": "intellify_databricks_demo.ml"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.ml:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.ml:retail_hp_engineers"
+    },
+    {
+      "action": "create_managed_schema",
+      "name": "intellify_databricks_demo.gold"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.gold:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.gold:retail_hp_engineers"
+    },
+    {
+      "action": "create_managed_schema",
+      "name": "intellify_databricks_demo.serving"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.serving:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.serving:retail_hp_engineers"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.serving:retail_hp_viewers"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.serving:retail_hp_app_runtime"
+    },
+    {
+      "action": "create_managed_schema",
+      "name": "intellify_databricks_demo.agent"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.agent:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.agent:retail_hp_engineers"
+    },
+    {
+      "action": "create_managed_schema",
+      "name": "intellify_databricks_demo.monitoring"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.monitoring:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "schema:intellify_databricks_demo.monitoring:retail_hp_engineers"
+    },
+    {
+      "action": "create_managed_volume",
+      "name": "intellify_databricks_demo.bronze.transfer_landing"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "volume:intellify_databricks_demo.bronze.transfer_landing:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "volume:intellify_databricks_demo.bronze.transfer_landing:retail_hp_engineers"
+    },
+    {
+      "action": "create_managed_volume",
+      "name": "intellify_databricks_demo.ml.model_assets"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "volume:intellify_databricks_demo.ml.model_assets:retail_hp_admins"
+    },
+    {
+      "action": "grant_project_privileges",
+      "name": "volume:intellify_databricks_demo.ml.model_assets:retail_hp_engineers"
+    },
+    {
+      "action": "merge_project_tags",
+      "name": "resource_group"
+    },
+    {
+      "action": "merge_project_tags",
+      "name": "workspace"
+    }
+  ],
+  "captured_at": "2026-09-04T05:56:58.786041+00:00",
+  "cloud_mutations_performed": true,
+  "paid_resources_created": 0,
+  "plan": {
+    "automatic_deletion": false,
+    "data_upload_allowed": false,
+    "expiry_requires_owner_review": true,
+    "groups": [
+      "retail_hp_admins",
+      "retail_hp_engineers",
+      "retail_hp_viewers",
+      "retail_hp_app_runtime"
+    ],
+    "managed_volumes": [
+      "intellify_databricks_demo.bronze.transfer_landing",
+      "intellify_databricks_demo.ml.model_assets"
+    ],
+    "note": "Additive project governance only; no workspace-admin grants or user invitations",
+    "paid_compute_allowed": false,
+    "poc_expiry": null,
+    "schemas": [
+      "intellify_databricks_demo.bronze",
+      "intellify_databricks_demo.silver",
+      "intellify_databricks_demo.features",
+      "intellify_databricks_demo.ml",
+      "intellify_databricks_demo.gold",
+      "intellify_databricks_demo.serving",
+      "intellify_databricks_demo.agent",
+      "intellify_databricks_demo.monitoring"
+    ],
+    "scope": {
+      "catalog": "intellify_databricks_demo",
+      "resource_group": "Databricks",
+      "workspace_host": "https://adb-7405618180989330.10.azuredatabricks.net"
+    },
+    "tags": {
+      "auto-stop": "true",
+      "cost-profile": "low",
+      "environment": "poc",
+      "managed-by": "codex",
+      "project": "retail-hyper-personalization",
+      "workspace": "intellify-databricks-demo"
+    },
+    "version": "azure_phase2_governance_v1",
+    "warehouse_creation_allowed": false
+  },
+  "status": "GOVERNANCE_APPLIED_VERIFICATION_PENDING"
+}
