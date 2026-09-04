@@ -1,0 +1,305 @@
+{
+  "$defs": {
+    "Cost": {
+      "additionalProperties": false,
+      "properties": {
+        "azure_hard_cap_available": {
+          "const": false,
+          "title": "Azure Hard Cap Available",
+          "type": "boolean"
+        },
+        "budget_deployed": {
+          "const": false,
+          "title": "Budget Deployed",
+          "type": "boolean"
+        },
+        "cloud_mutations_allowed": {
+          "const": false,
+          "title": "Cloud Mutations Allowed",
+          "type": "boolean"
+        },
+        "currency": {
+          "const": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "custom_serving_blocked_by_idle_policy": {
+          "const": true,
+          "title": "Custom Serving Blocked By Idle Policy",
+          "type": "boolean"
+        },
+        "demonstrations_per_month_max": {
+          "const": 4,
+          "title": "Demonstrations Per Month Max",
+          "type": "integer"
+        },
+        "free_to_paid_fallback": {
+          "const": false,
+          "title": "Free To Paid Fallback",
+          "type": "boolean"
+        },
+        "human_idle_limit_minutes": {
+          "const": 20,
+          "title": "Human Idle Limit Minutes",
+          "type": "integer"
+        },
+        "internal_stop_target": {
+          "const": 9000,
+          "title": "Internal Stop Target",
+          "type": "integer"
+        },
+        "monthly_target": {
+          "const": 12000,
+          "title": "Monthly Target",
+          "type": "integer"
+        },
+        "notification_recipient_count": {
+          "const": 2,
+          "title": "Notification Recipient Count",
+          "type": "integer"
+        },
+        "notification_recipients_in_git": {
+          "const": false,
+          "title": "Notification Recipients In Git",
+          "type": "boolean"
+        },
+        "paid_resource_creation_allowed": {
+          "const": false,
+          "title": "Paid Resource Creation Allowed",
+          "type": "boolean"
+        },
+        "reserve": {
+          "const": 3000,
+          "title": "Reserve",
+          "type": "integer"
+        },
+        "shutdown_controller_deployed": {
+          "const": false,
+          "title": "Shutdown Controller Deployed",
+          "type": "boolean"
+        },
+        "sql_auto_stop_minutes": {
+          "const": 1,
+          "title": "Sql Auto Stop Minutes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "currency",
+        "monthly_target",
+        "internal_stop_target",
+        "reserve",
+        "azure_hard_cap_available",
+        "budget_deployed",
+        "shutdown_controller_deployed",
+        "notification_recipient_count",
+        "notification_recipients_in_git",
+        "free_to_paid_fallback",
+        "paid_resource_creation_allowed",
+        "cloud_mutations_allowed",
+        "human_idle_limit_minutes",
+        "sql_auto_stop_minutes",
+        "custom_serving_blocked_by_idle_policy",
+        "demonstrations_per_month_max"
+      ],
+      "title": "Cost",
+      "type": "object"
+    },
+    "Features": {
+      "additionalProperties": false,
+      "properties": {
+        "app": {
+          "const": false,
+          "title": "App",
+          "type": "boolean"
+        },
+        "azure_ai_search": {
+          "const": false,
+          "title": "Azure Ai Search",
+          "type": "boolean"
+        },
+        "jobs": {
+          "const": false,
+          "title": "Jobs",
+          "type": "boolean"
+        },
+        "lakebase": {
+          "const": false,
+          "title": "Lakebase",
+          "type": "boolean"
+        },
+        "llm": {
+          "const": false,
+          "title": "Llm",
+          "type": "boolean"
+        },
+        "model_serving": {
+          "const": false,
+          "title": "Model Serving",
+          "type": "boolean"
+        },
+        "sql_warehouse": {
+          "const": false,
+          "title": "Sql Warehouse",
+          "type": "boolean"
+        },
+        "vector_search": {
+          "const": false,
+          "title": "Vector Search",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "jobs",
+        "sql_warehouse",
+        "model_serving",
+        "llm",
+        "app",
+        "lakebase",
+        "vector_search",
+        "azure_ai_search"
+      ],
+      "title": "Features",
+      "type": "object"
+    },
+    "Names": {
+      "additionalProperties": false,
+      "properties": {
+        "app": {
+          "pattern": "^retail-hp-[a-z0-9-]{1,48}$",
+          "title": "App",
+          "type": "string"
+        },
+        "bronze_schema": {
+          "pattern": "^[a-z][a-z0-9_]{0,62}$",
+          "title": "Bronze Schema",
+          "type": "string"
+        },
+        "gold_schema": {
+          "pattern": "^[a-z][a-z0-9_]{0,62}$",
+          "title": "Gold Schema",
+          "type": "string"
+        },
+        "ml_schema": {
+          "pattern": "^[a-z][a-z0-9_]{0,62}$",
+          "title": "Ml Schema",
+          "type": "string"
+        },
+        "model_endpoint": {
+          "pattern": "^retail-hp-[a-z0-9-]{1,48}$",
+          "title": "Model Endpoint",
+          "type": "string"
+        },
+        "silver_schema": {
+          "pattern": "^[a-z][a-z0-9_]{0,62}$",
+          "title": "Silver Schema",
+          "type": "string"
+        },
+        "warehouse": {
+          "pattern": "^retail-hp-[a-z0-9-]{1,48}$",
+          "title": "Warehouse",
+          "type": "string"
+        }
+      },
+      "required": [
+        "bronze_schema",
+        "silver_schema",
+        "gold_schema",
+        "ml_schema",
+        "warehouse",
+        "model_endpoint",
+        "app"
+      ],
+      "title": "Names",
+      "type": "object"
+    },
+    "Scope": {
+      "additionalProperties": false,
+      "properties": {
+        "catalog": {
+          "const": "intellify_databricks_demo",
+          "title": "Catalog",
+          "type": "string"
+        },
+        "host": {
+          "const": "https://adb-7405618180989330.10.azuredatabricks.net",
+          "title": "Host",
+          "type": "string"
+        },
+        "region": {
+          "const": "westus",
+          "title": "Region",
+          "type": "string"
+        },
+        "resource_group": {
+          "const": "Databricks",
+          "title": "Resource Group",
+          "type": "string"
+        },
+        "workspace": {
+          "const": "intellify-databricks-demo",
+          "title": "Workspace",
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource_group",
+        "workspace",
+        "host",
+        "region",
+        "catalog"
+      ],
+      "title": "Scope",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cost": {
+      "$ref": "#/$defs/Cost"
+    },
+    "features": {
+      "$ref": "#/$defs/Features"
+    },
+    "names": {
+      "$ref": "#/$defs/Names"
+    },
+    "phase": {
+      "const": 1,
+      "title": "Phase",
+      "type": "integer"
+    },
+    "scope": {
+      "$ref": "#/$defs/Scope"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "object"
+    },
+    "target": {
+      "const": "poc",
+      "title": "Target",
+      "type": "string"
+    },
+    "version": {
+      "const": "azure_phase1_v1",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "version",
+    "phase",
+    "target",
+    "scope",
+    "names",
+    "features",
+    "cost",
+    "tags"
+  ],
+  "title": "PocConfig",
+  "type": "object"
+}

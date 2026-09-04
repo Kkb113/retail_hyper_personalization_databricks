@@ -57,7 +57,11 @@ def test_paid_resource_creation_fails_closed():
     }
     assert costs["budget"]["amount_usd"] is None
     assert costs["budget"]["notification_recipient_committed"] is False
-    assert costs["budget"]["state"] == "BLOCKED_PENDING_OWNER_THRESHOLD_AND_RECIPIENT"
+    assert costs["budget"]["state"] == (
+        "OWNER_DECISIONS_RECORDED_DEPLOYMENT_BLOCKED_PENDING_CONTROLS"
+    )
+    assert costs["budget"]["amount_inr"] == 12000
+    assert costs["budget"]["azure_budget_deployed"] is False
     assert not any(costs["default_optional_features"].values())
     assert costs["hard_limits"]["all_purpose_clusters"] == 0
     assert costs["hard_limits"]["gpu_endpoints"] == 0
@@ -218,7 +222,11 @@ def test_phase0_outputs_do_not_commit_raw_ids_credentials_or_personal_email():
         ),
         re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE),
     ]
-    output_paths = [*AZURE_ROOT.rglob("*.json"), *AZURE_ROOT.rglob("*.md")]
+    output_paths = [
+        path for path in [*AZURE_ROOT.rglob("*.json"), *AZURE_ROOT.rglob("*.md")]
+        if not {".databricks", ".build", "build", "dist", "__pycache__"}.intersection(path.parts)
+        and not path.name.endswith(".local.json")
+    ]
     assert output_paths
     for path in output_paths:
         text = path.read_text(encoding="utf-8")

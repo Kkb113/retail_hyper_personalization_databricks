@@ -1,4 +1,4 @@
-name: Azure Databricks Phase 0 CI
+name: Azure Databricks Foundation CI
 
 on:
   pull_request:
@@ -14,11 +14,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  runtime-smoke:
+    name: runtime-${{ matrix.runtime }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        runtime: [jobs, serving, agent, app]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install hash-locked runtime
+        run: python -m pip install --require-hashes -r azure_databricks/environments/${{ matrix.runtime }}.lock
+      - name: Build and install Azure wheel without editable imports
+        run: python -m pip install --no-deps .
+      - name: Verify dependency compatibility
+        run: python -m pip check
+      - name: Import from installed package without working-directory imports
+        run: python -I azure_databricks/scripts/smoke_package.py --runtime ${{ matrix.runtime }}
+
   phase0-safety:
     name: phase0-safety
+    needs: [runtime-smoke]
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Require every clean-runtime test to pass
+        env:
+          RUNTIME_RESULT: ${{ needs.runtime-smoke.result }}
+        run: test "$RUNTIME_RESULT" = success
       - name: Check out repository
         uses: actions/checkout@v4
       - name: Set up Python
@@ -27,12 +55,20 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install locked test dependencies
-        run: python -m pip install -r requirements-dev.lock
-      - name: Rebuild sanitized Phase 0 evidence
-        run: python azure_databricks/scripts/build_phase0.py
+        run: python -m pip install --require-hashes -r requirements-dev.lock
+      - name: Install Azure package
+        run: python -m pip install --no-deps .
+      - name: Verify dependency compatibility
+        run: python -m pip check
+      - name: Verify deterministic Phase 1 schema and no-resource plan
+        run: |
+          python azure_databricks/scripts/generate_phase1.py
+          git diff --exit-code -- azure_databricks/config/poc.schema.json azure_databricks/evidence/phase_01/local_plan.json
       - name: Lint Azure implementation
-        run: ruff check azure_databricks/scripts tests/azure_databricks
-      - name: Run Phase 0 safety and integrity tests
-        run: pytest tests/azure_databricks -q
+        run: ruff check azure_databricks/src azure_databricks/scripts tests/azure_databricks
+      - name: Type-check installed foundation
+        run: mypy
+      - name: Run all foundation safety, contract and app tests
+        run: pytest -c pyproject.toml tests/azure_databricks -q
       - name: Scan committed source for credentials
         run: python azure_databricks/scripts/scan_repository_secrets.py

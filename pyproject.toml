@@ -1,19 +1,40 @@
 [build-system]
-requires = ["setuptools==75.8.2", "wheel==0.45.1"]
+requires = ["setuptools==83.0.0", "wheel==0.46.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "retail-hp-azure-databricks"
 version = "0.1.0"
 description = "Azure Databricks retail hyper-personalization POC"
-requires-python = ">=3.11,<3.13"
-dependencies = []
+requires-python = ">=3.12,<3.13"
+dependencies = ["pydantic==2.13.4", "PyYAML==6.0.2"]
 
-[tool.setuptools]
-packages = []
+[project.optional-dependencies]
+jobs = ["databricks-sdk==0.81.0"]
+serving = []
+agent = ["databricks-sdk==0.81.0"]
+app = ["fastapi==0.141.1", "uvicorn==0.51.0"]
+dev = ["pyarrow==17.0.0", "pytest==8.4.1", "ruff==0.12.5", "mypy==1.17.1",
+       "types-PyYAML==6.0.12.20250516", "build==1.2.2.post1", "httpx==0.28.1",
+       "jsonschema==4.25.1"]
+
+[project.scripts]
+retail-hp-preflight = "retail_hp_azure.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["azure_databricks/src"]
+include = ["retail_hp_azure*"]
+
+[tool.setuptools.package-data]
+retail_hp_azure = ["py.typed"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["azure_databricks/src"]
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py312"
 line-length = 100
 extend-exclude = ["migration_assets"]
 

@@ -1,0 +1,50 @@
+{
+  "version": "azure_phase1_acceptance_v1",
+  "engineering_status": "PASS_LOCAL_LIVE_AND_CI",
+  "verified_date": "2026-09-04",
+  "phase": 1,
+  "scope": "Azure project foundation only",
+  "tests": {
+    "offline_unit_contract_app_safety": "PASS: 80 tests on Windows Python 3.12.14",
+    "ruff": "PASS",
+    "mypy_strict": "PASS: 6 source files",
+    "credential_scan": "PASS",
+    "schema_and_plan_reproducibility": "PASS",
+    "windows_clean_wheel_runtime_installs": "PASS: jobs, serving, agent, app",
+    "runtime_dependency_compatibility": "PASS: all four clean environments",
+    "azure_scope_fingerprints": "PASS",
+    "catalog_read": "PASS",
+    "bundle_validate_strict": "PASS",
+    "resolved_bundle_scope_and_variables": "PASS",
+    "bundle_plan": "PASS: zero resource actions",
+    "github_linux_ci": "PASS: four clean-runtime jobs and required phase0-safety"
+  },
+  "ci_evidence": {
+    "tested_code_commit": "92085d5",
+    "run_url": "https://github.com/Kkb113/retail_hyper_personalization_databricks/actions/runs/33839105206",
+    "conclusion": "success",
+    "later_commits_must_pass_protected_branch_checks": true
+  },
+  "known_nonblocking_test_warnings": [
+    "Upstream Starlette TestClient deprecates httpx in favor of httpx2",
+    "Upstream Starlette references a deprecated AnyIO BlockingPortal alias"
+  ],
+  "cloud_mutations_performed": false,
+  "artifact_uploads_performed": false,
+  "new_billable_resources": 0,
+  "new_compute_cost_inr": 0,
+  "existing_workspace_sku_changed": false,
+  "budget_deployed": false,
+  "shutdown_controller_deployed": false,
+  "paid_deployment_allowed": false,
+  "release_status": "POC_ONLY_HOLD_PENDING_FUTURE_HOLDOUT",
+  "live_observations": {
+    "azure_resource_group_resources": 1,
+    "budget_count": 0,
+    "existing_workspace_tags_need_phase2_review": true
+  },
+  "remaining_gates": [
+    "Phase 2 scoped governance, billing currency, tested budget delivery and shutdown controls",
+    "Later data/model migration, actual inference parity, agent and authenticated app implementation"
+  ]
+}

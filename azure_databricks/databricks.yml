@@ -1,0 +1,52 @@
+# Phase 1 intentionally declares no deployable resources or build hooks.
+bundle:
+  name: retail-hp-azure
+  databricks_cli_version: '>= 1.15.0, <= 1.15.0'
+  engine: direct
+
+variables:
+  catalog:
+    default: intellify_databricks_demo
+  bronze_schema:
+    default: bronze
+  silver_schema:
+    default: silver
+  gold_schema:
+    default: gold
+  ml_schema:
+    default: ml
+  warehouse:
+    default: retail-hp-poc-sql
+  model_endpoint:
+    default: retail-hp-poc-recommender
+  app:
+    default: retail-hp-poc-app
+  enable_jobs:
+    default: 'false'
+  enable_sql_warehouse:
+    default: 'false'
+  enable_model_serving:
+    default: 'false'
+  enable_llm:
+    default: 'false'
+  enable_app:
+    default: 'false'
+  enable_lakebase:
+    default: 'false'
+  enable_vector_search:
+    default: 'false'
+  enable_azure_ai_search:
+    default: 'false'
+
+# Only a harmless marker is eligible for sync; validation/plan never uploads it.
+sync:
+  paths:
+    - bundle_files
+
+resources: {}
+targets:
+  poc:
+    default: true
+    workspace:
+      host: https://adb-7405618180989330.10.azuredatabricks.net
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/retail-hp-azure/poc

@@ -8,7 +8,7 @@
     "allow_paid_resource_creation": false,
     "azure_budget_amount_usd": null,
     "azure_budget_notification_recipient_committed": false,
-    "budget_gate": "BLOCKED_PENDING_OWNER_THRESHOLD_AND_RECIPIENT",
+    "budget_gate": "OWNER_DECISIONS_RECORDED_DEPLOYMENT_BLOCKED_PENDING_CONTROLS",
     "free_sku_must_not_fallback_to_paid": true
   },
   "data": {
