@@ -1,0 +1,16 @@
+{
+  "app_count": 0,
+  "azure_resource_types": [
+    "Microsoft.Databricks/workspaces"
+  ],
+  "captured_at": "2026-09-04T06:08:45.619565+00:00",
+  "cloud_mutations_performed": false,
+  "cluster_count": 0,
+  "job_count": 0,
+  "managed_resource_group_cost_coverage": "NOT_VERIFIED; no managed-group writes permitted",
+  "note": "Pre-existing foundation endpoints are not invoked; counts are not billed usage",
+  "project_serving_endpoint_count": 0,
+  "scope_verified": true,
+  "serving_endpoint_count": 22,
+  "warehouse_count": 0
+}

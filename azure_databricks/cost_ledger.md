@@ -10,6 +10,8 @@
 - Owner monthly target: INR 12,000; internal stop target INR 9,000; reserve INR 3,000.
 - Two notification recipients supplied privately; addresses are not committed.
 - Budget alerts and shutdown controller: not deployed.
+- Owner decision: budget setup deferred until IT confirms the currency. This is
+  a scheduling deferral, not authorization to bypass paid-deployment controls.
 - Paid resource creation: blocked pending controls, current pricing and approval
   of the specific resource. No premium add-ons or automatic paid fallback.
 
@@ -19,7 +21,15 @@
 |---:|---|---:|---|---|
 | 0 | None; read-only inventory only | USD 0.00 | Complete | live_inventory.json and resource_inventory.json |
 | 1 | Local code and read-only bundle validation | INR 0 new compute | Foundation | evidence/phase_01 |
-| 2+ | Governed resources and bounded compute | Not yet estimated | Blocked | Current pricing, budget notifications and shutdown controls required |
+| 2 | Groups, schemas, empty managed volumes, grants, tags; predictive optimization disabled | No compute started; billing total unavailable | Metadata verified; cost gate blocked | evidence/phase_02 |
+| 3+ | Transfer and bounded compute | Not yet estimated | Blocked | Current pricing, budget notifications and shutdown controls required |
+
+Phase 2 has not created any Azure resource or SQL warehouse. It uses existing
+managed storage for empty volume metadata. This is not a claim of zero total
+Azure spend: current cost/currency queries return HTTP 429 and Databricks system
+billing access is denied. Managed-resource-group/storage cost coverage is not
+verified. Budget inventory remains empty. The auto-stop tag is a policy label,
+not evidence that an automated stop controller is running.
 
 ## Required future controls (not deployed in Phase 1)
 
