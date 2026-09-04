@@ -5,6 +5,7 @@ import copy
 import json
 import shutil
 import subprocess
+import tomllib
 from pathlib import Path
 
 import jsonschema
@@ -332,3 +333,8 @@ def test_package_has_no_legacy_or_cloud_side_effect_imports():
                 assert all(item.name.split(".")[0] not in forbidden for item in node.names)
             elif isinstance(node, ast.ImportFrom) and node.module:
                 assert node.module.split(".")[0] not in forbidden
+
+
+def test_build_tool_pins_include_verified_security_fixes():
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    assert project["build-system"]["requires"] == ["setuptools==83.0.0", "wheel==0.46.2"]

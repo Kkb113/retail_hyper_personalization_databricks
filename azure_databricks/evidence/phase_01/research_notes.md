@@ -70,6 +70,12 @@ for an occasional synthetic POC, not production or cost guarantees.
 
 ## Conclusion
 
+Build-tool security follow-up: the repository's pre-existing pins were affected
+by [setuptools path traversal](https://github.com/pypa/setuptools/security/advisories/GHSA-5rjg-fvgr-3xxf),
+[wheel unpack path traversal](https://github.com/pypa/wheel/security/advisories/GHSA-8rrh-rw8j-w5fx)
+and [setuptools Unicode exclusion handling](https://setuptools.pypa.io/en/latest/history.html).
+Pin setuptools 83.0.0 and wheel 0.46.2, rebuild and rerun the clean-runtime gates.
+
 The Phase 1 foundation needs no Azure paid resource. Reusing the existing
 workspace for read-only validation, using a small local Python package and
 keeping deployment blocked is sufficient. New Azure technologies would add no

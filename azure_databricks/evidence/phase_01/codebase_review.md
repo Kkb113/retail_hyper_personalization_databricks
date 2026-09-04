@@ -51,3 +51,7 @@ are preserved. No model unpickling or model-serving claim is part of this phase.
   commit the actual user name. Strict validation also requires a non-empty file
   set, so only a fixed harmless marker is eligible for future sync. No upload is
   performed by validation or planning.
+- GitHub reported three pre-existing build-tool advisories on main after the
+  first push. Upgraded setuptools from 75.8.2 to 83.0.0 and wheel from 0.45.1 to
+  0.46.2, covering both path traversal advisories and the Unicode sdist exclusion
+  issue. Rebuilt the wheel and added a regression test for the corrected pins.
