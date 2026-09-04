@@ -466,7 +466,7 @@ The workspace already exposes governed foundation endpoints and managed storage.
 | Phase | Name | Primary outcome | Initial status |
 |---:|---|---|---|
 | 0 | Scope, safety, and cost baseline | Frozen scope, live inventory, cost guardrails, and decision log | Complete |
-| 1 | Azure project foundation | Clean bundle-based repository, environments, tests, and CI-ready structure | Not started |
+| 1 | Azure project foundation | Clean bundle-based repository, environments, tests, and CI-ready structure | Implemented; local and live gates pass |
 | 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Not started |
 | 3 | Immutable data and model transfer | Complete, hash-verified transfer package in Unity Catalog volumes | Not started |
 | 4 | Lakehouse and feature foundation | Bronze, Silver, Feature, Gold, lineage, and data-quality gates | Not started |

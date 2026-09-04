@@ -1,6 +1,6 @@
 # Retail Hyper-Personalization on Azure Databricks
 
-[![Azure Databricks Phase 0 CI](https://github.com/Kkb113/retail_hyper_personalization_databricks/actions/workflows/azure-phase0-ci.yml/badge.svg)](https://github.com/Kkb113/retail_hyper_personalization_databricks/actions/workflows/azure-phase0-ci.yml)
+[![Azure Databricks Foundation CI](https://github.com/Kkb113/retail_hyper_personalization_databricks/actions/workflows/azure-phase0-ci.yml/badge.svg)](https://github.com/Kkb113/retail_hyper_personalization_databricks/actions/workflows/azure-phase0-ci.yml)
 
 This repository is the Azure-only source of truth for the retail
 hyper-personalization POC. It will contain the governed data pipeline, migrated

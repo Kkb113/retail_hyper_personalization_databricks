@@ -124,3 +124,10 @@ Databricks App yet. Authentication and real user journeys belong to later phases
 CI has no Azure credentials. It runs offline policy/contracts/app checks and four
 clean Linux runtime installations. Live validation is a separate explicit local
 gate; a green offline build alone is not permission to deploy.
+
+### Rollback
+
+Phase 1 has no cloud resources to destroy or data transfers to undo. Stop any
+manually started local health server and use a reviewed Git revert if the
+foundation changes need to be rolled back. Do not run `bundle destroy`, delete
+the existing workspace/catalog or touch the frozen migration payload.
