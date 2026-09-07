@@ -14,7 +14,7 @@ this Azure solution.
 
 ## Current status
 
-Phase 0 established the scope and migration baseline. Phase 1 adds an installable
+Phase 0 established the scope and migration baseline. Phase 1 added an installable
 Azure-only package, resource-free bundle, strict preflight, runtime locks and app
 health skeleton. The boundary remains:
 
@@ -22,7 +22,7 @@ health skeleton. The boundary remains:
 - Azure Databricks workspace `intellify-databricks-demo`
 - Unity Catalog catalog `intellify_databricks_demo`
 - synthetic POC data only
-- zero new Azure resources and zero incremental Phase 0 cloud cost
+- zero new Azure resources in Phase 3; all billable compute stopped
 
 Phase 2's governed platform bootstrap is implemented: four project groups, eight
 group-owned schemas, two empty managed volumes, least-privilege grants and tags,
@@ -35,19 +35,24 @@ revoked. **Phase 2 is complete and the platform is stopped.** Broad Databricks
 billing-table visibility remains a documented, non-blocking limitation. See the
 [Phase 2 status and runbook](azure_databricks/evidence/phase_02/README.md).
 
-The owner confirmed INR with IT. The INR 12,000 monthly resource-group budget and
-five notification rules are deployed and verified without committing recipient
-addresses. The one Phase 2 live test had an owner-approved INR 250 planning
-ceiling; its conservative pre-tax estimate is under INR 15, subject to billing lag.
+Phase 3 is also complete. The versioned `retail_hp_transfer_v1` package is live in
+the two governed volumes: 45 unique sources, 46 payload destinations, 20 data
+assets, 275,630 rows and 26 model assets. Databricks verified every hash and model
+load; final inspection also matched both control manifests, the compatibility
+module and both deterministic seals. See the
+[Phase 3 status and evidence](azure_databricks/evidence/phase_03/README.md).
 
 The agreed monthly target is INR 12,000, with an internal stop target of INR
 9,000 and INR 3,000 reserve. Two notification recipients were provided privately.
 The warehouse uses layered shutdown: one-minute native idle stop, a 12-minute
 test deadline, and an unconditional final stop with STOPPED-state verification.
 Azure budgets are not hard billing caps, so the INR 250 ceiling is a conservative
-admission/runtime control, not an invoice guarantee. Phase 3 remains blocked
-pending explicit authorization. Model release remains POC-only, pending a
-future holdout and owner approvals.
+admission/runtime control, not an invoice guarantee. Four terminated one-time
+Phase 3 serverless validation attempts have a cumulative conservative estimate of
+INR 103.3578 pre-tax, or INR 206.7156 with the 2x planning guard. There are zero
+clusters and persistent jobs, and the warehouse is **STOPPED**. Phase 4 is not
+authorized. Model release remains POC-only, pending future parity, holdout,
+privacy, security and owner approvals.
 
 The only bundle is `azure_databricks/databricks.yml`, with target `poc`, **zero
 resources**, no build hooks and marker-only sync eligibility. No sync is run in

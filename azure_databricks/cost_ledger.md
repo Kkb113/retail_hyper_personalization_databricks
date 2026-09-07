@@ -2,8 +2,7 @@
 
 ## Policy
 
-- Owner planning currency: INR; Azure billing currency must be verified before
-  creating the budget (do not assume INR or use an unverified conversion).
+- Owner planning and verified Azure billing currency: INR.
 - Azure scope: resource group **Databricks** only.
 - Free or existing capability is always evaluated before a paid resource.
 - Contract/list prices are refreshed immediately before a paid creation.
@@ -12,10 +11,10 @@
 - Budget alerts: deployed at INR 12,000 monthly with five actual/forecast rules.
 - Shutdown controls: deployed for the project SQL warehouse (one-minute native
   idle stop, 12-minute live-test deadline, unconditional final stop).
-- Owner confirmed INR with IT. The budget did not authorize anything beyond the
-  separately approved bounded Phase 2 test.
-- Paid resource creation outside the single approved Phase 2 warehouse remains
-  blocked. No premium add-ons or automatic paid fallback.
+- Owner confirmed INR with IT. The budget separately admitted the bounded Phase 2
+  warehouse test and Phase 3 one-time validation; it is not general compute approval.
+- New paid or persistent resources remain blocked. No premium add-ons, GPUs,
+  provisioned throughput or automatic paid fallback.
 
 ## Phase ledger
 
@@ -24,7 +23,8 @@
 | 0 | None; read-only inventory only | USD 0.00 | Complete | live_inventory.json and resource_inventory.json |
 | 1 | Local code and read-only bundle validation | INR 0 new compute | Foundation | evidence/phase_01 |
 | 2 | Governance, budget, bounded warehouse, shutdown/ACL and authenticated workload-identity tests | Conservative total INR 16.1284 estimated pre-tax | Complete; warehouse STOPPED; zero active OAuth test secrets | evidence/phase_02 |
-| 3+ | Transfer and bounded compute | Not yet estimated | Blocked | Explicit Phase 3 approval required |
+| 3 | Approximately 13 MiB volume transfer, four terminated one-time serverless validations, and two seals | Cumulative INR 103.3578 estimated pre-tax; INR 206.7156 with 2x guard | Complete; warehouse STOPPED; zero clusters/jobs | evidence/phase_03 |
+| 4+ | Lakehouse, model, agent and serving work | Not yet authorized | Blocked | Separate phase approval required |
 
 Phase 2 created no new Azure resource, but it created one Databricks SQL warehouse
 inside the existing workspace. The warehouse is 2X-Small serverless, one cluster,
@@ -46,7 +46,20 @@ upper estimate for the failed sub-minute attempt, well below INR 250.
 The final authenticated workload-identity check added INR 1.5676 estimated
 pre-tax, for a conservative total Phase 2 estimate of INR 16.1284.
 
-## Required future controls (not deployed in Phase 1)
+Phase 3 reused the existing managed volumes and created no Azure resource. The
+payload has 12,733,215 unique bytes; the maximum uploaded size including one
+duplicated cross-role snapshot and two manifests was 13,041,264 bytes, followed by
+one 430-byte compatibility module and two small seals. Files API transfer and
+managed-storage charges may apply and are not claimed as zero.
+
+The 2026-09-07 Microsoft retail-price snapshot lists West US Premium automated
+serverless compute at INR 44.91 per DBU-hour. Four terminated runtime-validation
+attempts total 517.83 elapsed seconds. At the deliberately conservative 16
+DBU/hour assumption, the cumulative estimate is INR 103.3578 pre-tax; its 2x
+planning guard is INR 206.7156, below the INR 250 Phase 3 validation ceiling.
+This is not actual metered billing; taxes, discounts and reporting lag remain.
+
+## Controls required for later phases
 
 - Zero all-purpose clusters.
 - One smallest serverless SQL warehouse with one-minute API auto-stop.
@@ -67,9 +80,10 @@ pre-tax, for a conservative total Phase 2 estimate of INR 16.1284.
 - Zero vector-search endpoints by default.
 - Pay-per-token model calls with token and rate limits.
 
-## Remaining work before Phase 3 paid deployment
+## Remaining work before Phase 4
 
-The budget and warehouse controls are deployed. Before wider paid deployment:
+The budget, warehouse controls and bounded Phase 3 transfer validation are complete.
+Before any Phase 4 compute:
 
 1. Confirm alert email delivery when Azure evaluates a real threshold.
 2. Add service-specific timeout/scale-to-zero tests only when those services are created.

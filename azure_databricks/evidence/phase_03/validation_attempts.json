@@ -1,0 +1,49 @@
+{
+  "actual_billed_usage": "PENDING_BILLING_LAG",
+  "assumed_max_dbu_per_hour": 16,
+  "attempts": [
+    {
+      "attempt": 1,
+      "elapsed_seconds": 107.69,
+      "estimated_cost_inr_pre_tax": 21.4957,
+      "finding": "Frozen pandas 3.0.3 artifact was incompatible with the serverless baseline pandas 2.2.3",
+      "final_state": "TERMINATED",
+      "status": "FAILED"
+    },
+    {
+      "attempt": 2,
+      "elapsed_seconds": 218.71,
+      "estimated_cost_inr_pre_tax": 43.6537,
+      "finding": "Validation assertion expected a field not present in the approved onboarding schema",
+      "final_state": "TERMINATED",
+      "status": "FAILED"
+    },
+    {
+      "attempt": 3,
+      "elapsed_seconds": 113.96,
+      "estimated_cost_inr_pre_tax": 22.7458,
+      "finding": "Frozen ranker preprocessor references one reviewed legacy module function",
+      "final_state": "TERMINATED",
+      "status": "FAILED"
+    },
+    {
+      "attempt": 4,
+      "elapsed_seconds": 77.47,
+      "estimated_cost_inr_pre_tax": 15.4626,
+      "finding": "Exact dependency environment and minimal hashed compatibility shim passed",
+      "final_state": "TERMINATED",
+      "status": "PASS"
+    }
+  ],
+  "cumulative_elapsed_seconds": 517.83,
+  "cumulative_estimated_cost_inr_pre_tax": 103.3578,
+  "guarded_cumulative_estimate_inr_pre_tax": 206.7156,
+  "hard_invoice_cap_guaranteed": false,
+  "new_azure_resources": 0,
+  "persistent_compute_after_validation": 0,
+  "planning_ceiling_inr": 250,
+  "retail_rate_inr_per_dbu_hour": 44.91,
+  "risk_multiplier": 2,
+  "source": "Microsoft Azure Retail Prices API, West US, 2026-09-07",
+  "version": "azure_phase3_validation_attempts_v1"
+}

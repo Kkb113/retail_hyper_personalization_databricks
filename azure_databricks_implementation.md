@@ -5,8 +5,8 @@
 | Field | Value |
 |---|---|
 | Document status | Implementation source of truth |
-| Initial delivery status | Phase 0 complete; Phase 1 foundation implemented and live-validated |
-| Last verified | 2026-09-04 |
+| Initial delivery status | Phases 0–3 complete; versioned transfer sealed; platform stopped |
+| Last verified | 2026-09-07 |
 | Azure resource group boundary | **Databricks** only |
 | Azure Databricks workspace | **intellify-databricks-demo** |
 | Azure region | **West US** |
@@ -686,6 +686,22 @@ Namespace, access, warehouse, budget controls, and cost tags pass automated insp
 ---
 
 ## Phase 3 — Immutable data and model transfer
+
+**Current status (2026-09-07): COMPLETE.** The synthetic
+`retail_hp_transfer_v1` package is present in the governed Bronze and ML volumes.
+Databricks verified 46 payload hashes, parsed 20 data assets and 275,630 rows,
+loaded all 26 model assets, and initialized both customer-loader paths. Final
+inspection also matched both manifest copies, the separately hashed compatibility
+module and both deterministic seals. No Azure resource was created; zero clusters
+and persistent jobs remain; the project warehouse is STOPPED. See
+[Phase 3 evidence and runbook](azure_databricks/evidence/phase_03/README.md).
+
+The frozen joblib payload required an exact six-package environment and one minimal
+legacy-function compatibility shim. This is a migration bridge, not the final
+serving package. The seals are application-level no-overwrite/hash controls, not
+infrastructure WORM. Four terminated validation attempts have a cumulative
+INR 103.3578 pre-tax estimate, or INR 206.7156 with the 2x planning guard, subject
+to billing lag and below the approved INR 250 ceiling.
 
 ### Objective
 
@@ -2078,9 +2094,10 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-**Phase 2 is complete.** Governance, the INR budget, workload identity, warehouse
-ACLs, SQL smoke, authenticated allow/deny checks, and shutdown controls are
-verified; the warehouse is STOPPED and the test OAuth secret is revoked. Broad
-Databricks billing-table access remains denied, so the scoped budget is the POC
-admission source. Do not start Phase 3 data/model transfer without explicit
-authorization.
+**Phases 0–3 are complete and the platform is stopped.** The governed transfer is
+hash-identical, Databricks-loadable and sealed; there are zero clusters and
+persistent jobs, and the warehouse is STOPPED. Broad Databricks billing-table
+access remains denied, so the scoped INR budget is the POC admission source and
+reported actual usage may lag. Phase 4 lakehouse work is the next roadmap step,
+but it is not authorized by Phase 3 completion and must begin with a fresh
+read-only scope, cost and compute-admission review.

@@ -1,0 +1,41 @@
+{
+  "budget_admission": {
+    "amount_inr": 12000,
+    "current_spend_inr": 0.0,
+    "notification_count": 5
+  },
+  "bundle_sha256": "976b7d0cf2390869d78af3bce95842f6f30e09d5c64c4bdd7fddfb46c9a3bc0b",
+  "captured_at": "2026-09-07T06:22:43.273194+00:00",
+  "customer_identifiers_recorded": false,
+  "data_files_parsed": 20,
+  "data_rows": 275630,
+  "deadline_fired": false,
+  "elapsed_seconds": 77.47,
+  "estimated_elapsed_cost_inr_pre_tax": 15.4626,
+  "existing_customer_loader_initialized": true,
+  "hard_invoice_cap_guaranteed": false,
+  "model_files_loaded": 26,
+  "new_customer_loader_initialized": true,
+  "notebook_operation": "CREATED",
+  "notebook_sha256": "67d56b9d66f5242932a2dbb224ff582426793640f96e9f1ea21e81f96cdef3e8",
+  "package_versions": {
+    "joblib": "1.5.3",
+    "numpy": "2.5.1",
+    "pandas": "3.0.3",
+    "pyarrow": "24.0.0",
+    "xgboost": "3.3.0"
+  },
+  "persistent_job_created": false,
+  "planning_guarded_ceiling_inr": 59.88,
+  "production_approved": false,
+  "remote_hashes_verified": 46,
+  "run_identifier_recorded": false,
+  "runtime_compatibility_loaded": true,
+  "runtime_compatibility_operation": "CREATED",
+  "schedule_created": false,
+  "scope_verified": true,
+  "serverless_run_terminated": true,
+  "status": "PASS",
+  "version": "azure_phase3_databricks_validation_v1",
+  "workspace_path_recorded": false
+}

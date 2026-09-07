@@ -1,0 +1,14 @@
+{
+  "captured_at": "2026-09-07T05:36:57.372830+00:00",
+  "cloud_mutations_performed": false,
+  "compute_started": false,
+  "drift_count": 0,
+  "expected_destination_count": 46,
+  "matching_count": 0,
+  "missing_count": 46,
+  "present_count": 0,
+  "scope_verified": true,
+  "sealed_root_count": 0,
+  "status": "PASS",
+  "version": "azure_phase3_remote_inspection_v1"
+}

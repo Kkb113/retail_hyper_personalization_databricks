@@ -1,0 +1,17 @@
+{
+  "captured_at": "2026-09-07T05:46:04.442456+00:00",
+  "cloud_mutations_performed": true,
+  "compute_started": false,
+  "control_manifest_count": 2,
+  "created_count": 48,
+  "local_validation": "PASS",
+  "new_azure_resources": 0,
+  "payload_destination_count": 46,
+  "remote_matching_count": 46,
+  "scope_verified": true,
+  "sealed": false,
+  "status": "PASS",
+  "unchanged_count": 0,
+  "uploaded_bytes_maximum": 13041264,
+  "version": "azure_phase3_transfer_apply_v1"
+}
