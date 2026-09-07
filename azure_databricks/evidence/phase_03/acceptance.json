@@ -1,0 +1,90 @@
+{
+  "version": "azure_phase3_acceptance_v1",
+  "reviewed_on": "2026-09-07",
+  "status": "PHASE3_COMPLETE_TRANSFER_SEALED_PLATFORM_STOPPED",
+  "phase3_complete": true,
+  "phase4_authorized": false,
+  "production_approved": false,
+  "scope": {
+    "resource_group": "Databricks",
+    "workspace": "intellify-databricks-demo",
+    "catalog": "intellify_databricks_demo",
+    "classification": "synthetic_data",
+    "scope_verified": true,
+    "new_azure_resources": 0
+  },
+  "transfer": {
+    "version": "retail_hp_transfer_v1",
+    "bundle_sha256": "976b7d0cf2390869d78af3bce95842f6f30e09d5c64c4bdd7fddfb46c9a3bc0b",
+    "unique_files": 45,
+    "destination_copies": 46,
+    "data_files": 20,
+    "model_files": 26,
+    "data_rows": 275630,
+    "unique_bytes": 12733215,
+    "uploaded_bytes_maximum": 13041264,
+    "remote_payload_hashes_matching": 46,
+    "remote_control_manifests_matching": 2,
+    "remote_control_drift_count": 0,
+    "runtime_compatibility_matching": true,
+    "sealed_roots": 2,
+    "matching_seals": 2,
+    "seal_sha256": "26e1520ec4c3e26281def45413459fd24c96796a8810f76daeb0411dee6ec218",
+    "storage_worm_guaranteed": false,
+    "immutability_control": "versioned paths + approved hashes + no-overwrite client + deterministic seals"
+  },
+  "databricks_validation": {
+    "status": "PASS",
+    "remote_hashes_verified": 46,
+    "data_files_parsed": 20,
+    "data_rows": 275630,
+    "model_files_loaded": 26,
+    "existing_customer_loader_initialized": true,
+    "new_customer_loader_initialized": true,
+    "runtime_compatibility_loaded": true,
+    "exact_environment": {
+      "joblib": "1.5.3",
+      "numpy": "2.5.1",
+      "pandas": "3.0.3",
+      "pyarrow": "24.0.0",
+      "scikit-learn": "1.9.0",
+      "xgboost": "3.3.0"
+    },
+    "customer_identifiers_recorded": false,
+    "persistent_job_created": false,
+    "schedule_created": false,
+    "serverless_run_terminated": true,
+    "deadline_fired": false
+  },
+  "cost_and_final_state": {
+    "validation_attempt_count": 4,
+    "cumulative_estimated_cost_inr_pre_tax": 103.3578,
+    "guarded_cumulative_estimate_inr_pre_tax": 206.7156,
+    "planning_ceiling_inr": 250,
+    "actual_billed_usage": "PENDING_BILLING_LAG",
+    "hard_invoice_cap_guaranteed": false,
+    "cluster_count": 0,
+    "persistent_job_count": 0,
+    "project_warehouse_state": "STOPPED"
+  },
+  "local_validation": {
+    "pytest_passed": 122,
+    "pytest_failed": 0,
+    "pytest_warnings": 82,
+    "warnings": "Two existing framework deprecations plus 80 frozen-joblib/NumPy compatibility deprecations",
+    "ruff": "PASS",
+    "mypy": "PASS",
+    "dependency_compatibility": "PASS",
+    "package_build": "PASS",
+    "wheel_runtime_smoke": "PASS_JOBS_SERVING_AGENT_APP",
+    "credential_scan": "PASS",
+    "git_diff_check": "PASS_AZURE_DATABRICKS_SCOPE_ONLY"
+  },
+  "open_gates": {
+    "phase4": "EXPLICIT_OWNER_AUTHORIZATION_REQUIRED",
+    "production_release": "HOLD_REAL_DATA_PRIVACY_QUALITY_SECURITY_AND_OPERATING_APPROVALS_REQUIRED",
+    "frozen_pickle_portability": "MIGRATED_WITH_EXACT_ENVIRONMENT_AND_HASHED_SHIM_REPACKAGE_AS_MLFLOW_IN_PHASE5",
+    "storage_worm": "NOT_PROVIDED_APPLICATION_LEVEL_SEAL_ONLY",
+    "billing_actual": "PENDING_AZURE_AND_DATABRICKS_REPORTING_LAG"
+  }
+}

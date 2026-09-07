@@ -1,0 +1,15 @@
+{
+  "captured_at": "2026-09-07T06:28:15.107909+00:00",
+  "cluster_count": 0,
+  "databricks_validation": "PASS",
+  "estimated_validation_cost_inr_pre_tax": 15.4626,
+  "hard_invoice_cap_guaranteed": false,
+  "new_azure_resources": 0,
+  "persistent_job_count": 0,
+  "production_approved": false,
+  "project_warehouse_state": "STOPPED",
+  "sealed_root_count": 2,
+  "status": "PASS",
+  "transfer": "HASH_IDENTICAL",
+  "version": "azure_phase3_completion_v1"
+}

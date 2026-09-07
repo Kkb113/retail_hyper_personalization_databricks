@@ -1,0 +1,15 @@
+{
+  "captured_at": "2026-09-07T06:28:10.452037+00:00",
+  "cloud_mutations_performed": true,
+  "compute_started": false,
+  "created_count": 2,
+  "immutability_control": "versioned paths + approved hashes + no-overwrite client + seals",
+  "new_azure_resources": 0,
+  "scope_verified": true,
+  "seal_sha256": "26e1520ec4c3e26281def45413459fd24c96796a8810f76daeb0411dee6ec218",
+  "sealed_root_count": 2,
+  "status": "PASS",
+  "storage_worm_guaranteed": false,
+  "unchanged_count": 0,
+  "version": "azure_phase3_transfer_seal_result_v1"
+}

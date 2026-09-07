@@ -1,0 +1,20 @@
+{
+  "captured_at": "2026-09-07T06:58:07.548247+00:00",
+  "cloud_mutations_performed": false,
+  "compute_started": false,
+  "control_drift_count": 0,
+  "control_manifest_matching_count": 2,
+  "control_manifest_present_count": 2,
+  "drift_count": 0,
+  "expected_destination_count": 46,
+  "matching_count": 46,
+  "matching_seal_count": 2,
+  "missing_count": 0,
+  "present_count": 46,
+  "runtime_compatibility_matching": true,
+  "runtime_compatibility_present": true,
+  "scope_verified": true,
+  "sealed_root_count": 2,
+  "status": "PASS",
+  "version": "azure_phase3_remote_inspection_v1"
+}

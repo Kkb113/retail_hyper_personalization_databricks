@@ -54,6 +54,19 @@ and workload-identity evidence, see
 [Phase 2 status and runbook](evidence/phase_02/README.md).
 The Phase 1 restrictions below remain the historical resource-free bundle contract.
 
+## Phase 3 transfer
+
+Phase 3 is complete. The synthetic `retail_hp_transfer_v1` package is present in
+the governed Bronze and ML volumes, validated inside Databricks, and sealed. Final
+inspection matched 46 payload hashes, two control manifests, the runtime
+compatibility module and two deterministic seals. The one-time serverless runs
+terminated; zero clusters and zero persistent jobs remain, and the SQL warehouse
+is stopped. No Azure resource, endpoint, app, schedule or LLM capacity was created.
+
+See [Phase 3 status, limitations and runbook](evidence/phase_03/README.md). The
+seals provide application-level no-overwrite/hash controls, not storage WORM.
+Phase 4 requires separate authorization.
+
 The runtime lives only in `src/retail_hp_azure`. No legacy code is imported.
 The wheel contains configuration/preflight helpers and a local app skeleton;
 it does not contain migration data, frozen models or credentials.

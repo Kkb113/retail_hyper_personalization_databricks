@@ -1,0 +1,369 @@
+{
+  "bundle_sha256": "976b7d0cf2390869d78af3bce95842f6f30e09d5c64c4bdd7fddfb46c9a3bc0b",
+  "captured_at": "2026-09-07T06:53:07.206489+00:00",
+  "classification": "synthetic_data",
+  "cloud_mutations_performed": false,
+  "compute_started": false,
+  "data": [
+    {
+      "columns": 24,
+      "name": "recommendation_snapshot",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "CustomerID",
+        "Rank"
+      ],
+      "rows": 15930,
+      "status": "PASS"
+    },
+    {
+      "columns": 4,
+      "name": "brands",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "BrandID"
+      ],
+      "rows": 150,
+      "status": "PASS"
+    },
+    {
+      "columns": 8,
+      "name": "browsing_events",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "EventID"
+      ],
+      "rows": 45000,
+      "status": "PASS"
+    },
+    {
+      "columns": 10,
+      "name": "cart_events",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "CartEventID"
+      ],
+      "rows": 12000,
+      "status": "PASS"
+    },
+    {
+      "columns": 8,
+      "name": "customer_preferences",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "CustomerID"
+      ],
+      "rows": 5000,
+      "status": "PASS"
+    },
+    {
+      "columns": 15,
+      "name": "customer_product_audit",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "CustomerID",
+        "ProductID"
+      ],
+      "rows": 56610,
+      "status": "PASS"
+    },
+    {
+      "columns": 7,
+      "name": "customers",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "CustomerID"
+      ],
+      "rows": 5000,
+      "status": "PASS"
+    },
+    {
+      "columns": 13,
+      "name": "inventory",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "InventoryID"
+      ],
+      "rows": 15000,
+      "status": "PASS"
+    },
+    {
+      "columns": 5,
+      "name": "product_categories",
+      "optional_null_columns_observed": [
+        "ParentCategoryID"
+      ],
+      "primary_key": [
+        "CategoryID"
+      ],
+      "rows": 80,
+      "status": "PASS"
+    },
+    {
+      "columns": 12,
+      "name": "products",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "ProductID"
+      ],
+      "rows": 3000,
+      "status": "PASS"
+    },
+    {
+      "columns": 8,
+      "name": "promotions",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "PromotionID"
+      ],
+      "rows": 200,
+      "status": "PASS"
+    },
+    {
+      "columns": 13,
+      "name": "recommendation_log",
+      "optional_null_columns_observed": [
+        "PromotionID",
+        "SessionID"
+      ],
+      "primary_key": [
+        "RecommendationID"
+      ],
+      "rows": 25000,
+      "status": "PASS"
+    },
+    {
+      "columns": 7,
+      "name": "recommendation_response",
+      "optional_null_columns_observed": [
+        "OrderID",
+        "ResponseTime"
+      ],
+      "primary_key": [
+        "ResponseID"
+      ],
+      "rows": 25000,
+      "status": "PASS"
+    },
+    {
+      "columns": 5,
+      "name": "regions",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "RegionID"
+      ],
+      "rows": 10,
+      "status": "PASS"
+    },
+    {
+      "columns": 8,
+      "name": "sales_order_lines",
+      "optional_null_columns_observed": [
+        "PromotionID"
+      ],
+      "primary_key": [
+        "OrderLineID"
+      ],
+      "rows": 30000,
+      "status": "PASS"
+    },
+    {
+      "columns": 11,
+      "name": "sales_orders",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "OrderID"
+      ],
+      "rows": 12000,
+      "status": "PASS"
+    },
+    {
+      "columns": 9,
+      "name": "search_events",
+      "optional_null_columns_observed": [
+        "ClickedProductID"
+      ],
+      "primary_key": [
+        "SearchID"
+      ],
+      "rows": 12000,
+      "status": "PASS"
+    },
+    {
+      "columns": 8,
+      "name": "weather",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "WeatherID"
+      ],
+      "rows": 3650,
+      "status": "PASS"
+    },
+    {
+      "columns": 6,
+      "name": "wishlist",
+      "optional_null_columns_observed": [
+        "RemovedDate"
+      ],
+      "primary_key": [
+        "WishlistID"
+      ],
+      "rows": 5000,
+      "status": "PASS"
+    },
+    {
+      "columns": 27,
+      "name": "customer_profile_history",
+      "optional_null_columns_observed": [],
+      "primary_key": [
+        "CustomerID",
+        "ProfileVersion"
+      ],
+      "rows": 5000,
+      "status": "PASS"
+    }
+  ],
+  "data_file_count": 20,
+  "data_rows": 275630,
+  "destination_copy_count": 46,
+  "direct_pii_columns": 0,
+  "executable_files": 0,
+  "model_file_count": 26,
+  "models": [
+    {
+      "loader": "json",
+      "logical_path": "artifacts/adaptive_router_v1/fallback_matrix.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/adaptive_router_v1/routing_contract.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/adaptive_router_v1/routing_policy.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/cold_start_v1/cold_start_metadata.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "joblib:sklearn.compose._column_transformer.ColumnTransformer",
+      "logical_path": "artifacts/cold_start_v1/cold_start_preprocessor.joblib",
+      "status": "PASS"
+    },
+    {
+      "loader": "xgboost_booster",
+      "logical_path": "artifacts/cold_start_v1/cold_start_ranker.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "joblib:builtins.dict",
+      "logical_path": "artifacts/cold_start_v1/inference_reference.joblib",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/cold_start_v1/no_purchase_api_contract.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/cold_start_v1/onboarding_schema.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/final_policy/final_policy.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/final_policy/final_recommender_metadata.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/model_release_v1/agent_recommendation_contract.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/model_release_v1/model_selection.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "parquet_cross_role",
+      "logical_path": "artifacts/model_release_v1/recommendation_snapshot.parquet",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/model_release_v1/release_manifest.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/ranker_v2/inference_contract.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "xgboost_booster",
+      "logical_path": "artifacts/ranker_v2/known_ranker.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "xgboost_booster",
+      "logical_path": "artifacts/ranker_v2/lowhistory_ranker.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "joblib:sklearn.compose._column_transformer.ColumnTransformer",
+      "logical_path": "artifacts/ranker_v2/ranker_preprocessor.joblib",
+      "status": "PASS"
+    },
+    {
+      "loader": "xgboost_booster",
+      "logical_path": "artifacts/ranker_v2/shared_ranker.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "numpy_npz",
+      "logical_path": "artifacts/retrieval_v2/als_factors.npz",
+      "status": "PASS"
+    },
+    {
+      "loader": "numpy_npz",
+      "logical_path": "artifacts/retrieval_v2/content_matrix.npz",
+      "status": "PASS"
+    },
+    {
+      "loader": "joblib:sklearn.neighbors._unsupervised.NearestNeighbors",
+      "logical_path": "artifacts/retrieval_v2/content_neighbor_model.joblib",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/retrieval_v2/factor_mappings.json",
+      "status": "PASS"
+    },
+    {
+      "loader": "joblib:sklearn.pipeline.Pipeline",
+      "logical_path": "artifacts/retrieval_v2/metadata_factor_model.joblib",
+      "status": "PASS"
+    },
+    {
+      "loader": "json",
+      "logical_path": "artifacts/retrieval_v2/retrieval_metadata.json",
+      "status": "PASS"
+    }
+  ],
+  "production_approved": false,
+  "status": "PASS",
+  "total_unique_bytes": 12733215,
+  "unique_file_count": 45,
+  "version": "azure_phase3_local_validation_v1"
+}
