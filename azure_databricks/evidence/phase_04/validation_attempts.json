@@ -1,0 +1,54 @@
+{
+  "actual_billed_usage": "PENDING_BILLING_LAG",
+  "assumed_max_dbu_per_hour": 16,
+  "attempts": [
+    {
+      "attempt": 1,
+      "elapsed_seconds": 56,
+      "estimated_cost_inr_pre_tax": 11.1776,
+      "finding": "Removed an unsupported explicit error-if-exists write mode; no table was created",
+      "final_state": "TERMINATED",
+      "status": "FAILED"
+    },
+    {
+      "attempt": 2,
+      "elapsed_seconds": 174,
+      "estimated_cost_inr_pre_tax": 34.7304,
+      "finding": "Added an explicit raw-long schema and microsecond conversion for one Parquet nanosecond timestamp",
+      "final_state": "TERMINATED",
+      "status": "FAILED"
+    },
+    {
+      "attempt": 3,
+      "elapsed_seconds": 243,
+      "estimated_cost_inr_pre_tax": 48.5028,
+      "finding": "Corrected acronym-aware snake-case conversion; exactly 20 malformed Phase 4 Silver tables were removed and rebuilt",
+      "final_state": "TERMINATED",
+      "status": "FAILED"
+    },
+    {
+      "attempt": 4,
+      "elapsed_seconds": 315,
+      "estimated_cost_inr_pre_tax": 62.874,
+      "finding": "Timed out after creating all 50 expected objects; no further serverless build was attempted",
+      "final_state": "TIMEDOUT",
+      "status": "VALIDATION_INCOMPLETE_OBJECTS_CREATED"
+    },
+    {
+      "attempt": 5,
+      "compute": "existing_2X-Small_serverless_SQL_warehouse",
+      "elapsed_seconds": 52.17,
+      "estimated_cost_inr_pre_tax": 3.8771,
+      "finding": "One compact read-only reconciliation query passed and the warehouse stopped",
+      "final_state": "STOPPED",
+      "status": "PASS"
+    }
+  ],
+  "cumulative_estimated_cost_inr_pre_tax": 161.1619,
+  "hard_invoice_cap_guaranteed": false,
+  "new_azure_resources": 0,
+  "persistent_compute_after_validation": 0,
+  "phase4_execution_ceiling_inr": 250,
+  "source": "Microsoft Azure Retail Prices API snapshots and conservative elapsed-time estimates, West US, 2026-09-07",
+  "version": "azure_phase4_validation_attempts_v1"
+}
