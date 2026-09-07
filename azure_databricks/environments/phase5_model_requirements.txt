@@ -1,6 +1,6 @@
 # Captured from the registered Candidate's immutable requirements.txt.
 # Azure Databricks serverless environment version: 5; Python: 3.12.3.
-mlflow==3.8.1
+mlflow==3.16.0
 joblib==1.5.3
 numpy==2.5.1
 pandas==3.0.3
