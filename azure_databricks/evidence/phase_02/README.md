@@ -1,4 +1,4 @@
-# Phase 2 — governed platform verified; client identity pending
+# Phase 2 — complete; governed platform stopped
 
 ## Outcome
 
@@ -6,9 +6,11 @@ The governed foundation and one bounded SQL warehouse have been applied to the
 pinned Azure Databricks workspace. Governance verification passed **85 checks**;
 repeat apply produced **zero actions**. The SQL smoke test, **19 effective group
 grant checks**, **seven warehouse ACL checks**, explicit final stop, and native
-one-minute idle stop all passed. The warehouse is **STOPPED**.
+one-minute idle stop all passed. A non-admin workload identity then passed six
+authenticated allow/deny checks. Its temporary OAuth secret was revoked and zero
+active secrets remain. The warehouse is **STOPPED** and Phase 2 is complete.
 
-The full local suite passed **110 tests** (two existing dependency-deprecation
+The full local suite passed **113 tests** (two existing dependency-deprecation
 warnings), plus Ruff, mypy, dependency compatibility and the credential scan.
 See `acceptance.json` for the separate passed and blocked gates.
 
@@ -22,9 +24,9 @@ will occur only when Azure evaluates a threshold. This does not itself authorize
 general paid compute. The owner separately approved a maximum INR 250 planning
 ceiling for this Phase 2 warehouse test. The implemented 12-minute ceiling is
 estimated at INR 53.5059 pre-tax; the 3.5x guarded estimate is INR 187.2707.
-Recorded successful activity plus a conservative allowance for the first failed
-sub-minute attempt totals INR 14.5608 pre-tax. Azure billing can lag, so this is
-not an invoice guarantee.
+Recorded warehouse activity, a conservative allowance for the first failed
+sub-minute attempt, and the authenticated identity run total INR 16.1284 estimated
+pre-tax. Azure billing can lag, so this is not an invoice guarantee.
 
 Created/configured:
 
@@ -38,6 +40,8 @@ Created/configured:
 - One 2X-Small serverless SQL warehouse, min/max one cluster, API auto-stop one minute.
 - Group-only warehouse ACLs: admins CAN MANAGE, engineers CAN MONITOR, viewers and
   app runtime CAN USE.
+- One active, no-cost `retail-hp-app-runtime` workload service principal in the
+  runtime group, with no admin role and zero active OAuth secrets after testing.
 - A 12-minute wall-clock fallback, unconditional final stop, exact-name emergency
   stop, and STOPPED-state verification.
 
@@ -54,7 +58,7 @@ or deletions were performed. One harmless SQL context/smoke statement was execut
 | retail_hp_admins | USE, CREATE SCHEMA | Owns eight schemas; explicit create/read/write/execute | Owns both; read/write | USER; warehouse CAN MANAGE |
 | retail_hp_engineers | USE | Create tables/functions; select/modify/execute; CREATE MODEL in ml | Read/write both | USER; warehouse CAN MONITOR; no account-admin role |
 | retail_hp_viewers | USE | USE, SELECT, EXECUTE on serving only | None | USER; warehouse CAN USE |
-| retail_hp_app_runtime | USE | USE, SELECT, EXECUTE on serving only | None | USER; warehouse CAN USE; workload principal pending |
+| retail_hp_app_runtime | USE | USE, SELECT, EXECUTE on serving only | None | USER; warehouse CAN USE; non-admin workload principal active |
 
 The exact machine-readable privilege matrix is `grant_matrix()` in phase2.py.
 The serving schema is reserved for approved serving data/views/functions; do not
@@ -65,9 +69,10 @@ exist, so their object-specific ACLs are not claimed as applied.
 
 Verification inspects explicit grants, owners, group assignment, direct admin
 group membership, absence of broad grants to other principals, tags and schema
-settings. Effective permissions for the three non-admin project groups were read
-from Unity Catalog and passed 19 allow/deny checks. This is **not authenticated
-execution as the future app principal**; its credential does not exist yet. The
+settings. Effective permissions for the three non-admin project groups passed 19
+checks. The workload principal separately authenticated with OAuth, confirmed its
+runtime-group membership, listed the serving schema, ran a SQL probe, and was
+denied raw-volume metadata. The short-lived test secret was then revoked. The
 bootstrap user remains a pre-existing workspace
 administrator; these checks do not constrain that identity outside this workflow.
 
@@ -86,6 +91,7 @@ python -m retail_hp_azure.phase2 plan-paid-test
 python -m retail_hp_azure.phase2 run-paid-test
 python -m retail_hp_azure.phase2 apply-warehouse-acl
 python -m retail_hp_azure.phase2 test-idle-shutdown
+python -m retail_hp_azure.phase2 apply-test-workload-identity
 python -m retail_hp_azure.phase2 stop-project-warehouse
 ```
 
@@ -102,9 +108,10 @@ automatically remove objects or privileges to make a check pass.
 
 `inspect` records individual denied/unavailable capabilities without claiming
 overall readiness. Respect Azure retry headers and avoid repeatedly polling cost
-queries. `verify-governance` exits nonzero on failed metadata checks. It can pass
-while `phase2_complete` remains false because the cost/identity gate is separate.
-Phase 1's resource-free bundle, configuration and historical evidence are unchanged.
+queries. `verify-governance` exits nonzero on failed metadata checks. Its historical
+snapshot predates the separate workload-identity acceptance result; current Phase 2
+completion is recorded in `acceptance.json`. Phase 1's resource-free bundle,
+configuration and historical evidence are unchanged.
 
 ## Blockers and next actions
 
@@ -121,9 +128,9 @@ Phase 1's resource-free bundle, configuration and historical evidence are unchan
 3. **Budget and controller:** budget admission, explicit stop, deadline fallback,
    exact-name emergency stop, and native idle stop are verified. Notification
    delivery still awaits Azure evaluating a real threshold.
-4. **Identity tests:** Unity Catalog effective group grants and warehouse ACLs pass.
-   The remaining gap is authenticated execution as the client-approved workload
-   principal. Do not create a dummy identity or publish a credential to close it.
+4. **Identity tests:** Unity Catalog effective grants, warehouse ACLs, and six
+   authenticated workload-principal checks pass. The service principal is non-admin
+   and no OAuth test secret remains active.
 5. **Expiry:** owner review is required; expiry remains null. No deletion schedule
    exists. Agree the date before a handoff or unattended deployment.
 
@@ -150,6 +157,8 @@ managed-resource-group writes were made or authorized by this implementation.
 - `warehouse_idle_shutdown_test.json`: observed native idle stop and fallback state.
 - `warehouse_stop_verification.json`: exact-name emergency stop result after the
   first parser failure.
+- `workload_identity_verification.json`: authenticated allow/deny results, secret
+  revocation state and final warehouse stop; no identifiers or credentials.
 
 None of these reports contains recipient addresses, bearer tokens or raw Azure
 subscription/tenant/principal identifiers. Metadata evidence is not a billing

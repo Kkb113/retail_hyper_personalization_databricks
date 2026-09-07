@@ -467,7 +467,7 @@ The workspace already exposes governed foundation endpoints and managed storage.
 |---:|---|---|---|
 | 0 | Scope, safety, and cost baseline | Frozen scope, live inventory, cost guardrails, and decision log | Complete |
 | 1 | Azure project foundation | Clean bundle-based repository, environments, tests, and CI-ready structure | Implemented; local and live gates pass |
-| 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Platform verified; warehouse stopped; client workload credential pending |
+| 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Complete; warehouse stopped; workload identity verified |
 | 3 | Immutable data and model transfer | Complete, hash-verified transfer package in Unity Catalog volumes | Not started |
 | 4 | Lakehouse and feature foundation | Bronze, Silver, Feature, Gold, lineage, and data-quality gates | Not started |
 | 5 | Functional MLflow recommender | Real composite inference package with Azure parity evidence | Not started |
@@ -611,11 +611,12 @@ The bundle is reproducible, validates against the live workspace, and cannot tar
 
 ## Phase 2 — Governance and platform bootstrap
 
-**Current status (2026-09-07):** governed namespaces, INR budget, group grants,
+**Current status (2026-09-07): COMPLETE.** Governed namespaces, INR budget, group grants,
 one 2X-Small serverless warehouse, least-privilege warehouse ACLs, bounded shutdown
 controls, SQL smoke test, and native one-minute idle stop are applied and verified.
-The warehouse is STOPPED. Authenticated execution using the future client workload
-identity remains pending because no such credential has been supplied. See
+The warehouse is STOPPED. A no-cost non-admin Databricks workload identity passed
+six authenticated allow/deny checks; its one-hour test secret was immediately
+revoked and zero OAuth secrets remain active. See
 [Phase 2 evidence and runbook](azure_databricks/evidence/phase_02/README.md).
 
 **Owner follow-up decision:** IT confirmed INR; the INR 12,000 monthly budget is
@@ -2077,9 +2078,9 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-Obtain the client-approved workload identity and run its authenticated allow/deny
-tests to close **Phase 2**. Governance, the INR budget, warehouse ACLs, SQL smoke,
-and shutdown controls are applied and verified; the warehouse is STOPPED. Broad
-Databricks billing-table access remains denied, so use the scoped budget for
-admission and request a least-privilege monitoring view later. Do not start
-Phase 3 data/model transfer without explicit authorization.
+**Phase 2 is complete.** Governance, the INR budget, workload identity, warehouse
+ACLs, SQL smoke, authenticated allow/deny checks, and shutdown controls are
+verified; the warehouse is STOPPED and the test OAuth secret is revoked. Broad
+Databricks billing-table access remains denied, so the scoped budget is the POC
+admission source. Do not start Phase 3 data/model transfer without explicit
+authorization.

@@ -23,8 +23,8 @@
 |---:|---|---:|---|---|
 | 0 | None; read-only inventory only | USD 0.00 | Complete | live_inventory.json and resource_inventory.json |
 | 1 | Local code and read-only bundle validation | INR 0 new compute | Foundation | evidence/phase_01 |
-| 2 | Governance, INR budget, one bounded serverless warehouse and shutdown/ACL tests | Recorded successful runs INR 10.102 estimated pre-tax; conservative total including failed attempt INR 14.5608 | Platform verified; warehouse STOPPED; client identity pending | evidence/phase_02 |
-| 3+ | Transfer and bounded compute | Not yet estimated | Blocked | Explicit Phase 3 approval and workload identity required |
+| 2 | Governance, budget, bounded warehouse, shutdown/ACL and authenticated workload-identity tests | Conservative total INR 16.1284 estimated pre-tax | Complete; warehouse STOPPED; zero active OAuth test secrets | evidence/phase_02 |
+| 3+ | Transfer and bounded compute | Not yet estimated | Blocked | Explicit Phase 3 approval required |
 
 Phase 2 created no new Azure resource, but it created one Databricks SQL warehouse
 inside the existing workspace. The warehouse is 2X-Small serverless, one cluster,
@@ -43,6 +43,8 @@ ceiling was approved for one bounded live test. The implemented 12-minute maximu
 is INR 53.5059 pre-tax at retail; a 3.5x planning guard is INR 187.2707. Recorded
 successful activity estimated INR 10.102 pre-tax, plus an INR 4.4588 conservative
 upper estimate for the failed sub-minute attempt, well below INR 250.
+The final authenticated workload-identity check added INR 1.5676 estimated
+pre-tax, for a conservative total Phase 2 estimate of INR 16.1284.
 
 ## Required future controls (not deployed in Phase 1)
 
@@ -70,9 +72,8 @@ upper estimate for the failed sub-minute attempt, well below INR 250.
 The budget and warehouse controls are deployed. Before wider paid deployment:
 
 1. Confirm alert email delivery when Azure evaluates a real threshold.
-2. Provision the client-approved workload identity and run authenticated allow/deny tests.
-3. Add service-specific timeout/scale-to-zero tests only when those services are created.
-4. Verify all billable compute is stopped after every development/demo session.
+2. Add service-specific timeout/scale-to-zero tests only when those services are created.
+3. Verify all billable compute is stopped after every development/demo session.
 
 Source control records only the state and amount, never personal notification
 details. Budget alerts do not stop resources and are evaluated using delayed cost

@@ -49,8 +49,8 @@ is superseded, not evidence of a deployed Azure budget.
 
 ## Phase 1 foundation
 
-For the current governed Phase 2 platform, stopped warehouse, live shutdown
-evidence, and remaining client-identity gate, see
+For the completed governed Phase 2 platform, stopped warehouse, live shutdown
+and workload-identity evidence, see
 [Phase 2 status and runbook](evidence/phase_02/README.md).
 The Phase 1 restrictions below remain the historical resource-free bundle contract.
 

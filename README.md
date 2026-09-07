@@ -29,9 +29,10 @@ group-owned schemas, two empty managed volumes, least-privilege grants and tags,
 the INR budget, and one 2X-Small serverless SQL warehouse. The warehouse is
 limited to one cluster, has API-configured one-minute auto-stop, and is currently
 **STOPPED**. Live SQL, 19 effective-grant checks, seven warehouse ACL checks, and
-the native idle-stop test passed. **Phase 2 is not fully closed:** authenticated
-execution as the future client workload identity still needs that credential,
-and broad Databricks billing visibility remains denied. See the
+the native idle-stop test passed. A no-cost, non-admin workload service principal
+was then authenticated for six allow/deny checks; its test OAuth secret was
+revoked. **Phase 2 is complete and the platform is stopped.** Broad Databricks
+billing-table visibility remains a documented, non-blocking limitation. See the
 [Phase 2 status and runbook](azure_databricks/evidence/phase_02/README.md).
 
 The owner confirmed INR with IT. The INR 12,000 monthly resource-group budget and

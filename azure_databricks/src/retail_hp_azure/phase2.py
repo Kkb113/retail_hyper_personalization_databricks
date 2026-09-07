@@ -541,7 +541,7 @@ def main() -> None:
         "inspect-compute",
         "apply-budget",
         "plan-paid-test", "run-paid-test", "test-idle-shutdown", "apply-warehouse-acl",
-        "stop-project-warehouse",
+        "apply-test-workload-identity", "stop-project-warehouse",
     ])
     arguments = parser.parse_args()
     try:
@@ -582,6 +582,11 @@ def main() -> None:
 
             result = run_native_idle_shutdown_test(CloudContext(apply=True))
             record_evidence("warehouse_idle_shutdown_test.json", result)
+        elif arguments.command == "apply-test-workload-identity":
+            from retail_hp_azure.phase2_identity import apply_and_test_workload_identity
+
+            result = apply_and_test_workload_identity(CloudContext(apply=True))
+            record_evidence("workload_identity_verification.json", result)
         elif arguments.command == "stop-project-warehouse":
             from retail_hp_azure.phase2_compute import stop_project_warehouse
 

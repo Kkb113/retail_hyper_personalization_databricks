@@ -226,13 +226,14 @@ def test_confirmed_budget_does_not_implicitly_authorize_paid_platform_activation
     root = Path(__file__).resolve().parents[2] / "azure_databricks"
     acceptance = json.loads((root / "evidence/phase_02/acceptance.json").read_text())
     assert acceptance["governance_complete"] is True
-    assert acceptance["phase2_complete"] is False
+    assert acceptance["phase2_complete"] is True
     assert acceptance["phase3_authorized"] is False
     assert acceptance["paid_deployment_allowed"] is False
     decision = acceptance["owner_budget_deferral"]
     assert decision["decision"] == "INR_CONFIRMED_BUDGET_DEPLOYED"
     assert decision["budget_deployed"] is True
     assert decision["paid_compute_authorized_by_deferral"] is False
+    assert acceptance["live_validation"]["workload_identity_authenticated_checks_passed"] == 6
     policy = json.loads((root / "config/poc.json").read_text())
     assert policy["cost"]["paid_resource_creation_allowed"] is False
 

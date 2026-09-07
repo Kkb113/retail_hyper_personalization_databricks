@@ -1,0 +1,35 @@
+{
+  "authenticated_checks_failed": 0,
+  "authenticated_checks_passed": 6,
+  "budget_admission": {
+    "amount_inr": 12000,
+    "current_spend_inr": 0.0,
+    "notification_count": 5
+  },
+  "captured_at": "2026-09-07T05:12:22.123299+00:00",
+  "checks": {
+    "authenticated_as_service_principal": true,
+    "raw_volume_metadata_denied": true,
+    "runtime_group_membership": true,
+    "serving_schema_allowed": true,
+    "serving_table_listing_allowed": true,
+    "sql_execution_allowed": true
+  },
+  "deadline_fired": false,
+  "elapsed_seconds": 21.09,
+  "estimated_elapsed_cost_inr_pre_tax": 1.5676,
+  "hard_invoice_cap_guaranteed": false,
+  "identity": {
+    "account_admin_roles": 0,
+    "identity_cost_inr": 0,
+    "identity_created": true,
+    "runtime_group_membership_added": true,
+    "workspace_admin": false
+  },
+  "identity_identifiers_recorded": false,
+  "oauth_secret_recorded": false,
+  "scope_verified": true,
+  "status": "PASS",
+  "temporary_oauth_secret_revoked": true,
+  "warehouse_final_state": "STOPPED"
+}
