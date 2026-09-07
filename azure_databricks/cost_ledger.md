@@ -26,7 +26,8 @@
 | 2 | Governance, budget, bounded warehouse, shutdown/ACL and authenticated workload-identity tests | Conservative total INR 16.1284 estimated pre-tax | Complete; warehouse STOPPED; zero active OAuth test secrets | evidence/phase_02 |
 | 3 | Approximately 13 MiB volume transfer, four terminated one-time serverless validations, and two seals | Cumulative INR 103.3578 estimated pre-tax; INR 206.7156 with 2x guard | Complete; warehouse STOPPED; zero clusters/jobs | evidence/phase_03 |
 | 4 | 50 governed Lakehouse objects; four terminated one-time serverless builds; one bounded read-only SQL validation | Cumulative INR 161.1619 estimated pre-tax | Complete; warehouse STOPPED; zero clusters/jobs | evidence/phase_04 |
-| 5+ | Model, agent and serving work | Not yet authorized | Blocked | Separate phase approval required |
+| 5 | Functional composite MLflow Candidate; six bounded serverless attempts | Cumulative INR 198.1409 estimated pre-tax | Complete; Candidate only; warehouse STOPPED; zero clusters/jobs | evidence/phase_05 |
+| 6+ | Batch/real-time serving, agent and app work | Not yet authorized | Blocked | Separate phase approval required |
 
 Phase 2 created no new Azure resource, but it created one Databricks SQL warehouse
 inside the existing workspace. The warehouse is 2X-Small serverless, one cluster,
@@ -70,6 +71,15 @@ Phase 4 estimated compute is therefore INR 161.1619 pre-tax, below the INR 250
 execution ceiling. Metered usage can lag; taxes, discounts and small managed
 storage charges are not included, so this is not a hard billing cap.
 
+Phase 5 reused the existing catalog and sealed volume assets. Six bounded
+automated-serverless attempts totaled 992.69 seconds: five runtime-hardening
+failures and one canceled duplicate. At the conservative 16 DBU/hour and INR
+44.91/DBU-hour assumptions, cumulative Phase 5 compute is INR 198.1409 pre-tax,
+below the INR 250 ceiling. The registered Candidate was downloaded and validated
+locally without compute; its owner was repaired through the control plane. No
+serving endpoint, schedule, GPU, app, LLM, vector index or Azure resource was
+created. Metered billing may lag and this estimate is not a hard invoice cap.
+
 ## Controls required for later phases
 
 - Zero all-purpose clusters.
@@ -91,10 +101,10 @@ storage charges are not included, so this is not a hard billing cap.
 - Zero vector-search endpoints by default.
 - Pay-per-token model calls with token and rate limits.
 
-## Remaining work before Phase 5
+## Remaining work before Phase 6
 
-The budget, warehouse controls, Phase 3 transfer and Phase 4 Lakehouse are complete.
-Before any Phase 5 compute:
+The budget, warehouse controls, transfer, Lakehouse and functional Candidate are
+complete. Before any Phase 6 compute:
 
 1. Confirm alert email delivery when Azure evaluates a real threshold.
 2. Add service-specific timeout/scale-to-zero tests only when those services are created.

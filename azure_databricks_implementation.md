@@ -468,9 +468,9 @@ The workspace already exposes governed foundation endpoints and managed storage.
 | 0 | Scope, safety, and cost baseline | Frozen scope, live inventory, cost guardrails, and decision log | Complete |
 | 1 | Azure project foundation | Clean bundle-based repository, environments, tests, and CI-ready structure | Implemented; local and live gates pass |
 | 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Complete; warehouse stopped; workload identity verified |
-| 3 | Immutable data and model transfer | Complete, hash-verified transfer package in Unity Catalog volumes | Not started |
-| 4 | Lakehouse and feature foundation | Bronze, Silver, Feature, Gold, lineage, and data-quality gates | Not started |
-| 5 | Functional MLflow recommender | Real composite inference package with Azure parity evidence | Not started |
+| 3 | Immutable data and model transfer | Complete, hash-verified transfer package in Unity Catalog volumes | Complete |
+| 4 | Lakehouse and feature foundation | Bronze, Silver, Feature, Gold, lineage, and data-quality gates | Complete |
+| 5 | Functional MLflow recommender | Real composite inference package with Azure parity evidence | Complete; Candidate only; Champion HOLD |
 | 6 | Batch and real-time recommendation serving | Fast known-user path plus dynamic cold-start/what-if path | Not started |
 | 7 | Operational state and feedback | Low-latency sessions, feedback, notifications, and idempotency | Not started |
 | 8 | Semantic intelligence and governed tools | Product semantics and deterministic, permission-aware tool layer | Not started |
@@ -851,6 +851,15 @@ All governed tables reconcile to the frozen input, feature parity passes, and da
 
 ## Phase 5 — Functional MLflow recommender
 
+**Implementation status (2026-09-07): COMPLETE.** The functional composite is
+registered as `intellify_databricks_demo.ml.adaptive_recommender` version 1,
+owned by `retail_hp_admins` and assigned Candidate. All deterministic parity,
+inventory, signature, dependency and stopped-state gates pass. Champion remains
+HOLD pending a future holdout and later approvals. No serving endpoint or other
+Azure resource was created; Phase 5's conservative cumulative compute estimate
+is INR 198.1409 pre-tax under the INR 250 execution ceiling. See
+`azure_databricks/evidence/phase_05/README.md`.
+
 ### Objective
 
 Package the actual adaptive recommender—not a placeholder or snapshot lookup—as a portable MLflow model registered in Unity Catalog.
@@ -935,7 +944,7 @@ The model accepts typed records and returns structured recommendation rows. It m
 
 ### Exit gate
 
-The registered Candidate is a real end-to-end recommender, passes golden parity and inventory rules, and has a reproducible environment. Only then may it become Champion.
+The registered Candidate is a real end-to-end recommender, passes golden parity and inventory rules, and has a reproducible environment. Candidate completion does not automatically authorize Champion; the documented holdout and approval gates still apply.
 
 ---
 
@@ -2113,10 +2122,12 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-**Phases 0–4 are complete and the platform is stopped.** The governed transfer is
+**Phases 0–5 are complete and the platform is stopped.** The governed transfer is
 hash-identical and sealed, and the Phase 4 Lakehouse reconciles end to end with
-all 50 expected objects present. There are zero clusters and persistent jobs, and
-the warehouse is STOPPED. Broad Databricks billing-table access remains denied,
-so reported actual usage may lag. Phase 5—the functional MLflow recommender—is
-the next roadmap step, but it requires separate owner authorization and a fresh
-read-only scope, compatibility, cost and compute-admission review.
+all 50 expected objects present. The functional MLflow recommender is registered
+as Candidate with deterministic parity and reproducible dependencies; Champion
+remains gated by the future holdout. There are zero clusters and persistent jobs,
+and the warehouse is STOPPED. Broad Databricks billing-table access remains
+denied, so reported actual usage may lag. Phase 6 serving is the next roadmap
+step and requires separate owner authorization plus a fresh cost and shutdown
+review.

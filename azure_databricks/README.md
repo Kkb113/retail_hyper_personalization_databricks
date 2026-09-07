@@ -84,7 +84,20 @@ production. See [Phase 4 evidence](evidence/phase_04/README.md) and the
 
 The build created no new Azure resource and left no job, schedule or pipeline.
 Zero clusters and persistent jobs remain, and the SQL warehouse is **STOPPED**.
-Phase 5 requires separate authorization.
+
+## Phase 5 functional MLflow recommender
+
+Phase 5 is complete. Unity Catalog contains one functional composite model
+version at `intellify_databricks_demo.ml.adaptive_recommender`. It is owned by
+`retail_hp_admins`, aliased **Candidate**, and deliberately has no Champion alias.
+Exact golden parity, inventory validity, signature/example packaging and a
+three-environment compatibility matrix pass. The frozen environment is recorded
+in [phase5_model_requirements.txt](environments/phase5_model_requirements.txt).
+
+No endpoint, app, schedule, GPU, LLM or Azure resource was created. All bounded
+serverless attempts terminated; zero clusters/jobs remain and the warehouse is
+**STOPPED**. See [Phase 5 evidence](evidence/phase_05/README.md). Do not rerun the
+registration job or promote Champion without a new phase authorization.
 
 The runtime lives only in `src/retail_hp_azure`. No legacy code is imported.
 The wheel contains configuration/preflight helpers and a local app skeleton;

@@ -1,0 +1,20 @@
+{
+  "candidate_alias_version": 1,
+  "champion_alias_present": false,
+  "cluster_count": 0,
+  "estimated_phase5_cost_inr_pre_tax": 198.1409,
+  "golden_output_rows": 40,
+  "golden_output_sha256": "4e4f7156be1fa0117d8cc01a33b090ba5086ecfb76067423e7ffc8c4c2540183",
+  "hard_invoice_cap_guaranteed": false,
+  "inventory_valid_pct": 100.0,
+  "model_version_count": 1,
+  "new_azure_resources": 0,
+  "owner": "retail_hp_admins",
+  "persistent_job_count": 0,
+  "production_approved": false,
+  "production_status": "HOLD_PENDING_FUTURE_HOLDOUT",
+  "project_warehouse_state": "STOPPED",
+  "registered_model": "intellify_databricks_demo.ml.adaptive_recommender",
+  "status": "PASS",
+  "version": "azure_phase5_completion_v1"
+}

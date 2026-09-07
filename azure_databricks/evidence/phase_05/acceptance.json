@@ -1,0 +1,16 @@
+{
+  "candidate_present": true,
+  "champion_decision": "HOLD_PENDING_FUTURE_HOLDOUT",
+  "champion_present": false,
+  "compatibility_matrix": "PASS",
+  "cost_ceiling": "PASS",
+  "functional_recommender": "PASS",
+  "golden_parity": "PASS",
+  "inventory_valid_pct": 100.0,
+  "model_owner": "retail_hp_admins",
+  "production_approved": false,
+  "registered_model": "intellify_databricks_demo.ml.adaptive_recommender",
+  "status": "PASS",
+  "stopped_state": "PASS",
+  "version": "azure_phase5_acceptance_v1"
+}

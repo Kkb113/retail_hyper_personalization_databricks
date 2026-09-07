@@ -1,0 +1,10 @@
+{
+  "captured_at": "2026-09-07T10:08:17.710952+00:00",
+  "identifiers_recorded": false,
+  "inventory_valid_pct": 100.0,
+  "output_rows": 40,
+  "output_sha256": "4e4f7156be1fa0117d8cc01a33b090ba5086ecfb76067423e7ffc8c4c2540183",
+  "request_count": 4,
+  "status": "PASS",
+  "version": "azure_phase5_local_golden_v1"
+}

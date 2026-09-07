@@ -1,0 +1,14 @@
+{
+  "captured_at": "2026-09-07T11:02:00+00:00",
+  "dependency_count": 8,
+  "environment_version": "5",
+  "identifiers_recorded": false,
+  "input_example_present": true,
+  "mlflow_version": "3.8.1",
+  "model_size_bytes": 12961822,
+  "python_version": "3.12.3",
+  "requirements_match_repository_lock": true,
+  "signature_present": true,
+  "status": "PASS",
+  "version": "azure_phase5_dependency_report_v1"
+}
