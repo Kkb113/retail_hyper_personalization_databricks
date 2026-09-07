@@ -9,11 +9,13 @@
 - Contract/list prices are refreshed immediately before a paid creation.
 - Owner monthly target: INR 12,000; internal stop target INR 9,000; reserve INR 3,000.
 - Two notification recipients supplied privately; addresses are not committed.
-- Budget alerts and shutdown controller: not deployed.
-- Owner decision: budget setup deferred until IT confirms the currency. This is
-  a scheduling deferral, not authorization to bypass paid-deployment controls.
-- Paid resource creation: blocked pending controls, current pricing and approval
-  of the specific resource. No premium add-ons or automatic paid fallback.
+- Budget alerts: deployed at INR 12,000 monthly with five actual/forecast rules.
+- Shutdown controls: deployed for the project SQL warehouse (one-minute native
+  idle stop, 12-minute live-test deadline, unconditional final stop).
+- Owner confirmed INR with IT. The budget did not authorize anything beyond the
+  separately approved bounded Phase 2 test.
+- Paid resource creation outside the single approved Phase 2 warehouse remains
+  blocked. No premium add-ons or automatic paid fallback.
 
 ## Phase ledger
 
@@ -21,15 +23,28 @@
 |---:|---|---:|---|---|
 | 0 | None; read-only inventory only | USD 0.00 | Complete | live_inventory.json and resource_inventory.json |
 | 1 | Local code and read-only bundle validation | INR 0 new compute | Foundation | evidence/phase_01 |
-| 2 | Groups, schemas, empty managed volumes, grants, tags; predictive optimization disabled | No compute started; billing total unavailable | Metadata verified; cost gate blocked | evidence/phase_02 |
-| 3+ | Transfer and bounded compute | Not yet estimated | Blocked | Current pricing, budget notifications and shutdown controls required |
+| 2 | Governance, budget, bounded warehouse, shutdown/ACL and authenticated workload-identity tests | Conservative total INR 16.1284 estimated pre-tax | Complete; warehouse STOPPED; zero active OAuth test secrets | evidence/phase_02 |
+| 3+ | Transfer and bounded compute | Not yet estimated | Blocked | Explicit Phase 3 approval required |
 
-Phase 2 has not created any Azure resource or SQL warehouse. It uses existing
-managed storage for empty volume metadata. This is not a claim of zero total
-Azure spend: current cost/currency queries return HTTP 429 and Databricks system
-billing access is denied. Managed-resource-group/storage cost coverage is not
-verified. Budget inventory remains empty. The auto-stop tag is a policy label,
-not evidence that an automated stop controller is running.
+Phase 2 created no new Azure resource, but it created one Databricks SQL warehouse
+inside the existing workspace. The warehouse is 2X-Small serverless, one cluster,
+one-minute auto-stop, and verified STOPPED. This is not a claim of zero total
+Azure spend: the generic cost query returned HTTP 429 and Databricks system
+billing access is denied. The budget resource now verifies INR and reports INR
+0.00 current spend, subject to billing delay. Managed-resource-group/storage cost
+coverage is not verified. Native idle stop was observed after 115.03 seconds;
+the four-minute fallback did not fire.
+
+The 2026-09-07 Microsoft retail-price snapshot lists Premium Serverless SQL at
+INR 66.8824 per DBU-hour in West US. A 2X-Small warehouse is documented at four
+DBU/hour, yielding an estimated INR 267.5296 per running hour or INR 89.1765 for
+20 minutes, before tax and without negotiated discounts. A conservative INR 250
+ceiling was approved for one bounded live test. The implemented 12-minute maximum
+is INR 53.5059 pre-tax at retail; a 3.5x planning guard is INR 187.2707. Recorded
+successful activity estimated INR 10.102 pre-tax, plus an INR 4.4588 conservative
+upper estimate for the failed sub-minute attempt, well below INR 250.
+The final authenticated workload-identity check added INR 1.5676 estimated
+pre-tax, for a conservative total Phase 2 estimate of INR 16.1284.
 
 ## Required future controls (not deployed in Phase 1)
 
@@ -52,15 +67,13 @@ not evidence that an automated stop controller is running.
 - Zero vector-search endpoints by default.
 - Pay-per-token model calls with token and rate limits.
 
-## Remaining budget work before paid deployment
+## Remaining work before Phase 3 paid deployment
 
-The owner has approved the target and supplied two recipients. Implementation must:
+The budget and warehouse controls are deployed. Before wider paid deployment:
 
-1. Verify Azure billing currency and current regional prices.
-2. Create scoped actual/forecast notifications and test delivery to both recipients.
-3. Build/test an idempotent, scoped stop controller with an INR 9,000 internal target.
-4. Test human inactivity, session expiry, job timeout and manual shutdown independently.
-5. Verify all billable compute is stopped after development/demo sessions.
+1. Confirm alert email delivery when Azure evaluates a real threshold.
+2. Add service-specific timeout/scale-to-zero tests only when those services are created.
+3. Verify all billable compute is stopped after every development/demo session.
 
 Source control records only the state and amount, never personal notification
 details. Budget alerts do not stop resources and are evaluated using delayed cost

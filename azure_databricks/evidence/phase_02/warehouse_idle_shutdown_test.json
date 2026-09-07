@@ -1,0 +1,19 @@
+{
+  "auto_stop_minutes": 1,
+  "budget_admission": {
+    "amount_inr": 12000,
+    "current_spend_inr": 0.0,
+    "notification_count": 5
+  },
+  "captured_at": "2026-09-07T04:46:41.458176+00:00",
+  "elapsed_seconds": 115.03,
+  "estimated_elapsed_cost_inr_pre_tax": 8.5484,
+  "fallback_deadline_minutes": 4,
+  "fallback_fired": false,
+  "hard_invoice_cap_guaranteed": false,
+  "identifiers_recorded": false,
+  "native_idle_stop_observed": true,
+  "scope_verified": true,
+  "status": "PASS",
+  "warehouse_final_state": "STOPPED"
+}

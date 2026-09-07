@@ -467,7 +467,7 @@ The workspace already exposes governed foundation endpoints and managed storage.
 |---:|---|---|---|
 | 0 | Scope, safety, and cost baseline | Frozen scope, live inventory, cost guardrails, and decision log | Complete |
 | 1 | Azure project foundation | Clean bundle-based repository, environments, tests, and CI-ready structure | Implemented; local and live gates pass |
-| 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Metadata verified; cost/identity execution gates blocked |
+| 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Complete; warehouse stopped; workload identity verified |
 | 3 | Immutable data and model transfer | Complete, hash-verified transfer package in Unity Catalog volumes | Not started |
 | 4 | Lakehouse and feature foundation | Bronze, Silver, Feature, Gold, lineage, and data-quality gates | Not started |
 | 5 | Functional MLflow recommender | Real composite inference package with Azure parity evidence | Not started |
@@ -552,8 +552,9 @@ monthly target, INR 9,000 internal stop target, INR 3,000 reserve, at most four
 occasional demos per month, and service-specific idle optimization. Twenty
 minutes was an example, not a hard limit. Both alert
 recipients are supplied privately. Azure budgets are not hard billing caps.
-Budget delivery and shutdown controllers are not deployed; all optional features
-and cloud mutations remain disabled in `azure_databricks/config/poc.json`.
+Budget delivery is now deployed; the shutdown controller is not. All optional
+features and cloud mutations remain disabled in the historical Phase 1
+`azure_databricks/config/poc.json` contract.
 Custom serving's native 30-minute idle scale-down may now be evaluated if its
 full session cost and cold-start behavior fit the POC. It remains disabled until
 the deployment gate passes. Require pre-start cost checks, bounded sessions,
@@ -610,16 +611,18 @@ The bundle is reproducible, validates against the live workspace, and cannot tar
 
 ## Phase 2 — Governance and platform bootstrap
 
-**Current status (2026-09-04):** metadata governance applied and verified with
-85 live checks; repeat apply produced zero actions. Billing/currency visibility,
-budget/controller deployment and non-admin execution tests remain unresolved.
-No paid compute was created. See
+**Current status (2026-09-07): COMPLETE.** Governed namespaces, INR budget, group grants,
+one 2X-Small serverless warehouse, least-privilege warehouse ACLs, bounded shutdown
+controls, SQL smoke test, and native one-minute idle stop are applied and verified.
+The warehouse is STOPPED. A no-cost non-admin Databricks workload identity passed
+six authenticated allow/deny checks; its one-hour test secret was immediately
+revoked and zero OAuth secrets remain active. See
 [Phase 2 evidence and runbook](azure_databricks/evidence/phase_02/README.md).
 
-**Owner follow-up decision:** defer budget setup until IT confirms the currency.
-The metadata-governance deliverable is complete. Full platform activation still
-requires the remaining cost, identity and execution gates; this scheduling
-decision does not authorize paid compute or mark those tests passed.
+**Owner follow-up decision:** IT confirmed INR; the INR 12,000 monthly budget is
+deployed. The owner approved an INR 250 maximum planning ceiling for one Phase 2
+test. A 12-minute deadline and 3.5x guard limited the plan to INR 187.2707; the
+conservative total test estimate is INR 14.5608 pre-tax, subject to billing lag.
 
 ### Objective
 
@@ -646,7 +649,8 @@ Create the minimum governed Databricks foundation for data, models, jobs, the ap
    The owner has approved INR 12,000 monthly, INR 9,000 internal stop and INR 3,000
    reserve; the two recipients are private. Alerts are not a hard billing cap.
 8. Add a POC expiry field to the inventory, but do not automate deletion.
-9. Validate that Databricks system billing tables are visible for later usage reporting.
+9. Validate Databricks system billing when a least-privilege billing view is supplied;
+   the RG budget is the current cost admission source because broad access is denied.
 10. Disable background predictive optimization on the project schemas while paid
     background maintenance is not approved. Do not alter unrelated schemas.
 
@@ -2074,8 +2078,9 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-Complete the remaining **Phase 2** billing, budget/controller and identity gates.
-Metadata governance is applied and verified; see evidence/phase_02. Azure cost
-queries are throttled and Databricks billing-table access is denied. Resolve
-these before creating budget notifications, testing shutdown controls or starting
-paid compute. Do not advance to Phase 3 merely because the metadata checks pass.
+**Phase 2 is complete.** Governance, the INR budget, workload identity, warehouse
+ACLs, SQL smoke, authenticated allow/deny checks, and shutdown controls are
+verified; the warehouse is STOPPED and the test OAuth secret is revoked. Broad
+Databricks billing-table access remains denied, so the scoped budget is the POC
+admission source. Do not start Phase 3 data/model transfer without explicit
+authorization.

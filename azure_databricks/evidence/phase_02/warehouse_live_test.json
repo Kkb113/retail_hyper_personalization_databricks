@@ -1,0 +1,40 @@
+{
+  "budget_admission": {
+    "amount_inr": 12000,
+    "current_spend_inr": 0.0,
+    "notification_count": 5
+  },
+  "captured_at": "2026-09-07T04:40:15.211225+00:00",
+  "controller_fired": false,
+  "controller_stop_failed": false,
+  "elapsed_seconds": 20.91,
+  "estimated_elapsed_cost_inr_pre_tax": 1.5536,
+  "hard_invoice_cap_guaranteed": false,
+  "identifiers_recorded": false,
+  "identity_effective_grant_tests": {
+    "checks_failed": 0,
+    "checks_passed": 19,
+    "status": "PASS"
+  },
+  "plan": {
+    "auto_stop_minutes": 1,
+    "azure_budget_is_hard_cap": false,
+    "controller": "in-process deadline + finally stop + native idle auto-stop",
+    "estimated_max_runtime_cost_inr_pre_tax": 53.5059,
+    "guarded_estimate_inr": 187.2707,
+    "max_clusters": 1,
+    "min_clusters": 1,
+    "owner_approved_ceiling_inr": 250.0,
+    "risk_multiplier": 3.5,
+    "serverless": true,
+    "wall_clock_deadline_minutes": 12,
+    "warehouse_name": "retail-hp-poc-sql",
+    "warehouse_size": "2X-Small"
+  },
+  "representative_principal_authentication": "NOT_RUN_NO_CLIENT_WORKLOAD_CREDENTIAL",
+  "scope_verified": true,
+  "sql_smoke_test": "PASS",
+  "status": "PASS",
+  "warehouse_created": false,
+  "warehouse_final_state": "STOPPED"
+}

@@ -21,6 +21,7 @@ from retail_hp_azure.safety import (
 )
 
 CATALOG = "intellify_databricks_demo"
+AZURE_BUDGET_NAME = "retail-hp-poc-monthly-budget"
 SCHEMAS = ("bronze", "silver", "features", "ml", "gold", "serving", "agent", "monitoring")
 GROUPS = ("retail_hp_admins", "retail_hp_engineers", "retail_hp_viewers", "retail_hp_app_runtime")
 VOLUMES = (("bronze", "transfer_landing"), ("ml", "model_assets"))
@@ -73,6 +74,8 @@ def safe_arm_route(method: str, path: str, group_id: str, workspace_id: str) -> 
     resource = path.split("?", 1)[0].lower()
     routes = {
         ("GET", group_id + "/providers/Microsoft.Consumption/budgets"),
+        ("GET", group_id + "/providers/Microsoft.Consumption/budgets/" + AZURE_BUDGET_NAME),
+        ("PUT", group_id + "/providers/Microsoft.Consumption/budgets/" + AZURE_BUDGET_NAME),
         ("POST", group_id + "/providers/Microsoft.CostManagement/query"),
         ("GET", group_id + "/providers/Microsoft.Resources/tags/default"),
         ("PATCH", group_id + "/providers/Microsoft.Resources/tags/default"),
@@ -81,6 +84,79 @@ def safe_arm_route(method: str, path: str, group_id: str, workspace_id: str) -> 
     }
     require((method, resource) in {(verb, value.lower()) for verb, value in routes},
             "ARM route is not an approved Phase 2 operation")
+
+
+def budget_properties(recipients: tuple[str, str]) -> dict[str, Any]:
+    """Build the private ARM payload. Callers must never persist the returned value."""
+    email = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+    require(len(set(recipients)) == 2 and all(email.fullmatch(item) for item in recipients),
+            "Exactly two distinct valid budget recipients are required")
+
+    def notification(threshold: int, threshold_type: str = "Actual") -> dict[str, Any]:
+        return {
+            "enabled": True, "operator": "GreaterThan", "threshold": threshold,
+            "thresholdType": threshold_type, "contactEmails": list(recipients),
+            "contactGroups": [], "contactRoles": [], "locale": "en-us",
+        }
+
+    return {
+        "category": "Cost", "amount": 12000, "timeGrain": "Monthly",
+        "timePeriod": {
+            "startDate": "2026-09-01T00:00:00Z", "endDate": "2028-08-31T23:59:59Z",
+        },
+        "notifications": {
+            "Actual50": notification(50), "Actual75": notification(75),
+            "Actual90": notification(90), "Actual100": notification(100),
+            "Forecast100": notification(100, "Forecasted"),
+        },
+    }
+
+
+def apply_budget(context: CloudContext, recipients: tuple[str, str]) -> dict[str, Any]:
+    """Create or reconcile the fixed INR budget without exposing its recipients."""
+    require(context.apply, "Cloud writes require explicit apply")
+    properties = budget_properties(recipients)
+    path = (context.group["id"] + "/providers/Microsoft.Consumption/budgets/" +
+            AZURE_BUDGET_NAME + "?api-version=2024-08-01")
+    existing: dict[str, Any] | None = None
+    try:
+        existing = context.arm("GET", path)
+    except SafetyError as exc:
+        require("HTTP 404" in str(exc), "Existing budget could not be safely inspected")
+    if existing:
+        current = existing.get("properties", {})
+        contacts_match = all(
+            set(item.get("contactEmails", [])) == set(recipients)
+            for item in current.get("notifications", {}).values()
+        )
+        comparable = {key: current.get(key) for key in properties if key != "notifications"}
+        expected = {key: value for key, value in properties.items() if key != "notifications"}
+        if comparable == expected and contacts_match and len(current.get("notifications", {})) == 5:
+            operation = "NO_CHANGE"
+            response = existing
+        else:
+            if existing.get("eTag"):
+                properties["eTag"] = existing["eTag"]
+            response = context.arm("PUT", path, {"properties": properties})
+            operation = "UPDATED"
+    else:
+        response = context.arm("PUT", path, {"properties": properties})
+        operation = "CREATED"
+    output = response.get("properties", {})
+    current_spend = output.get("currentSpend") or {}
+    unit = current_spend.get("unit")
+    require(unit == "INR", "Azure budget unit does not match owner-confirmed INR")
+    require(output.get("amount") == 12000, "Azure budget amount verification failed")
+    require(len(output.get("notifications", {})) == 5,
+            "Azure budget notification count verification failed")
+    return {
+        "status": "PASS", "name": AZURE_BUDGET_NAME, "operation": operation,
+        "amount": 12000, "currency": "INR", "time_grain": "Monthly",
+        "current_spend_amount": current_spend.get("amount"),
+        "notification_count": 5, "recipient_count": 2,
+        "recipients_recorded": False, "hard_cap": False,
+        "cloud_mutations_performed": operation != "NO_CHANGE",
+    }
 
 
 class CloudContext:
@@ -427,6 +503,7 @@ def inspect_compute(context: CloudContext) -> dict[str, Any]:
                                  "--resource-group", "Databricks"])
     clusters = list(client.clusters.list())
     warehouses = list(client.warehouses.list())
+    project_warehouses = [w for w in warehouses if (w.name or "").startswith("retail-hp-")]
     jobs = list(client.jobs.list())
     apps = list(client.apps.list())
     endpoints = list(client.serving_endpoints.list())
@@ -434,6 +511,10 @@ def inspect_compute(context: CloudContext) -> dict[str, Any]:
         "scope_verified": True, "cloud_mutations_performed": False,
         "azure_resource_types": sorted(r["type"] for r in resources),
         "cluster_count": len(clusters), "warehouse_count": len(warehouses),
+        "project_warehouses": [
+            {"name": w.name, "state": getattr(w.state, "value", str(w.state))}
+            for w in project_warehouses
+        ],
         "job_count": len(jobs), "app_count": len(apps),
         "serving_endpoint_count": len(endpoints),
         "project_serving_endpoint_count": sum(
@@ -458,6 +539,9 @@ def main() -> None:
     parser.add_argument("command", choices=[
         "inspect", "plan-governance", "apply-governance", "verify-governance",
         "inspect-compute",
+        "apply-budget",
+        "plan-paid-test", "run-paid-test", "test-idle-shutdown", "apply-warehouse-acl",
+        "apply-test-workload-identity", "stop-project-warehouse",
     ])
     arguments = parser.parse_args()
     try:
@@ -471,6 +555,43 @@ def main() -> None:
         elif arguments.command == "inspect-compute":
             result = inspect_compute(CloudContext())
             record_evidence("compute_inventory.json", result)
+        elif arguments.command == "apply-budget":
+            raw_recipients = os.environ.get("RETAIL_HP_BUDGET_RECIPIENTS", "")
+            recipients = tuple(
+                item.strip() for item in raw_recipients.split(",") if item.strip()
+            )
+            require(len(recipients) == 2, "Private budget recipients are required at runtime")
+            result = apply_budget(CloudContext(apply=True), (recipients[0], recipients[1]))
+            record_evidence("budget_verification.json", result)
+        elif arguments.command == "plan-paid-test":
+            from retail_hp_azure.phase2_compute import paid_test_plan
+
+            result = paid_test_plan()
+        elif arguments.command == "run-paid-test":
+            from retail_hp_azure.phase2_compute import run_paid_test
+
+            result = run_paid_test(CloudContext(apply=True))
+            record_evidence("warehouse_live_test.json", result)
+        elif arguments.command == "apply-warehouse-acl":
+            from retail_hp_azure.phase2_compute import apply_warehouse_acl
+
+            result = apply_warehouse_acl(CloudContext(apply=True))
+            record_evidence("warehouse_acl_verification.json", result)
+        elif arguments.command == "test-idle-shutdown":
+            from retail_hp_azure.phase2_compute import run_native_idle_shutdown_test
+
+            result = run_native_idle_shutdown_test(CloudContext(apply=True))
+            record_evidence("warehouse_idle_shutdown_test.json", result)
+        elif arguments.command == "apply-test-workload-identity":
+            from retail_hp_azure.phase2_identity import apply_and_test_workload_identity
+
+            result = apply_and_test_workload_identity(CloudContext(apply=True))
+            record_evidence("workload_identity_verification.json", result)
+        elif arguments.command == "stop-project-warehouse":
+            from retail_hp_azure.phase2_compute import stop_project_warehouse
+
+            result = stop_project_warehouse(CloudContext(apply=True))
+            record_evidence("warehouse_stop_verification.json", result)
         else:
             result = inspect_environment(CloudContext())
             record_evidence("live_discovery.json", result)

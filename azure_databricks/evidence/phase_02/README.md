@@ -1,26 +1,32 @@
-# Phase 2 — governance implemented; cost gate blocked
+# Phase 2 — complete; governed platform stopped
 
 ## Outcome
 
-The metadata foundation has been applied to the pinned Azure Databricks workspace.
-Live verification passed **85 checks**. Reapplying the bootstrap produced **zero
-actions**. This is **partial Phase 2 completion**, not permission to start Phase 3
-or paid compute.
+The governed foundation and one bounded SQL warehouse have been applied to the
+pinned Azure Databricks workspace. Governance verification passed **85 checks**;
+repeat apply produced **zero actions**. The SQL smoke test, **19 effective group
+grant checks**, **seven warehouse ACL checks**, explicit final stop, and native
+one-minute idle stop all passed. A non-admin workload identity then passed six
+authenticated allow/deny checks. Its temporary OAuth secret was revoked and zero
+active secrets remain. The warehouse is **STOPPED** and Phase 2 is complete.
 
-The full local suite passed **98 tests** (two existing dependency-deprecation
+The full local suite passed **113 tests** (two existing dependency-deprecation
 warnings), plus Ruff, mypy, dependency compatibility and the credential scan.
 See `acceptance.json` for the separate passed and blocked gates.
 
-### Owner decision — budget deferred
+### Owner decision — INR confirmed; bounded test approved
 
-The owner has asked to set the budget later and will obtain currency confirmation
-from IT. The completed metadata-governance work is closed out independently of
-that administrative follow-up. Budget deployment is explicitly deferred, not
-failed or secretly enabled. This decision does not authorize paid compute,
-waive the INR 12,000 target, resolve Databricks billing permissions, or turn
-unexecuted identity/warehouse/shutdown tests into passes. Full Phase 2 platform
-activation remains pending; `governance_complete` is true and `phase2_complete`
-remains false. No additional cloud operations are needed for this decision.
+The owner confirmed the TargetSubscription billing currency as INR with IT. The
+resource-group budget is deployed and verified at INR 12,000 monthly with five
+actual/forecast notification rules and two private recipients. Recipient addresses
+are not recorded in evidence. Notification configuration is verified; delivery
+will occur only when Azure evaluates a threshold. This does not itself authorize
+general paid compute. The owner separately approved a maximum INR 250 planning
+ceiling for this Phase 2 warehouse test. The implemented 12-minute ceiling is
+estimated at INR 53.5059 pre-tax; the 3.5x guarded estimate is INR 187.2707.
+Recorded warehouse activity, a conservative allowance for the first failed
+sub-minute attempt, and the authenticated identity run total INR 16.1284 estimated
+pre-tax. Azure billing can lag, so this is not an invoice guarantee.
 
 Created/configured:
 
@@ -31,34 +37,43 @@ Created/configured:
 - Specific catalog/schema/volume grants; no ALL PRIVILEGES grant.
 - Project tags merged onto the existing Databricks resource group and workspace.
 - Predictive optimization explicitly DISABLE on all eight project schemas.
+- One 2X-Small serverless SQL warehouse, min/max one cluster, API auto-stop one minute.
+- Group-only warehouse ACLs: admins CAN MANAGE, engineers CAN MONITOR, viewers and
+  app runtime CAN USE.
+- One active, no-cost `retail-hp-app-runtime` workload service principal in the
+  runtime group, with no admin role and zero active OAuth secrets after testing.
+- A 12-minute wall-clock fallback, unconditional final stop, exact-name emergency
+  stop, and STOPPED-state verification.
 
 Only the existing bootstrap administrator was added to retail_hp_admins. The
 other groups have no newly invited users or service principals. Notification
 recipients were not made Databricks users. The parent catalog owner was not changed.
-No source data/model uploads, SQL statements, model calls, compute starts, Azure
-resource creations, paid add-ons or deletions were performed.
+No source data/model uploads, model calls, Azure resource creations, paid add-ons
+or deletions were performed. One harmless SQL context/smoke statement was executed.
 
 ## Access contract
 
 | Group | Catalog | Project schemas | Managed volumes | Workspace |
 |---|---|---|---|---|
-| retail_hp_admins | USE, CREATE SCHEMA | Owns eight schemas; explicit create/read/write/execute | Owns both; read/write | USER, not workspace admin |
-| retail_hp_engineers | USE | Create tables/functions; select/modify/execute; CREATE MODEL in ml | Read/write both | USER, no account-admin role granted |
-| retail_hp_viewers | USE | USE, SELECT, EXECUTE on serving only | None | USER |
-| retail_hp_app_runtime | USE | USE, SELECT, EXECUTE on serving only | None | USER; workload principal pending |
+| retail_hp_admins | USE, CREATE SCHEMA | Owns eight schemas; explicit create/read/write/execute | Owns both; read/write | USER; warehouse CAN MANAGE |
+| retail_hp_engineers | USE | Create tables/functions; select/modify/execute; CREATE MODEL in ml | Read/write both | USER; warehouse CAN MONITOR; no account-admin role |
+| retail_hp_viewers | USE | USE, SELECT, EXECUTE on serving only | None | USER; warehouse CAN USE |
+| retail_hp_app_runtime | USE | USE, SELECT, EXECUTE on serving only | None | USER; warehouse CAN USE; non-admin workload principal active |
 
 The exact machine-readable privilege matrix is `grant_matrix()` in phase2.py.
 The serving schema is reserved for approved serving data/views/functions; do not
 put raw or sensitive tables there. Future model execution should be exposed
 through an explicitly reviewed tool/function or narrow model grant, not raw-data
-access for the app. Jobs, registered models, views, warehouse and app resources
-do not yet exist, so their object-specific ACLs are not claimed as applied.
+access for the app. Jobs, registered models, views, and app resources do not yet
+exist, so their object-specific ACLs are not claimed as applied.
 
 Verification inspects explicit grants, owners, group assignment, direct admin
 group membership, absence of broad grants to other principals, tags and schema
-settings. It is **not** a SQL execution test using a viewer/app identity. Effective
-permissions of future users, including other/nested groups, must be tested when
-identities are approved. The bootstrap user remains a pre-existing workspace
+settings. Effective permissions for the three non-admin project groups passed 19
+checks. The workload principal separately authenticated with OAuth, confirmed its
+runtime-group membership, listed the serving schema, ran a SQL probe, and was
+denied raw-volume metadata. The short-lived test secret was then revoked. The
+bootstrap user remains a pre-existing workspace
 administrator; these checks do not constrain that identity outside this workflow.
 
 ## Runbook
@@ -72,10 +87,20 @@ python -m retail_hp_azure.phase2 inspect
 python -m retail_hp_azure.phase2 apply-governance
 python -m retail_hp_azure.phase2 verify-governance
 python -m retail_hp_azure.phase2 inspect-compute
+python -m retail_hp_azure.phase2 plan-paid-test
+python -m retail_hp_azure.phase2 run-paid-test
+python -m retail_hp_azure.phase2 apply-warehouse-acl
+python -m retail_hp_azure.phase2 test-idle-shutdown
+python -m retail_hp_azure.phase2 apply-test-workload-identity
+python -m retail_hp_azure.phase2 stop-project-warehouse
 ```
 
-Only `apply-governance` writes cloud state. Its fixed scope fingerprints and
-allowlisted names/routes forbid compute creation, resource deletion and uploads.
+The last four compute commands are operational and must not be run casually.
+`run-paid-test` additionally requires the exact runtime environment approval
+`RETAIL_HP_PHASE2_PAID_TEST_CEILING_INR=250`. Its fixed 12-minute deadline,
+one-minute native auto-stop and `finally` stop protect the single allowlisted
+warehouse. `stop-project-warehouse` is idempotent and matches that exact name only.
+No command permits resource deletion or upload.
 Conflicting names, project privilege drift or foreign ownership stop the apply;
 unrelated grants/objects are preserved. Partial mutations are recorded as they
 complete. Review the ledger and resolve a conflict before rerunning; do not
@@ -83,41 +108,34 @@ automatically remove objects or privileges to make a check pass.
 
 `inspect` records individual denied/unavailable capabilities without claiming
 overall readiness. Respect Azure retry headers and avoid repeatedly polling cost
-queries. `verify-governance` exits nonzero on failed metadata checks. It can pass
-while `phase2_complete` remains false because the cost/identity gate is separate.
-Phase 1's resource-free bundle, configuration and historical evidence are unchanged.
+queries. `verify-governance` exits nonzero on failed metadata checks. Its historical
+snapshot predates the separate workload-identity acceptance result; current Phase 2
+completion is recorded in `acceptance.json`. Phase 1's resource-free bundle,
+configuration and historical evidence are unchanged.
 
 ## Blockers and next actions
 
-1. **Azure cost/currency visibility:** repeated RG-scoped Cost Management requests
-   returned HTTP 429, including after a long backoff. No trustworthy current spend
-   or billing currency was returned. The budget inventory is readable and empty.
-   An Azure billing owner should verify current-month cost and currency in Cost
-   Analysis for this scope and resolve the API throttling/support issue. A denied
-   or empty response is not zero spend. Do not guess a currency conversion.
+1. **Azure cost/currency visibility:** INR is confirmed by the owner with IT and
+   independently returned by the deployed budget resource. The generic RG-scoped
+   Cost Management query previously returned HTTP 429; use the budget current-spend
+   field as the bounded Phase 2 admission input and continue to respect reporting lag.
 2. **Databricks billing visibility:** the current identity receives PermissionDenied
    for system.billing table listing and system-schema state listing. Ask an
    account/metastore administrator for a least-privilege, workspace-filtered
    billing view in monitoring (usage plus approved price information), or explicit
    approval for narrowly scoped billing access. System billing contains other
    workspaces' usage; do not self-grant broad account/metastore administration.
-3. **Budget and controller:** budget deferred by the owner until IT confirms the
-   currency; controller still not deployed. After currency and price checks,
-   configure actual/forecast notifications to the two privately supplied recipients,
-   test delivery, implement/test scoped admission and shutdown controls, and then
-   evaluate a single smallest suitable serverless warehouse with one-minute idle
-   stop and bounded session duration. No warehouse is required merely to create
-   these schemas and volumes.
-4. **Identity tests:** confirm the client workload identity and representative
-   non-admin identities, then test allowed and denied SQL/file/job operations
-   during an approved bounded compute session. Do not create dummy people or
-   publish credentials for this purpose.
+3. **Budget and controller:** budget admission, explicit stop, deadline fallback,
+   exact-name emergency stop, and native idle stop are verified. Notification
+   delivery still awaits Azure evaluating a real threshold.
+4. **Identity tests:** Unity Catalog effective grants, warehouse ACLs, and six
+   authenticated workload-principal checks pass. The service principal is non-admin
+   and no OAuth test secret remains active.
 5. **Expiry:** owner review is required; expiry remains null. No deletion schedule
    exists. Agree the date before a handoff or unattended deployment.
 
 The INR 12,000 monthly target, INR 9,000 internal stop target and INR 3,000 reserve
-remain unchanged. The auto-stop tag expresses policy, **not a running shutdown
-controller**. Repository gates are not a hard Azure invoice cap. Existing storage
+remain unchanged. Repository gates are not a hard Azure invoice cap. Existing storage
 and other workspace costs can persist with compute off; the associated managed
 resource group's cost coverage must be reconciled before quoting a total. No
 managed-resource-group writes were made or authorized by this implementation.
@@ -132,6 +150,15 @@ managed-resource-group writes were made or authorized by this implementation.
 - `governance_result.json`: latest repeat apply; zero actions.
 - `governance_verification.json`: all 85 live metadata checks passed.
 - `compute_inventory.json`: final read-only platform inventory.
+- `budget_verification.json`: INR amount and notification counts; no addresses.
+- `pricing_snapshot.json`: Microsoft retail-price input and bounded test estimate.
+- `warehouse_live_test.json`: SQL smoke, effective grants, elapsed estimate and final stop.
+- `warehouse_acl_verification.json`: sanitized group-only ACL result.
+- `warehouse_idle_shutdown_test.json`: observed native idle stop and fallback state.
+- `warehouse_stop_verification.json`: exact-name emergency stop result after the
+  first parser failure.
+- `workload_identity_verification.json`: authenticated allow/deny results, secret
+  revocation state and final warehouse stop; no identifiers or credentials.
 
 None of these reports contains recipient addresses, bearer tokens or raw Azure
 subscription/tenant/principal identifiers. Metadata evidence is not a billing
