@@ -6,7 +6,9 @@ import hashlib
 import io
 import json
 import os
-from collections.abc import Iterable, Mapping
+import sys
+from collections.abc import Iterable, Iterator, Mapping
+from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 from typing import TYPE_CHECKING, Any, BinaryIO, cast
@@ -141,6 +143,17 @@ def _validate_destination(destination: str, roles: set[str]) -> None:
     require(not under_model or "model" in roles, "Non-model asset targets model landing")
 
 
+@contextmanager
+def _runtime_compat_import_path() -> Iterator[None]:
+    """Resolve the approved pickle dependency from the isolated migration shim."""
+    root = str(RUNTIME_COMPAT_SOURCE.parents[1])
+    sys.path.insert(0, root)
+    try:
+        yield
+    finally:
+        sys.path.remove(root)
+
+
 def validate_manifest(manifest: Mapping[str, Any]) -> None:
     require(manifest.get("manifest_version") == "azure_phase0_transfer_v1",
             "Unexpected transfer manifest version")
@@ -255,7 +268,8 @@ def _validate_model_file(entry: Mapping[str, Any], source: Path) -> dict[str, An
         import joblib  # type: ignore[import-untyped]
 
         # Loading pickle-compatible content is permitted only after its approved hash passed.
-        value = joblib.load(source)
+        with _runtime_compat_import_path():
+            value = joblib.load(source)
         require(value is not None, "Joblib artifact did not load")
         kind = f"joblib:{type(value).__module__}.{type(value).__name__}"
     elif suffix == ".parquet":
