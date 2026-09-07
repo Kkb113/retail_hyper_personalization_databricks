@@ -1,0 +1,10 @@
+{
+  "captured_at": "2026-09-07T04:42:32.459577+00:00",
+  "checks_failed": 0,
+  "checks_passed": 7,
+  "cloud_mutations_performed": true,
+  "identifiers_recorded": false,
+  "project_group_entries": 4,
+  "status": "PASS",
+  "warehouse_final_state": "STOPPED"
+}

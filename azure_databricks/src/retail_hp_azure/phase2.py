@@ -503,6 +503,7 @@ def inspect_compute(context: CloudContext) -> dict[str, Any]:
                                  "--resource-group", "Databricks"])
     clusters = list(client.clusters.list())
     warehouses = list(client.warehouses.list())
+    project_warehouses = [w for w in warehouses if (w.name or "").startswith("retail-hp-")]
     jobs = list(client.jobs.list())
     apps = list(client.apps.list())
     endpoints = list(client.serving_endpoints.list())
@@ -510,6 +511,10 @@ def inspect_compute(context: CloudContext) -> dict[str, Any]:
         "scope_verified": True, "cloud_mutations_performed": False,
         "azure_resource_types": sorted(r["type"] for r in resources),
         "cluster_count": len(clusters), "warehouse_count": len(warehouses),
+        "project_warehouses": [
+            {"name": w.name, "state": getattr(w.state, "value", str(w.state))}
+            for w in project_warehouses
+        ],
         "job_count": len(jobs), "app_count": len(apps),
         "serving_endpoint_count": len(endpoints),
         "project_serving_endpoint_count": sum(
@@ -535,6 +540,8 @@ def main() -> None:
         "inspect", "plan-governance", "apply-governance", "verify-governance",
         "inspect-compute",
         "apply-budget",
+        "plan-paid-test", "run-paid-test", "test-idle-shutdown", "apply-warehouse-acl",
+        "stop-project-warehouse",
     ])
     arguments = parser.parse_args()
     try:
@@ -556,6 +563,30 @@ def main() -> None:
             require(len(recipients) == 2, "Private budget recipients are required at runtime")
             result = apply_budget(CloudContext(apply=True), (recipients[0], recipients[1]))
             record_evidence("budget_verification.json", result)
+        elif arguments.command == "plan-paid-test":
+            from retail_hp_azure.phase2_compute import paid_test_plan
+
+            result = paid_test_plan()
+        elif arguments.command == "run-paid-test":
+            from retail_hp_azure.phase2_compute import run_paid_test
+
+            result = run_paid_test(CloudContext(apply=True))
+            record_evidence("warehouse_live_test.json", result)
+        elif arguments.command == "apply-warehouse-acl":
+            from retail_hp_azure.phase2_compute import apply_warehouse_acl
+
+            result = apply_warehouse_acl(CloudContext(apply=True))
+            record_evidence("warehouse_acl_verification.json", result)
+        elif arguments.command == "test-idle-shutdown":
+            from retail_hp_azure.phase2_compute import run_native_idle_shutdown_test
+
+            result = run_native_idle_shutdown_test(CloudContext(apply=True))
+            record_evidence("warehouse_idle_shutdown_test.json", result)
+        elif arguments.command == "stop-project-warehouse":
+            from retail_hp_azure.phase2_compute import stop_project_warehouse
+
+            result = stop_project_warehouse(CloudContext(apply=True))
+            record_evidence("warehouse_stop_verification.json", result)
         else:
             result = inspect_environment(CloudContext())
             record_evidence("live_discovery.json", result)

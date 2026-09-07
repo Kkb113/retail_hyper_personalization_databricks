@@ -10,8 +10,10 @@
   "dbu_per_hour": 4,
   "estimated_retail_cost_per_running_hour_inr": 267.5296,
   "estimated_20_minute_runtime_inr": 89.1765,
-  "proposed_test_ceiling_inr": 250,
-  "approval_state": "PENDING_OWNER_APPROVAL",
+  "approved_test_ceiling_inr": 250,
+  "approval_state": "OWNER_APPROVED_2026-09-07",
+  "implemented_wall_clock_deadline_minutes": 12,
+  "implemented_guarded_estimate_inr": 187.2707,
   "caveats": [
     "Pre-tax public retail estimate; negotiated pricing can differ",
     "Actual metering and billing lag can differ from elapsed wall time",

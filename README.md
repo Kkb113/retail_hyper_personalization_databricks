@@ -24,23 +24,28 @@ health skeleton. The boundary remains:
 - synthetic POC data only
 - zero new Azure resources and zero incremental Phase 0 cloud cost
 
-Phase 2's metadata governance is now implemented: four project groups, eight
-group-owned schemas, two empty managed volumes, least-privilege grants and tags.
-Background predictive optimization is disabled on the project schemas. Live
-verification passed 85 checks and repeat apply made zero changes. **Phase 2 is
-not complete:** Azure cost queries are throttled and Databricks billing access
-is denied; paid deployment and Phase 3 remain blocked. See the
+Phase 2's governed platform bootstrap is implemented: four project groups, eight
+group-owned schemas, two empty managed volumes, least-privilege grants and tags,
+the INR budget, and one 2X-Small serverless SQL warehouse. The warehouse is
+limited to one cluster, has API-configured one-minute auto-stop, and is currently
+**STOPPED**. Live SQL, 19 effective-grant checks, seven warehouse ACL checks, and
+the native idle-stop test passed. **Phase 2 is not fully closed:** authenticated
+execution as the future client workload identity still needs that credential,
+and broad Databricks billing visibility remains denied. See the
 [Phase 2 status and runbook](azure_databricks/evidence/phase_02/README.md).
 
 The owner confirmed INR with IT. The INR 12,000 monthly resource-group budget and
 five notification rules are deployed and verified without committing recipient
-addresses. Paid deployment and remaining platform-activation tests are not waived.
+addresses. The one Phase 2 live test had an owner-approved INR 250 planning
+ceiling; its conservative pre-tax estimate is under INR 15, subject to billing lag.
 
 The agreed monthly target is INR 12,000, with an internal stop target of INR
 9,000 and INR 3,000 reserve. Two notification recipients were provided privately.
-**The shutdown controller is not deployed.** Azure budgets are not hard billing
-caps. Paid deployment remains blocked until runtime controls and current pricing
-are verified. Model release remains POC-only, pending a
+The warehouse uses layered shutdown: one-minute native idle stop, a 12-minute
+test deadline, and an unconditional final stop with STOPPED-state verification.
+Azure budgets are not hard billing caps, so the INR 250 ceiling is a conservative
+admission/runtime control, not an invoice guarantee. Phase 3 remains blocked
+pending explicit authorization. Model release remains POC-only, pending a
 future holdout and owner approvals.
 
 The only bundle is `azure_databricks/databricks.yml`, with target `poc`, **zero

@@ -49,8 +49,9 @@ is superseded, not evidence of a deployed Azure budget.
 
 ## Phase 1 foundation
 
-For the current metadata-only Phase 2 bootstrap, live evidence and unresolved
-cost/identity gates, see [Phase 2 status and runbook](evidence/phase_02/README.md).
+For the current governed Phase 2 platform, stopped warehouse, live shutdown
+evidence, and remaining client-identity gate, see
+[Phase 2 status and runbook](evidence/phase_02/README.md).
 The Phase 1 restrictions below remain the historical resource-free bundle contract.
 
 The runtime lives only in `src/retail_hp_azure`. No legacy code is imported.

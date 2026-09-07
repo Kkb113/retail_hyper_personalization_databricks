@@ -467,7 +467,7 @@ The workspace already exposes governed foundation endpoints and managed storage.
 |---:|---|---|---|
 | 0 | Scope, safety, and cost baseline | Frozen scope, live inventory, cost guardrails, and decision log | Complete |
 | 1 | Azure project foundation | Clean bundle-based repository, environments, tests, and CI-ready structure | Implemented; local and live gates pass |
-| 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Metadata verified; cost/identity execution gates blocked |
+| 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Platform verified; warehouse stopped; client workload credential pending |
 | 3 | Immutable data and model transfer | Complete, hash-verified transfer package in Unity Catalog volumes | Not started |
 | 4 | Lakehouse and feature foundation | Bronze, Silver, Feature, Gold, lineage, and data-quality gates | Not started |
 | 5 | Functional MLflow recommender | Real composite inference package with Azure parity evidence | Not started |
@@ -611,17 +611,17 @@ The bundle is reproducible, validates against the live workspace, and cannot tar
 
 ## Phase 2 — Governance and platform bootstrap
 
-**Current status (2026-09-04):** metadata governance applied and verified with
-85 live checks; repeat apply produced zero actions. Billing/currency visibility,
-budget/controller deployment and non-admin execution tests remain unresolved.
-No paid compute was created. See
+**Current status (2026-09-07):** governed namespaces, INR budget, group grants,
+one 2X-Small serverless warehouse, least-privilege warehouse ACLs, bounded shutdown
+controls, SQL smoke test, and native one-minute idle stop are applied and verified.
+The warehouse is STOPPED. Authenticated execution using the future client workload
+identity remains pending because no such credential has been supplied. See
 [Phase 2 evidence and runbook](azure_databricks/evidence/phase_02/README.md).
 
-**Owner follow-up decision:** IT confirmed INR and the INR 12,000 monthly budget
-with five notification rules is deployed and verified. The metadata-governance
-deliverable is complete. Full platform activation still
-requires the remaining cost, identity and execution gates; this scheduling
-decision does not authorize paid compute or mark those tests passed.
+**Owner follow-up decision:** IT confirmed INR; the INR 12,000 monthly budget is
+deployed. The owner approved an INR 250 maximum planning ceiling for one Phase 2
+test. A 12-minute deadline and 3.5x guard limited the plan to INR 187.2707; the
+conservative total test estimate is INR 14.5608 pre-tax, subject to billing lag.
 
 ### Objective
 
@@ -648,7 +648,8 @@ Create the minimum governed Databricks foundation for data, models, jobs, the ap
    The owner has approved INR 12,000 monthly, INR 9,000 internal stop and INR 3,000
    reserve; the two recipients are private. Alerts are not a hard billing cap.
 8. Add a POC expiry field to the inventory, but do not automate deletion.
-9. Validate that Databricks system billing tables are visible for later usage reporting.
+9. Validate Databricks system billing when a least-privilege billing view is supplied;
+   the RG budget is the current cost admission source because broad access is denied.
 10. Disable background predictive optimization on the project schemas while paid
     background maintenance is not approved. Do not alter unrelated schemas.
 
@@ -2076,8 +2077,9 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-Complete the remaining **Phase 2** billing, budget/controller and identity gates.
-Metadata governance is applied and verified; see evidence/phase_02. Azure cost
-queries are throttled and Databricks billing-table access is denied. Resolve
-these before creating budget notifications, testing shutdown controls or starting
-paid compute. Do not advance to Phase 3 merely because the metadata checks pass.
+Obtain the client-approved workload identity and run its authenticated allow/deny
+tests to close **Phase 2**. Governance, the INR budget, warehouse ACLs, SQL smoke,
+and shutdown controls are applied and verified; the warehouse is STOPPED. Broad
+Databricks billing-table access remains denied, so use the scoped budget for
+admission and request a least-privilege monitoring view later. Do not start
+Phase 3 data/model transfer without explicit authorization.
