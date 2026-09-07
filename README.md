@@ -22,7 +22,7 @@ health skeleton. The boundary remains:
 - Azure Databricks workspace `intellify-databricks-demo`
 - Unity Catalog catalog `intellify_databricks_demo`
 - synthetic POC data only
-- zero new Azure resources in Phases 3–4; all billable compute stopped
+- zero new Azure resources in Phases 3–5; all billable compute stopped
 
 Phase 2's governed platform bootstrap is implemented: four project groups, eight
 group-owned schemas, two empty managed volumes, least-privilege grants and tags,
@@ -50,16 +50,25 @@ orphan, temporal-leakage, idempotency and local-feature-parity checks pass. See 
 [Phase 4 status and evidence](azure_databricks/evidence/phase_04/README.md) and
 [Lakehouse contract](azure_databricks/contracts/phase4_lakehouse_contract.md).
 
+Phase 5 is complete. The functional composite recommender—not a snapshot lookup—
+is registered as `intellify_databricks_demo.ml.adaptive_recommender`, version 1,
+owned by `retail_hp_admins` with alias **Candidate**. Repository, Databricks and
+downloaded-artifact compatibility checks produced the same deterministic golden
+output; signature, input example and dependencies are packaged. **Champion is
+intentionally unset** pending the future holdout and later release approvals. See
+the [Phase 5 status and evidence](azure_databricks/evidence/phase_05/README.md).
+
 The agreed monthly target is INR 12,000, with an internal stop target of INR
 9,000 and INR 3,000 reserve. Two notification recipients were provided privately.
 The warehouse uses layered shutdown: one-minute native idle stop, a 12-minute
 test deadline, and an unconditional final stop with STOPPED-state verification.
 Azure budgets are not hard billing caps, so the INR 250 phase ceilings are
 admission/runtime controls, not invoice guarantees. Phase 3's work is estimated
-at INR 103.3578 pre-tax and Phase 4's work at INR 161.1619 pre-tax. Metered usage
-can lag. There are zero clusters and persistent jobs, and the warehouse is
-**STOPPED**. Phase 5 is not authorized. Model release remains POC-only, pending
-functional model parity, holdout, privacy, security and owner approvals.
+at INR 103.3578 pre-tax, Phase 4's work at INR 161.1619 pre-tax, and Phase 5's
+work at INR 198.1409 pre-tax. Metered usage can lag. There are zero clusters and
+persistent jobs, and the warehouse is **STOPPED**. Model release remains POC-only;
+Phase 6 serving is not authorized and Champion remains gated by holdout, privacy,
+security and owner approvals.
 
 The only bundle is `azure_databricks/databricks.yml`, with target `poc`, **zero
 resources**, no build hooks and marker-only sync eligibility. No sync is run in

@@ -47,7 +47,8 @@ def sandbox(tmp_path, config):
     (root / "databricks.yml").write_text(yaml.safe_dump(expected_bundle(config)), encoding="utf-8")
     (root / "bundle_files").mkdir()
     (root / "bundle_files/README.md").write_text(
-        (AZURE / "bundle_files/README.md").read_text(encoding="utf-8"), encoding="utf-8",
+        (AZURE / "bundle_files/README.md").read_text(encoding="utf-8"),
+        encoding="utf-8",
     )
     return root
 
@@ -64,25 +65,28 @@ def test_authoritative_contract_matches_schema_and_source(config):
     assert old["required_tags"] == REQUIRED_TAGS
 
 
-@pytest.mark.parametrize(("section", "key", "value"), [
-    ("scope", "resource_group", "another-group"),
-    ("scope", "host", "https://example.invalid"),
-    ("scope", "catalog", "retail_hyper_personalization"),
-    ("scope", "region", "eastus"),
-    ("scope", "workspace", "legacy"),
-    ("cost", "paid_resource_creation_allowed", True),
-    ("cost", "cloud_mutations_allowed", True),
-    ("cost", "free_to_paid_fallback", True),
-    ("cost", "monthly_target", 12001),
-    ("cost", "monthly_target", "12000"),
-    ("cost", "hard_idle_limit_required", True),
-    ("cost", "budget_deployed", True),
-    ("features", "app", "false"),
-    ("features", "app", 0),
-    ("features", "extra_feature", False),
-    ("names", "app", "legacy-app"),
-    ("names", "ml_schema", "../outside"),
-])
+@pytest.mark.parametrize(
+    ("section", "key", "value"),
+    [
+        ("scope", "resource_group", "another-group"),
+        ("scope", "host", "https://example.invalid"),
+        ("scope", "catalog", "retail_hyper_personalization"),
+        ("scope", "region", "eastus"),
+        ("scope", "workspace", "legacy"),
+        ("cost", "paid_resource_creation_allowed", True),
+        ("cost", "cloud_mutations_allowed", True),
+        ("cost", "free_to_paid_fallback", True),
+        ("cost", "monthly_target", 12001),
+        ("cost", "monthly_target", "12000"),
+        ("cost", "hard_idle_limit_required", True),
+        ("cost", "budget_deployed", True),
+        ("features", "app", "false"),
+        ("features", "app", 0),
+        ("features", "extra_feature", False),
+        ("names", "app", "legacy-app"),
+        ("names", "ml_schema", "../outside"),
+    ],
+)
 def test_invalid_policy_fails_closed(config, section, key, value):
     changed = config.model_dump()
     changed[section][key] = value
@@ -90,10 +94,19 @@ def test_invalid_policy_fails_closed(config, section, key, value):
         PocConfig.model_validate(changed)
 
 
-@pytest.mark.parametrize("feature", [
-    "jobs", "sql_warehouse", "model_serving", "llm", "app", "lakebase",
-    "vector_search", "azure_ai_search",
-])
+@pytest.mark.parametrize(
+    "feature",
+    [
+        "jobs",
+        "sql_warehouse",
+        "model_serving",
+        "llm",
+        "app",
+        "lakebase",
+        "vector_search",
+        "azure_ai_search",
+    ],
+)
 def test_all_features_must_remain_disabled(config, feature):
     changed = config.model_dump()
     changed["features"][feature] = True
@@ -101,11 +114,19 @@ def test_all_features_must_remain_disabled(config, feature):
         PocConfig.model_validate(changed)
 
 
-@pytest.mark.parametrize("override", [
-    "DATABRICKS_BUNDLE_VAR_catalog", "DATABRICKS_CONFIG_PROFILE", "DATABRICKS_CONFIG_FILE",
-    "DATABRICKS_BUNDLE_ENGINE", "DATABRICKS_BUNDLE_ROOT", "DATABRICKS_TOKEN",
-    "DATABRICKS_HOST", "databricks_host",
-])
+@pytest.mark.parametrize(
+    "override",
+    [
+        "DATABRICKS_BUNDLE_VAR_catalog",
+        "DATABRICKS_CONFIG_PROFILE",
+        "DATABRICKS_CONFIG_FILE",
+        "DATABRICKS_BUNDLE_ENGINE",
+        "DATABRICKS_BUNDLE_ROOT",
+        "DATABRICKS_TOKEN",
+        "DATABRICKS_HOST",
+        "databricks_host",
+    ],
+)
 def test_environment_overrides_fail(override):
     with pytest.raises(SafetyError):
         check_environment({override: "unapproved"})
@@ -115,15 +136,18 @@ def test_only_explicit_azure_cli_environment_is_accepted():
     check_environment({"DATABRICKS_HOST": HOST, "DATABRICKS_AUTH_TYPE": "azure-cli"})
 
 
-@pytest.mark.parametrize(("key", "value"), [
-    ("resources", {"jobs": {"unsafe": {}}}),
-    ("include", ["../databricks.yml"]),
-    ("artifacts", {"wheel": {"build": "echo unsafe"}}),
-    ("scripts", {"deploy": {"content": "echo unsafe"}}),
-    ("sync", {"paths": ["../"]}),
-    ("targets", {"dev": {"workspace": {"host": HOST}}}),
-    ("run_as", {"service_principal_name": "unknown"}),
-])
+@pytest.mark.parametrize(
+    ("key", "value"),
+    [
+        ("resources", {"jobs": {"unsafe": {}}}),
+        ("include", ["../databricks.yml"]),
+        ("artifacts", {"wheel": {"build": "echo unsafe"}}),
+        ("scripts", {"deploy": {"content": "echo unsafe"}}),
+        ("sync", {"paths": ["../"]}),
+        ("targets", {"dev": {"workspace": {"host": HOST}}}),
+        ("run_as", {"service_principal_name": "unknown"}),
+    ],
+)
 def test_bundle_side_effects_and_alternate_targets_rejected(sandbox, config, key, value):
     bundle = expected_bundle(config)
     bundle[key] = value
@@ -158,8 +182,15 @@ def test_missing_tags_rejected(sandbox, config):
 def test_neither_free_nor_paid_mutation_is_authorized(config):
     for sku in ("Free", "Premium"):
         with pytest.raises(SafetyError, match="All cloud mutations"):
-            validate_proposed_mutation({"resource_group": "Databricks", "workspace_host": HOST,
-                                        "tags": REQUIRED_TAGS, "sku": sku}, config)
+            validate_proposed_mutation(
+                {
+                    "resource_group": "Databricks",
+                    "workspace_host": HOST,
+                    "tags": REQUIRED_TAGS,
+                    "sku": sku,
+                },
+                config,
+            )
 
 
 @pytest.mark.parametrize("key", ["resource_group", "workspace_host", "tags"])
@@ -172,16 +203,23 @@ def test_wrong_mutation_boundary_is_rejected(config, key):
 
 def test_resolved_cli_config_is_verified(config):
     resolved_root = ROOT_PATH.replace("${workspace.current_user.userName}", "test-user")
-    document = {"workspace": {"host": HOST, "root_path": resolved_root,
-                              "current_user": {"userName": "test-user"}},
-                "bundle": {"target": "poc"}, "resources": {},
-                "variables": {key: {"value": value}
-                              for key, value in bundle_variables(config).items()}}
+    document = {
+        "workspace": {
+            "host": HOST,
+            "root_path": resolved_root,
+            "current_user": {"userName": "test-user"},
+        },
+        "bundle": {"target": "poc"},
+        "resources": {},
+        "variables": {key: {"value": value} for key, value in bundle_variables(config).items()},
+    }
     validate_resolved(document, config)
-    for section, key, value in [("workspace", "host", "https://example.invalid"),
-                                ("workspace", "root_path", "/Workspace/other"),
-                                ("bundle", "target", "dev"),
-                                ("variables", "enable_app", {"value": "true"})]:
+    for section, key, value in [
+        ("workspace", "host", "https://example.invalid"),
+        ("workspace", "root_path", "/Workspace/other"),
+        ("bundle", "target", "dev"),
+        ("variables", "enable_app", {"value": "true"}),
+    ]:
         changed = copy.deepcopy(document)
         changed[section][key] = value
         with pytest.raises(SafetyError):
@@ -200,9 +238,14 @@ def test_plan_is_reproducible_and_has_no_deployment(config):
 def test_plan_output_is_fail_closed():
     valid = {"plan_version": 2, "cli_version": "1.15.0", "plan": {}}
     validate_plan_output(valid)
-    for invalid in ({}, {**valid, "plan": None}, {**valid, "extra": "unknown"},
-                    {**valid, "plan_version": 3}, {**valid, "cli_version": "1.0.0"},
-                    {**valid, "plan": {"resources.jobs.test": {"action": "create"}}}):
+    for invalid in (
+        {},
+        {**valid, "plan": None},
+        {**valid, "extra": "unknown"},
+        {**valid, "plan_version": 3},
+        {**valid, "cli_version": "1.0.0"},
+        {**valid, "plan": {"resources.jobs.test": {"action": "create"}}},
+    ):
         with pytest.raises(SafetyError):
             validate_plan_output(invalid)
 
@@ -232,17 +275,26 @@ def test_azure_reads_are_explicitly_scoped_and_tags_are_observed(config, monkeyp
     checks = []
     monkeypatch.setattr(live_module, "check_fingerprint", lambda key, value: checks.append(key))
     calls = []
-    responses = iter([
-        {"id": "synthetic-subscription", "tenantId": "synthetic-tenant", "state": "Enabled"},
-        {"id": "synthetic-group", "name": "Databricks"},
-        {"id": "synthetic-workspace", "name": config.scope.workspace, "location": "westus",
-         "sku": {"name": "premium"}, "tags": {},
-         "properties": {"workspaceId": "synthetic-workspace-id",
-                        "workspaceUrl": HOST.removeprefix("https://"),
-                        "provisioningState": "Succeeded"}},
-        [{"type": "Microsoft.Databricks/workspaces"}],
-        [],
-    ])
+    responses = iter(
+        [
+            {"id": "synthetic-subscription", "tenantId": "synthetic-tenant", "state": "Enabled"},
+            {"id": "synthetic-group", "name": "Databricks"},
+            {
+                "id": "synthetic-workspace",
+                "name": config.scope.workspace,
+                "location": "westus",
+                "sku": {"name": "premium"},
+                "tags": {},
+                "properties": {
+                    "workspaceId": "synthetic-workspace-id",
+                    "workspaceUrl": HOST.removeprefix("https://"),
+                    "provisioningState": "Succeeded",
+                },
+            },
+            [{"type": "Microsoft.Databricks/workspaces"}],
+            [],
+        ]
+    )
 
     def runner(arguments):
         calls.append(arguments)
@@ -307,7 +359,11 @@ def test_no_private_runtime_cache_is_tracked():
     git = shutil.which("git")
     assert git
     tracked = subprocess.run(  # noqa: S603 - fixed read-only Git command
-        [git, "ls-files"], cwd=ROOT, capture_output=True, text=True, check=True,
+        [git, "ls-files"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
     ).stdout
     for name in tracked.splitlines():
         assert not {".databricks", ".venv", "__pycache__", "build", "dist"}.intersection(
@@ -325,14 +381,29 @@ def test_app_is_honest_about_readiness_and_has_no_fake_recommendations():
 
 
 def test_package_has_no_legacy_or_cloud_side_effect_imports():
-    forbidden = {"src", "agent", "app", "custom_app", "streamlit", "streamlit_app",
-                 "pyodbc", "boto3", "pyspark", "mlflow"}
+    forbidden = {
+        "src",
+        "agent",
+        "app",
+        "custom_app",
+        "streamlit",
+        "streamlit_app",
+        "pyodbc",
+        "boto3",
+        "pyspark",
+        "mlflow",
+    }
     for source in (AZURE / "src/retail_hp_azure").glob("*.py"):
+        # Phase 5 adds one explicit MLflow serialization boundary. It has no
+        # import-time connection and is not imported by the package root.
+        allowed = {"mlflow"} if source.name == "mlflow_model.py" else set()
         for node in ast.walk(ast.parse(source.read_text(encoding="utf-8"))):
             if isinstance(node, ast.Import):
-                assert all(item.name.split(".")[0] not in forbidden for item in node.names)
+                assert all(
+                    item.name.split(".")[0] not in forbidden - allowed for item in node.names
+                )
             elif isinstance(node, ast.ImportFrom) and node.module:
-                assert node.module.split(".")[0] not in forbidden
+                assert node.module.split(".")[0] not in forbidden - allowed
 
 
 def test_build_tool_pins_include_verified_security_fixes():

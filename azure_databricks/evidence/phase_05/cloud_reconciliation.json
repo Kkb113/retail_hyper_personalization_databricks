@@ -1,0 +1,31 @@
+{
+  "attempt_count": 6,
+  "attempt_result_states": {
+    "CANCELED": 1,
+    "FAILED": 5
+  },
+  "budget_amount_inr": 12000,
+  "budget_currency": "INR",
+  "budget_status": "PASS",
+  "candidate_assignment_is_post_validation": true,
+  "candidate_present": true,
+  "captured_at": "2026-09-07T10:56:42.017774+00:00",
+  "champion_present": false,
+  "cluster_count": 0,
+  "cumulative_elapsed_seconds": 992.69,
+  "estimated_cumulative_cost_inr_pre_tax": 198.1409,
+  "hard_invoice_cap_guaranteed": false,
+  "identifiers_recorded": false,
+  "new_azure_resources": 0,
+  "owner_valid": true,
+  "persistent_job_count": 0,
+  "phase5_ceiling_inr": 250.0,
+  "project_warehouse_state": "STOPPED",
+  "registered_model_count": 1,
+  "registered_model_version_count": 1,
+  "schedule_created": false,
+  "serving_endpoint_created": false,
+  "status": "PASS",
+  "version": "azure_phase5_cloud_reconciliation_v1",
+  "within_phase5_ceiling": true
+}

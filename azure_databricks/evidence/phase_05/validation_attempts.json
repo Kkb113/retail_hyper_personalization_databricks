@@ -1,0 +1,19 @@
+{
+  "attempt_count": 6,
+  "attempts": [
+    {"result": "FAILED", "reason_category": "experiment_path_collision"},
+    {"result": "CANCELED", "reason_category": "duplicate_submission_canceled"},
+    {"result": "FAILED", "reason_category": "pandas_string_schema_compatibility"},
+    {"result": "FAILED", "reason_category": "unity_catalog_tag_key_syntax"},
+    {"result": "FAILED", "reason_category": "mlflow_tag_api_compatibility"},
+    {"result": "FAILED", "reason_category": "post_validation_owner_sql_syntax"}
+  ],
+  "captured_at": "2026-09-07T10:56:42.017774+00:00",
+  "cumulative_elapsed_seconds": 992.69,
+  "estimated_cumulative_cost_inr_pre_tax": 198.1409,
+  "hard_invoice_cap_guaranteed": false,
+  "identifiers_recorded": false,
+  "phase5_ceiling_inr": 250.0,
+  "within_phase5_ceiling": true,
+  "version": "azure_phase5_validation_attempts_v1"
+}

@@ -1,0 +1,16 @@
+{
+  "aliases": {
+    "candidate": 1
+  },
+  "candidate_present": true,
+  "captured_at": "2026-09-07T11:01:57.475024+00:00",
+  "champion_present": false,
+  "compute_started": false,
+  "identifiers_recorded": false,
+  "model_version_count": 1,
+  "owner": "retail_hp_admins",
+  "owner_valid": true,
+  "registered_model_count": 1,
+  "status": "PASS",
+  "version": "azure_phase5_registry_inspection_v1"
+}

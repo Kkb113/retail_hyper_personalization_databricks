@@ -1,0 +1,32 @@
+{
+  "baseline_metrics": {
+    "CustomerCoverage": 1.0,
+    "CustomersWithRecommendations": 1593,
+    "DistinctRecommendedProducts": 1137,
+    "EligibleCustomers": 1593,
+    "HitRateAt10": 0.4438166980539862,
+    "NDCGAt10": 0.1768528204702373,
+    "PrecisionAt10": 0.0578782172002511,
+    "ProductCoverage": 0.4228337671997025,
+    "PurchaseHitRateAt10": 0.12115505335844319,
+    "PurchaseRecallAt10": 0.047343061137788064,
+    "RecallAt10": 0.2471537897023363
+  },
+  "captured_at": "2026-09-07T10:08:12.475002+00:00",
+  "cold_raw_features": 34,
+  "cold_transformed_features": 731,
+  "identifiers_recorded": false,
+  "item_factor_shape": [
+    2858,
+    64
+  ],
+  "production_holdout_status": "HOLD_PENDING_FUTURE_HOLDOUT",
+  "status": "PASS",
+  "user_factor_shape": [
+    4091,
+    64
+  ],
+  "version": "azure_phase5_artifact_inspection_v1",
+  "warm_raw_features": 92,
+  "warm_transformed_features": 272
+}

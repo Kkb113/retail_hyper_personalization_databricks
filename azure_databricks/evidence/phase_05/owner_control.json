@@ -1,0 +1,11 @@
+{
+  "candidate_present": true,
+  "captured_at": "2026-09-07T10:52:43.885127+00:00",
+  "champion_present": false,
+  "compute_started": false,
+  "identifiers_recorded": false,
+  "operation": "UPDATED",
+  "owner": "retail_hp_admins",
+  "status": "PASS",
+  "version": "azure_phase5_owner_control_v1"
+}

@@ -1,0 +1,11 @@
+{
+  "captured_at": "2026-09-07T10:56:42.017774+00:00",
+  "cluster_count": 0,
+  "identifiers_recorded": false,
+  "persistent_job_count": 0,
+  "project_warehouse_state": "STOPPED",
+  "schedule_created": false,
+  "serving_endpoint_created": false,
+  "status": "PASS",
+  "version": "azure_phase5_final_compute_state_v1"
+}
