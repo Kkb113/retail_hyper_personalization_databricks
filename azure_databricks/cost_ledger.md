@@ -12,7 +12,8 @@
 - Shutdown controls: deployed for the project SQL warehouse (one-minute native
   idle stop, 12-minute live-test deadline, unconditional final stop).
 - Owner confirmed INR with IT. The budget separately admitted the bounded Phase 2
-  warehouse test and Phase 3 one-time validation; it is not general compute approval.
+  warehouse test, Phase 3 transfer validation and Phase 4 Lakehouse build; it is
+  not general compute approval.
 - New paid or persistent resources remain blocked. No premium add-ons, GPUs,
   provisioned throughput or automatic paid fallback.
 
@@ -24,7 +25,8 @@
 | 1 | Local code and read-only bundle validation | INR 0 new compute | Foundation | evidence/phase_01 |
 | 2 | Governance, budget, bounded warehouse, shutdown/ACL and authenticated workload-identity tests | Conservative total INR 16.1284 estimated pre-tax | Complete; warehouse STOPPED; zero active OAuth test secrets | evidence/phase_02 |
 | 3 | Approximately 13 MiB volume transfer, four terminated one-time serverless validations, and two seals | Cumulative INR 103.3578 estimated pre-tax; INR 206.7156 with 2x guard | Complete; warehouse STOPPED; zero clusters/jobs | evidence/phase_03 |
-| 4+ | Lakehouse, model, agent and serving work | Not yet authorized | Blocked | Separate phase approval required |
+| 4 | 50 governed Lakehouse objects; four terminated one-time serverless builds; one bounded read-only SQL validation | Cumulative INR 161.1619 estimated pre-tax | Complete; warehouse STOPPED; zero clusters/jobs | evidence/phase_04 |
+| 5+ | Model, agent and serving work | Not yet authorized | Blocked | Separate phase approval required |
 
 Phase 2 created no new Azure resource, but it created one Databricks SQL warehouse
 inside the existing workspace. The warehouse is 2X-Small serverless, one cluster,
@@ -59,6 +61,15 @@ DBU/hour assumption, the cumulative estimate is INR 103.3578 pre-tax; its 2x
 planning guard is INR 206.7156, below the INR 250 Phase 3 validation ceiling.
 This is not actual metered billing; taxes, discounts and reporting lag remain.
 
+Phase 4 created no Azure resource and no persistent Databricks job, schedule or
+pipeline. Four bounded serverless build attempts total 788 seconds under the
+conservative 16 DBU/hour assumption, estimated at INR 157.2848 pre-tax. The final
+read-only reconciliation used the existing 2X-Small SQL warehouse for 52.17
+seconds, estimated at INR 3.8771 pre-tax, and explicitly stopped it. Cumulative
+Phase 4 estimated compute is therefore INR 161.1619 pre-tax, below the INR 250
+execution ceiling. Metered usage can lag; taxes, discounts and small managed
+storage charges are not included, so this is not a hard billing cap.
+
 ## Controls required for later phases
 
 - Zero all-purpose clusters.
@@ -80,10 +91,10 @@ This is not actual metered billing; taxes, discounts and reporting lag remain.
 - Zero vector-search endpoints by default.
 - Pay-per-token model calls with token and rate limits.
 
-## Remaining work before Phase 4
+## Remaining work before Phase 5
 
-The budget, warehouse controls and bounded Phase 3 transfer validation are complete.
-Before any Phase 4 compute:
+The budget, warehouse controls, Phase 3 transfer and Phase 4 Lakehouse are complete.
+Before any Phase 5 compute:
 
 1. Confirm alert email delivery when Azure evaluates a real threshold.
 2. Add service-specific timeout/scale-to-zero tests only when those services are created.

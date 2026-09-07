@@ -1,0 +1,15 @@
+{
+  "captured_at": "2026-09-07T08:42:04.155995+00:00",
+  "cluster_count": 0,
+  "compute_started": false,
+  "expected_object_count": 50,
+  "identifiers_recorded": false,
+  "new_azure_resources": 0,
+  "objects_updated": 50,
+  "persistent_job_count": 0,
+  "project_warehouse_state": "STOPPED",
+  "remaining_owner_mismatches": 0,
+  "required_owner": "retail_hp_admins",
+  "status": "PASS",
+  "version": "azure_phase4_ownership_repair_v1"
+}

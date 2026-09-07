@@ -1,0 +1,8 @@
+{
+  "cluster_count": 0,
+  "compute_started_by_inspection": false,
+  "persistent_job_count": 0,
+  "project_warehouse_state": "STOPPED",
+  "status": "PASS",
+  "version": "azure_phase4_final_compute_state_v1"
+}

@@ -65,7 +65,26 @@ is stopped. No Azure resource, endpoint, app, schedule or LLM capacity was creat
 
 See [Phase 3 status, limitations and runbook](evidence/phase_03/README.md). The
 seals provide application-level no-overwrite/hash controls, not storage WORM.
-Phase 4 requires separate authorization.
+Phase 4 was subsequently authorized and completed; the Phase 3 seal remains the
+immutable input boundary.
+
+## Phase 4 Lakehouse and feature foundation
+
+Phase 4 is complete. The governed catalog contains 20 append-only Bronze tables,
+20 conformed Silver tables, three offline feature tables, six Gold views and one
+column-level data dictionary. All 50 expected objects are present. Both Bronze
+and Silver reconcile to 275,630 rows, and identifier-free local golden aggregates
+match the Databricks results. Duplicate, range, orphan, feature-time leakage and
+idempotency checks pass.
+
+The source does not define a monetary currency, so monetary values are explicitly
+marked `UNSPECIFIED`; no currency was invented. This must be resolved before
+production. See [Phase 4 evidence](evidence/phase_04/README.md) and the
+[Lakehouse contract](contracts/phase4_lakehouse_contract.md).
+
+The build created no new Azure resource and left no job, schedule or pipeline.
+Zero clusters and persistent jobs remain, and the SQL warehouse is **STOPPED**.
+Phase 5 requires separate authorization.
 
 The runtime lives only in `src/retail_hp_azure`. No legacy code is imported.
 The wheel contains configuration/preflight helpers and a local app skeleton;

@@ -5,7 +5,7 @@
 | Field | Value |
 |---|---|
 | Document status | Implementation source of truth |
-| Initial delivery status | Phases 0–3 complete; versioned transfer sealed; platform stopped |
+| Initial delivery status | Phases 0–4 complete; governed Lakehouse validated; platform stopped |
 | Last verified | 2026-09-07 |
 | Azure resource group boundary | **Databricks** only |
 | Azure Databricks workspace | **intellify-databricks-demo** |
@@ -758,6 +758,25 @@ The remote package is complete, immutable, hash-identical, parseable, and loadab
 ---
 
 ## Phase 4 — Lakehouse and feature foundation
+
+### Implementation status — complete (2026-09-07)
+
+Phase 4 is implemented and its exit gate passes. The sealed 275,630-row transfer
+was materialized as 20 append-only Bronze tables, 20 conformed Silver tables,
+three offline Unity Catalog feature tables, six Gold views and one 478-row data
+dictionary. Final inspection found all 50 expected objects, all owned by
+`retail_hp_admins`, with no unexpected objects in the four schemas. Read-only
+reconciliation found zero duplicate key groups, zero tested orphans, zero encoded
+range violations and zero future-data leakage; independent local aggregate
+features matched Databricks.
+
+No Azure resource, persistent job, schedule, continuous pipeline, endpoint,
+application, LLM capacity, GPU or online feature store was created. The existing
+SQL warehouse is stopped, with zero clusters and zero persistent jobs. The
+conservative Phase 4 elapsed-time estimate is INR 161.1619 pre-tax, below its INR
+250 execution ceiling; actual billing remains subject to reporting lag and is not
+a hard-cap guarantee. See `azure_databricks/evidence/phase_04/README.md` and
+`azure_databricks/contracts/phase4_lakehouse_contract.md`.
 
 ### Objective
 
@@ -2094,10 +2113,10 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-**Phases 0–3 are complete and the platform is stopped.** The governed transfer is
-hash-identical, Databricks-loadable and sealed; there are zero clusters and
-persistent jobs, and the warehouse is STOPPED. Broad Databricks billing-table
-access remains denied, so the scoped INR budget is the POC admission source and
-reported actual usage may lag. Phase 4 lakehouse work is the next roadmap step,
-but it is not authorized by Phase 3 completion and must begin with a fresh
-read-only scope, cost and compute-admission review.
+**Phases 0–4 are complete and the platform is stopped.** The governed transfer is
+hash-identical and sealed, and the Phase 4 Lakehouse reconciles end to end with
+all 50 expected objects present. There are zero clusters and persistent jobs, and
+the warehouse is STOPPED. Broad Databricks billing-table access remains denied,
+so reported actual usage may lag. Phase 5—the functional MLflow recommender—is
+the next roadmap step, but it requires separate owner authorization and a fresh
+read-only scope, compatibility, cost and compute-admission review.

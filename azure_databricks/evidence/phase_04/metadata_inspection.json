@@ -1,0 +1,14 @@
+{
+  "captured_at": "2026-09-07T08:44:49.867238+00:00",
+  "cloud_mutations_performed": false,
+  "compute_started": false,
+  "expected_object_count": 50,
+  "missing": [],
+  "observed_expected_count": 50,
+  "owner_mismatches": [],
+  "required_owner": "retail_hp_admins",
+  "scope_verified": true,
+  "status": "PASS",
+  "unexpected_project_objects": [],
+  "version": "azure_phase4_metadata_inspection_v1"
+}

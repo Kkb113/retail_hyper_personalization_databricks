@@ -1,0 +1,20 @@
+{
+  "behavior_input_event_count": 103171,
+  "customer_behavior_customer_count": 4697,
+  "customer_behavior_feature_rows": 33402,
+  "customer_identifiers_recorded": false,
+  "customer_profile_feature_rows": 5000,
+  "latest_browse_count": 45000,
+  "latest_cart_add_count": 9840,
+  "latest_purchase_count": 29171,
+  "latest_purchase_spend": 5616469.28,
+  "latest_search_click_count": 8715,
+  "latest_search_count": 12000,
+  "latest_wishlist_count": 5000,
+  "product_feature_rows": 3000,
+  "product_total_browse_events": 45000,
+  "product_total_revenue": 5616469.28,
+  "product_total_units_sold": 39757,
+  "status": "PASS",
+  "version": "azure_phase4_local_golden_v1"
+}

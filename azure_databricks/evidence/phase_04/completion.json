@@ -1,0 +1,17 @@
+{
+  "bronze_rows": 275630,
+  "cluster_count": 0,
+  "estimated_phase4_cost_inr_pre_tax": 161.1619,
+  "expected_objects": 50,
+  "hard_invoice_cap_guaranteed": false,
+  "missing_objects": 0,
+  "new_azure_resources": 0,
+  "owner_mismatches": 0,
+  "required_owner": "retail_hp_admins",
+  "persistent_job_count": 0,
+  "production_approved": false,
+  "project_warehouse_state": "STOPPED",
+  "silver_rows": 275630,
+  "status": "PASS",
+  "version": "azure_phase4_completion_v1"
+}
