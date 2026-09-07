@@ -1,0 +1,21 @@
+{
+  "captured_on": "2026-09-07",
+  "source": "https://prices.azure.com/api/retail/prices",
+  "source_type": "Microsoft Azure Retail Prices API",
+  "region": "westus",
+  "currency": "INR",
+  "sku": "Premium Serverless SQL DBU",
+  "retail_price_per_dbu_hour": 66.8824,
+  "warehouse_size": "2X-Small",
+  "dbu_per_hour": 4,
+  "estimated_retail_cost_per_running_hour_inr": 267.5296,
+  "estimated_20_minute_runtime_inr": 89.1765,
+  "proposed_test_ceiling_inr": 250,
+  "approval_state": "PENDING_OWNER_APPROVAL",
+  "caveats": [
+    "Pre-tax public retail estimate; negotiated pricing can differ",
+    "Actual metering and billing lag can differ from elapsed wall time",
+    "Budget alerts do not stop compute",
+    "The proposed ceiling is enforced by bounded runtime and explicit stop, not Azure billing"
+  ]
+}

@@ -552,8 +552,9 @@ monthly target, INR 9,000 internal stop target, INR 3,000 reserve, at most four
 occasional demos per month, and service-specific idle optimization. Twenty
 minutes was an example, not a hard limit. Both alert
 recipients are supplied privately. Azure budgets are not hard billing caps.
-Budget delivery and shutdown controllers are not deployed; all optional features
-and cloud mutations remain disabled in `azure_databricks/config/poc.json`.
+Budget delivery is now deployed; the shutdown controller is not. All optional
+features and cloud mutations remain disabled in the historical Phase 1
+`azure_databricks/config/poc.json` contract.
 Custom serving's native 30-minute idle scale-down may now be evaluated if its
 full session cost and cold-start behavior fit the POC. It remains disabled until
 the deployment gate passes. Require pre-start cost checks, bounded sessions,
@@ -616,8 +617,9 @@ budget/controller deployment and non-admin execution tests remain unresolved.
 No paid compute was created. See
 [Phase 2 evidence and runbook](azure_databricks/evidence/phase_02/README.md).
 
-**Owner follow-up decision:** defer budget setup until IT confirms the currency.
-The metadata-governance deliverable is complete. Full platform activation still
+**Owner follow-up decision:** IT confirmed INR and the INR 12,000 monthly budget
+with five notification rules is deployed and verified. The metadata-governance
+deliverable is complete. Full platform activation still
 requires the remaining cost, identity and execution gates; this scheduling
 decision does not authorize paid compute or mark those tests passed.
 

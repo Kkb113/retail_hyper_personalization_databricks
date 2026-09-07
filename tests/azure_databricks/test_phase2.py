@@ -14,7 +14,9 @@ from retail_hp_azure.phase2 import (
     MARKER,
     SCHEMAS,
     CloudContext,
+    apply_budget,
     apply_governance,
+    budget_properties,
     governance_plan,
     grant_matrix,
     safe_arm_route,
@@ -63,6 +65,9 @@ def test_allowed_tags_and_read_only_cost_route():
     safe_arm_route("PATCH", "/rg/providers/Microsoft.Resources/tags/default?api-version=example",
                    "/rg", "/rg/providers/DB/workspace")
     safe_arm_route("POST", "/rg/providers/Microsoft.CostManagement/query?api-version=example",
+                   "/rg", "/rg/providers/DB/workspace")
+    safe_arm_route("PUT", "/rg/providers/Microsoft.Consumption/budgets/"
+                   "retail-hp-poc-monthly-budget?api-version=example",
                    "/rg", "/rg/providers/DB/workspace")
 
 
@@ -189,7 +194,35 @@ def test_existing_schema_marker_is_explicit():
     assert "synthetic" in MARKER
 
 
-def test_owner_budget_deferral_does_not_authorize_paid_platform_activation():
+def test_budget_contract_is_inr_monthly_and_private():
+    recipients = ("first@example.invalid", "second@example.invalid")
+    properties = budget_properties(recipients)
+    assert properties["amount"] == 12000
+    assert properties["timeGrain"] == "Monthly"
+    assert set(item["threshold"] for item in properties["notifications"].values()) == {
+        50, 75, 90, 100,
+    }
+    assert sum(item["thresholdType"] == "Forecasted"
+               for item in properties["notifications"].values()) == 1
+
+
+def test_budget_apply_records_no_recipient_addresses():
+    recipients = ("first@example.invalid", "second@example.invalid")
+    context = MagicMock(spec=CloudContext)
+    context.apply = True
+    context.group = {"id": "/rg"}
+    context.arm.side_effect = [
+        SafetyError("Scoped ARM request failed: HTTP 404 NotFound; retry_after_seconds=unknown"),
+        {"properties": {**budget_properties(recipients), "currentSpend": {"unit": "INR"}}},
+    ]
+    result = apply_budget(context, recipients)
+    assert result["status"] == "PASS"
+    assert result["recipient_count"] == 2
+    assert result["recipients_recorded"] is False
+    assert not any(address in json.dumps(result) for address in recipients)
+
+
+def test_confirmed_budget_does_not_implicitly_authorize_paid_platform_activation():
     root = Path(__file__).resolve().parents[2] / "azure_databricks"
     acceptance = json.loads((root / "evidence/phase_02/acceptance.json").read_text())
     assert acceptance["governance_complete"] is True
@@ -197,8 +230,8 @@ def test_owner_budget_deferral_does_not_authorize_paid_platform_activation():
     assert acceptance["phase3_authorized"] is False
     assert acceptance["paid_deployment_allowed"] is False
     decision = acceptance["owner_budget_deferral"]
-    assert decision["decision"] == "DEFER_BUDGET_UNTIL_IT_CONFIRMS_CURRENCY"
-    assert decision["budget_deployed"] is False
+    assert decision["decision"] == "INR_CONFIRMED_BUDGET_DEPLOYED"
+    assert decision["budget_deployed"] is True
     assert decision["paid_compute_authorized_by_deferral"] is False
     policy = json.loads((root / "config/poc.json").read_text())
     assert policy["cost"]["paid_resource_creation_allowed"] is False

@@ -1,0 +1,15 @@
+{
+  "amount": 12000,
+  "captured_at": "2026-09-07T04:22:09.658973+00:00",
+  "cloud_mutations_performed": false,
+  "currency": "INR",
+  "current_spend_amount": 0.0,
+  "hard_cap": false,
+  "name": "retail-hp-poc-monthly-budget",
+  "notification_count": 5,
+  "operation": "NO_CHANGE",
+  "recipient_count": 2,
+  "recipients_recorded": false,
+  "status": "PASS",
+  "time_grain": "Monthly"
+}

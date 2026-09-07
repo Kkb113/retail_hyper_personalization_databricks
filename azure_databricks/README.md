@@ -118,7 +118,8 @@ Databricks App yet. Authentication and real user journeys belong to later phases
 - Two notification recipients are known privately; no addresses in this repo.
 - No cloud mutations or new billable resources in Phase 1.
 - All optional features are disabled; free-to-paid fallback is forbidden.
-- Budget alerts, idle watchdog and cost stop controller are **not deployed**.
+- At the end of Phase 1, budget alerts, idle watchdog and cost stop controller
+  were **not deployed**. Current deployment state is recorded under evidence/phase_02.
 - Twenty minutes was an example, not a hard limit. Select service-specific idle
   settings to balance measured cost, cold starts and demo quality. A 30-minute
   native serving idle window is eligible for evaluation, not permission to deploy.
