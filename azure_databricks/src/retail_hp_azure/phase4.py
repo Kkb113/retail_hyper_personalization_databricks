@@ -273,6 +273,10 @@ def inspect_lakehouse(context: CloudContext) -> dict[str, Any]:
         "gold": set(GOLD_VIEWS) | {DICTIONARY_TABLE},
     }
     observed: dict[str, set[str]] = {}
+    later_phase_objects = {
+        f"{CATALOG}.gold.customer_recommendation_current",
+        f"{CATALOG}.gold.customer_recommendation_history",
+    }
     owner_mismatches: list[str] = []
     for schema in expected:
         items = list(context.client.tables.list(catalog_name=CATALOG, schema_name=schema))
@@ -280,7 +284,8 @@ def inspect_lakehouse(context: CloudContext) -> dict[str, Any]:
         owner_mismatches.extend(
             str(item.full_name)
             for item in items
-            if item.full_name in expected[schema] and str(item.owner) != OBJECT_OWNER
+            if item.full_name in (expected[schema] | later_phase_objects)
+            and str(item.owner) != OBJECT_OWNER
         )
     missing = sorted(
         name for schema, names in expected.items() for name in names - observed[schema]
@@ -288,7 +293,7 @@ def inspect_lakehouse(context: CloudContext) -> dict[str, Any]:
     unexpected_project = sorted(
         name
         for schema, names in observed.items()
-        for name in names - expected[schema]
+        for name in names - expected[schema] - later_phase_objects
     )
     return {
         "version": "azure_phase4_metadata_inspection_v1",
@@ -302,6 +307,9 @@ def inspect_lakehouse(context: CloudContext) -> dict[str, Any]:
         "owner_mismatches": sorted(owner_mismatches),
         "required_owner": OBJECT_OWNER,
         "unexpected_project_objects": unexpected_project,
+        "recognized_later_phase_objects": sorted(
+            name for names in observed.values() for name in names & later_phase_objects
+        ),
         "cloud_mutations_performed": False,
         "compute_started": False,
     }

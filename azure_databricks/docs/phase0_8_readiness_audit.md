@@ -21,6 +21,11 @@ Do not describe the solution as ready for Phase 9 or production.
 ## Corrections made
 
 - Transfer inspection now fails when required payloads or control manifests are missing.
+- Phase 4 metadata inspection recognizes the two exact Phase 6 Gold tables,
+  checks their owner, and still rejects unrelated additions. The live recheck
+  found all 50 original objects, no owner drift, and only those two later tables.
+- All 46 transfer destinations were freshly downloaded and hash-checked:
+  zero missing files or drift, with both manifests and seals matching.
 - Operational SQL checks the approved warehouse contract and RUNNING state before
   submission; it refuses to intentionally wake stopped compute. A state check is
   not an atomic platform lock: a concurrent stop/start race remains possible.
@@ -53,6 +58,11 @@ Delta is not a multi-writer OLTP database. Keep one application writer process;
 do not enable replicas until durable concurrency control is designed and tested.
 Expiry filters hide expired events; physical deletion and export retention are
 not automated. No real personal data should be loaded under this arrangement.
+
+GitHub still reports 19 advisories against the historical Phase 5 MLflow 3.8.1
+environment snapshot. Do not deploy that snapshot. The current version-3 serving
+environment uses MLflow 3.16.0; see the scoped Phase 6 security review. Historical
+artifacts were not rewritten and alerts were not dismissed by this audit.
 
 The stopped-state audit is not an invoice audit. Resource-group cost reported
 approximately INR 0.00176, which must not be represented as the complete project

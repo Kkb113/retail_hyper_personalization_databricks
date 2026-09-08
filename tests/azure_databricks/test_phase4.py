@@ -208,6 +208,13 @@ def test_metadata_inspection_requires_every_phase4_object() -> None:
     good = inspect_lakehouse(context)  # type: ignore[arg-type]
     assert good["status"] == "PASS"
     assert good["expected_object_count"] == 50
+    context.client.tables.names.add(
+        "intellify_databricks_demo.gold.customer_recommendation_current"
+    )
+    assert inspect_lakehouse(context)["status"] == "PASS"
+    context.client.tables.names.add("intellify_databricks_demo.gold.unrecognized")
+    assert inspect_lakehouse(context)["status"] == "FAIL"
+    context.client.tables.names.remove("intellify_databricks_demo.gold.unrecognized")
     context.client.tables.names.remove(next(iter(FEATURE_TABLES)))
     bad = inspect_lakehouse(context)  # type: ignore[arg-type]
     assert bad["status"] == "FAIL"
