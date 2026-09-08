@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from retail_hp_azure.phase5 import MODEL_OWNER, REGISTERED_MODEL
+from retail_hp_azure.model_identity import MODEL_OWNER, REGISTERED_MODEL
 from retail_hp_azure.safety import require
 
 ENDPOINT_NAME = "retail-hp-poc-recommender"

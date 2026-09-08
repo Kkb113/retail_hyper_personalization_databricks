@@ -96,7 +96,7 @@ def test_repeated_export_invocations_use_distinct_run_tokens(monkeypatch):
     settings = SimpleNamespace(
         schedule=None, trigger=None, continuous=None, timeout_seconds=180,
         max_concurrent_runs=1, tasks=[SimpleNamespace(
-            max_retries=0, timeout_seconds=180,
+            max_retries=0, timeout_seconds=180, disable_auto_optimization=True,
             notebook_task=SimpleNamespace(notebook_path=path),
         )],
     )

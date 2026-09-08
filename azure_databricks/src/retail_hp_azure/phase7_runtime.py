@@ -150,6 +150,7 @@ def _ensure_export_job(client: WorkspaceClient) -> tuple[int, str, str]:
                 environment_key="poc",
                 timeout_seconds=EXPORT_JOB_TIMEOUT_SECONDS,
                 max_retries=0,
+                disable_auto_optimization=True,
             )
         ],
         environments=[
@@ -371,6 +372,7 @@ def run_export_job(context: CloudContext) -> dict[str, Any]:
     )
     require(
         len(tasks) == 1 and (tasks[0].max_retries or 0) == 0
+        and tasks[0].disable_auto_optimization is True
         and tasks[0].timeout_seconds == EXPORT_JOB_TIMEOUT_SECONDS
         and tasks[0].notebook_task is not None
         and tasks[0].notebook_task.notebook_path == expected_path

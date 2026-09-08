@@ -102,6 +102,16 @@ Billing lag, tax, discounts, and managed-resource-group coverage remain unresolv
 
 ## Controls required for later phases
 
+Phase 8 added no Azure resources or dedicated endpoints. All four serverless
+attempts total INR 88.6816 by elapsed-time estimate; checkpointed embeddings
+INR 6.2166; live tool validation INR 9.1336 plus approximately INR 0.0021 query
+embeddings. Including INR 83.3979 reserved for unreported initial embedding usage
+and INR 1 for diagnostic calls gives INR 188.4318 pre-tax estimate/reserve, not
+a measured invoice. Failed attempts remain included. See the
+[Phase 8 evidence](evidence/phase_08/README.md). The final admitted paid-run plan
+was INR 238.77. Warehouse and recommender are stopped, all three jobs manual-only;
+small Delta/volume storage charges remain possible.
+
 - Zero all-purpose clusters.
 - One smallest serverless SQL warehouse with one-minute API auto-stop.
 - Triggered jobs with schedules paused at deployment.

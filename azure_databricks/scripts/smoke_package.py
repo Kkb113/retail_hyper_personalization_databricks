@@ -28,6 +28,13 @@ def main() -> None:
         from retail_hp_azure.app import create_app
 
         assert create_app().title == "Retail HP Azure POC"
+    if args.runtime == "agent":
+        from retail_hp_azure.phase8 import tool_schemas
+        from retail_hp_azure.phase8_backend import DatabricksToolBackend
+
+        assert len(tool_schemas()) == 10
+        assert DatabricksToolBackend is not None
+        assert not {"numpy", "pandas", "joblib"}.intersection(sys.modules)
     assert "mlflow" not in sys.modules
     print(f"PASS: {args.runtime} wheel imports cleanly without legacy runtime or cloud calls")
 
