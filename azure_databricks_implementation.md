@@ -1195,6 +1195,15 @@ The complete tool suite is contract-tested, grounded, permission-aware, and usab
 
 ## Phase 9 — Agent implementation and evaluation
 
+Implementation: see `azure_databricks/docs/phase9_agent_runbook.md` and
+`azure_databricks/evidence/phase_09/README.md` for the current release and its explicit
+fixture/live-evaluation boundaries. The owner-requested one-call planner is now configured for
+exactly GPT-5.6 Luna, Azure version `2026-07-09`, on the approved token-billed S0 / GlobalStandard
+Azure OpenAI account inside `Databricks`. The GPT-OSS-20B results remain a historical baseline.
+No fallback, dedicated Databricks agent endpoint, App, or continuous evaluation is created.
+See the current evidence ledger for estimates; the earlier INR 17 figure was before Luna
+migration, not an invoice cap. The deployed App workload identity remains a Phase 10 gate.
+
 ### Objective
 
 Build a reliable retail concierge that plans and explains through governed tools while preserving the recommender as the ranking authority.
@@ -1204,7 +1213,7 @@ Build a reliable retail concierge that plans and explains through governed tools
 - MLflow **ResponsesAgent** interface for standard streaming and structured agent responses.[R17]
 - MLflow **AgentServer** for local and Databricks App serving, tracing, health, and invocation routes.[R18]
 - OpenAI Agents SDK or a minimal compatible tool loop, selected based on dependency and observability tests.
-- One primary LLM and at most one quality fallback.
+- One primary LLM: exactly GPT-5.6 Luna; no quality fallback enabled.
 - No multi-agent graph in the POC.
 
 ### Agent responsibilities
@@ -1228,7 +1237,9 @@ Build a reliable retail concierge that plans and explains through governed tools
 
 ### Foundation-model bake-off
 
-Evaluate live available endpoints rather than fixing a model in advance. Initial candidates:
+The original candidate list below is historical. The owner subsequently selected exactly
+GPT-5.6 Luna; it must pass a fresh benchmark and cannot reuse baseline acceptance.
+Original candidates:
 
 - databricks-gpt-oss-20b
 - databricks-meta-llama-3-1-8b-instruct

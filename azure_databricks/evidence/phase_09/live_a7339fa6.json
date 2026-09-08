@@ -1,0 +1,93 @@
+{
+  "status": "PASS",
+  "non_admin_identity": true,
+  "new_azure_resources": 0,
+  "checks": [
+    "unauthorized_customer_denied",
+    "stopped_scenario_not_started",
+    "live_batch_rank_and_facts",
+    "live_multiturn_comparison",
+    "live_semantic_search"
+  ],
+  "new_endpoints": 0,
+  "traces": [
+    {
+      "agent_version": "retail_agent_v1",
+      "prompt_version": "retail_planner_v2",
+      "request_hash": "90f0fcd1dcc735c374e2e2e9372259e12eb72c6ba7a6b69d837ee56366d8293d",
+      "raw_payload_recorded": false,
+      "status": "refused",
+      "action": "refuse",
+      "tool_calls": 0,
+      "elapsed_ms": 0.0
+    },
+    {
+      "agent_version": "retail_agent_v1",
+      "prompt_version": "retail_planner_v2",
+      "request_hash": "df33198a2886c235eb3102b8a6f7bc891160537f2c32afa79349341c5d5be437",
+      "raw_payload_recorded": false,
+      "error_type": "SafetyError",
+      "status": "unavailable",
+      "action": "simulate_scenario",
+      "tool_calls": 1,
+      "elapsed_ms": 2547.0
+    },
+    {
+      "agent_version": "retail_agent_v1",
+      "prompt_version": "retail_planner_v2",
+      "request_hash": "2b2ec4553b160b16bc2787167752c09124807e37b817d7439046b845114f3aae",
+      "raw_payload_recorded": false,
+      "status": "ok",
+      "action": "get_recommendations",
+      "tool_calls": 3,
+      "elapsed_ms": 39844.0
+    },
+    {
+      "agent_version": "retail_agent_v1",
+      "prompt_version": "retail_planner_v2",
+      "request_hash": "08469776559fc88cf491772332e5fe8fa85ee95e344741f2216d2acd217a8414",
+      "raw_payload_recorded": false,
+      "status": "ok",
+      "action": "compare_products",
+      "tool_calls": 1,
+      "elapsed_ms": 5078.0
+    },
+    {
+      "agent_version": "retail_agent_v1",
+      "prompt_version": "retail_planner_v2",
+      "request_hash": "3d1c13548af5d906bf70023169da92f83292e8a2caf800c3618ab216161d1036",
+      "raw_payload_recorded": false,
+      "status": "ok",
+      "action": "search_products",
+      "tool_calls": 1,
+      "elapsed_ms": 10141.0
+    }
+  ],
+  "embedding_tokens": 5,
+  "temporary_secret_revoked": true,
+  "warehouse_final_state": "STOPPED",
+  "warehouse_elapsed_seconds": 65.73,
+  "estimated_warehouse_cost_inr_pre_tax": 4.8849,
+  "hard_invoice_cap_guaranteed": false,
+  "final_compute": {
+    "scope_verified": true,
+    "cloud_mutations_performed": false,
+    "azure_resource_types": [
+      "Microsoft.Databricks/workspaces"
+    ],
+    "cluster_count": 0,
+    "warehouse_count": 1,
+    "project_warehouses": [
+      {
+        "name": "retail-hp-poc-sql",
+        "state": "STOPPED"
+      }
+    ],
+    "job_count": 3,
+    "app_count": 0,
+    "serving_endpoint_count": 23,
+    "project_serving_endpoint_count": 1,
+    "note": "Pre-existing foundation endpoints are not invoked; counts are not billed usage",
+    "managed_resource_group_cost_coverage": "NOT_VERIFIED; no managed-group writes permitted"
+  }
+}
