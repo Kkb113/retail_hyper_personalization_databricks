@@ -1,6 +1,6 @@
 # Databricks notebook source
 # ruff: noqa: F821, E501, S608
-"""Triggered, checkpointed full-population scoring of the pinned POC Champion."""
+"""Triggered, checkpointed demo-cohort scoring of the pinned POC model."""
 import json
 import time
 from pathlib import Path
