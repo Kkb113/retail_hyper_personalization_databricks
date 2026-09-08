@@ -3,9 +3,11 @@
 ## Scope
 
 Synthetic POC only. Champion is a deployment label, not production approval.
-Version 2 repairs version 1's MLflow/pandas dependency conflict; trained weights
-and recommendation logic are unchanged. Production remains on hold pending a
-future holdout evaluation.
+Version 2 repairs version 1's MLflow/pandas dependency conflict. Version 3 adds
+deterministic score rounding and product-ID tie breaking before candidate limits,
+including nearest-neighbor boundary ties. Trained weights are unchanged; ranking
+runtime behavior has deliberately changed. Production remains on hold pending a
+future holdout evaluation. Version 3 is Champion after passing its live gates.
 
 The initial batch is a deterministic **100-customer demo cohort out of 5,000**,
 selected by sorting customer identifiers and taking every fiftieth customer.
@@ -23,6 +25,8 @@ without publishing a current table. Do not repeat that attempt blindly.
 
 All tables are in `intellify_databricks_demo`. Check the evidence directory for
 actual validation status; this runbook is not itself evidence of deployment.
+`config/poc.json` remains the immutable, fail-closed Phase 1 dry-run baseline,
+not a live inventory. Use the Phase 6 audit to assess actual deployed state.
 
 ## Demonstration lifecycle
 
@@ -54,6 +58,29 @@ small synthetic workload. Cold request deadline: 120 seconds, then show a safe
 “warming/unavailable” message. These are POC targets, not service guarantees.
 Readiness, prediction parity, inventory validity, invalid input handling, and
 stop/start behavior must be measured before declaring the live path ready.
+The cost-focused cold lifecycle test uses explicit stop/start and has a separate
+five-minute administrative resume deadline. It does not claim that the native
+30-minute idle timer was observed or that a stopped endpoint wakes on a query.
+
+## Commands
+
+Set `PYTHONPATH=azure_databricks/src` in the shell and use the project Python 3.12
+environment with Azure CLI authentication. Inspect without starting anything:
+
+```text
+python azure_databricks/scripts/phase6_endpoint.py inspect
+python azure_databricks/scripts/phase6_batch_control.py inspect
+python azure_databricks/scripts/phase6_audit.py
+```
+
+Start requires an explicit reconciled prior-cost amount and acceptance evidence
+matching Champion. The default validation ceiling is INR250; the user approved
+INR400 for the bounded Phase 6 retest. Neither value is an Azure invoice cap.
+Use `phase6_endpoint.py start --prior-cost-inr <amount> --ceiling-inr 400` only
+after checking remaining allowance. Then inspect until READY before querying.
+Always finish with `phase6_endpoint.py stop` and verify the raw STOPPED state.
+One-time repair/retest scripts are guarded historical workflows, not scheduled
+production automation; do not edit private run state to bypass their guards.
 
 ## Recovery
 

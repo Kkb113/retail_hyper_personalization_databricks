@@ -950,6 +950,17 @@ The registered Candidate is a real end-to-end recommender, passes golden parity 
 
 ## Phase 6 — Batch and real-time recommendation serving
 
+Implementation scope update (2026-09-08): the initial batch is an explicit
+100-customer synthetic demo cohort (1,000 recommendations) selected across the
+5,000-customer population. Full-population scoring is not an acceptance claim.
+The first full run timed out without partial publication. The user approved an
+INR400 validation allowance for one deterministic-ranking retest. Known-customer
+demo traffic uses the governed Delta view; dynamic requests use one Small CPU
+endpoint. Explicit stop/start is the validated cold lifecycle, with native
+scale-to-zero retained as an additional idle safeguard. Consult Phase 6 evidence
+for actual gate results; endpoint creation and alias assignment alone do not
+establish readiness.
+
 ### Objective
 
 Serve recommendations through the least expensive path appropriate to each customer state.
@@ -995,7 +1006,9 @@ Rules are applied deterministically:
 - Batch and endpoint results agree for identical supported inputs.
 - Atomic promotion prevents partial current tables.
 - Endpoint health, invalid-input, timeout, and retry tests pass.
-- A scaled-down endpoint successfully wakes and returns a valid response.
+- An explicitly stopped endpoint successfully resumes through the demo warm-up
+  action and returns a valid response; separately record whether the native idle
+  scale-to-zero timer was timed (do not conflate the two tests).
 - No returned product violates inventory or eligibility.
 - Repeated idempotent requests do not create duplicate feedback or audit events.
 
@@ -2122,12 +2135,22 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-**Phases 0–5 are complete and the platform is stopped.** The governed transfer is
-hash-identical and sealed, and the Phase 4 Lakehouse reconciles end to end with
-all 50 expected objects present. The functional MLflow recommender is registered
-as Candidate with deterministic parity and reproducible dependencies; Champion
-remains gated by the future holdout. There are zero clusters and persistent jobs,
-and the warehouse is STOPPED. Broad Databricks billing-table access remains
-denied, so reported actual usage may lag. Phase 6 serving is the next roadmap
-step and requires separate owner authorization plus a fresh cost and shutdown
-review.
+**Phases 0–6 are complete for the explicit synthetic POC scope.** The governed
+transfer remains sealed. Phase 6 adds history/current recommendation tables and
+a governed serving view to the Phase 4 foundation. Champion is registered model
+version 3, with stable ranking ties, matching batch/endpoint outputs for all
+1,000 recommendations in the representative 100-customer cohort, and MLflow
+3.16.0 packaging. This is not full-population or production approval.
+
+Warm endpoint p95 is 3.236 seconds, warm SQL read is 4.297 seconds, and explicit
+cold resume passed in 99.062 seconds. The endpoint and warehouse are stopped;
+there are zero clusters and active job runs, and one unscheduled batch job
+definition. Native scale-to-zero is enabled but its 30-minute idle timer was not
+separately timed. Production remains gated by a future holdout.
+
+The user approved an INR400 Phase 6 validation allowance; the guarded reservation
+is INR399.2408, not an invoice guarantee. Reported Azure costs may lag, and
+broad billing-table/managed-resource-group coverage is not verified. Review the
+Phase 6 evidence and reconcile costs before new paid work. **Phase 7 — Operational
+state and feedback** is the next roadmap step and requires a new implementation
+request; no Phase 7 resources or background workloads were started here.

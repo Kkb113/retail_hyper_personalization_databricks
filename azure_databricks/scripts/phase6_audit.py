@@ -15,6 +15,14 @@ root = Path(__file__).resolve().parents[2]
 state = json.loads((root / "build/phase6-control.local.json").read_text())
 inventory = inspect_compute(context)
 endpoint = client.serving_endpoints.get(ENDPOINT_NAME)
+permissions = client.serving_endpoints.get_permissions(endpoint.id)
+project_permissions = {
+    item.group_name: [permission.permission_level.value for permission in item.all_permissions]
+    for item in permissions.access_control_list
+    if item.group_name and item.group_name.startswith("retail_hp_")
+}
+assert "CAN_QUERY" in project_permissions["retail_hp_app_runtime"]
+assert "CAN_MANAGE" in project_permissions["retail_hp_admins"]
 raw_endpoint = client.api_client.do("GET", f"/api/2.0/serving-endpoints/{ENDPOINT_NAME}")
 job = client.jobs.get(state["job_id"])
 runs = []
@@ -44,6 +52,7 @@ report = {
     "registry": inspect_registered_model(context),
     "budget": _verify_budget(context),
     "endpoint_state": raw_endpoint.get("state"),
+    "project_endpoint_permissions": project_permissions,
     "endpoint_config": {
         "version": endpoint.config.served_entities[0].entity_version,
         "scale_to_zero": endpoint.config.served_entities[0].scale_to_zero_enabled,

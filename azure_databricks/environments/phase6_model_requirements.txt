@@ -1,4 +1,4 @@
-# Registered model version 2: packaging repair, no retraining.
+# Registered model versions 2/3: packaging repair; version 3 stabilizes ranking ties.
 # Resolution checked locally; serving-container build passed in Azure.
 mlflow==3.16.0
 joblib==1.5.3
