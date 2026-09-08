@@ -35,7 +35,11 @@ def main() -> None:
         assert len(tool_schemas()) == 10
         assert DatabricksToolBackend is not None
         assert not {"numpy", "pandas", "joblib"}.intersection(sys.modules)
-    assert "mlflow" not in sys.modules
+        from retail_hp_azure.phase9_responses import RetailResponsesAgent, create_agent_server
+
+        assert RetailResponsesAgent is not None and create_agent_server is not None
+    else:
+        assert "mlflow" not in sys.modules
     print(f"PASS: {args.runtime} wheel imports cleanly without legacy runtime or cloud calls")
 
 

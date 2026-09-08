@@ -9,9 +9,9 @@ Canonical Git repository:
 
 ## Phase 0 status
 
-For the latest semantic/tool-layer delivery, see the
-[Phase 8 evidence](evidence/phase_08/README.md) and
-[tool operating runbook](docs/phase8_tool_runbook.md). Earlier phase sections below
+For the latest agent implementation, see the
+[Phase 9 evidence](evidence/phase_09/README.md) and
+[agent operating runbook](docs/phase9_agent_runbook.md). Earlier phase sections below
 describe their historical completion state, not additional authorization to run compute.
 
 Phase 0 is read-only in Azure and Databricks. It creates local, sanitized

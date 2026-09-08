@@ -75,7 +75,10 @@ see the [Phase 8 runbook](azure_databricks/docs/phase8_tool_runbook.md) and
 [validation evidence](azure_databricks/evidence/phase_08/README.md).
 Jobs are manual-only definitions, not continuous compute. The warehouse and
 recommender endpoint must remain stopped outside bounded validation/demo sessions.
-The authenticated App and LLM agent are later-phase work.
+Phase 9 adds the bounded MLflow retail agent and evaluation harness; see the
+[agent runbook](azure_databricks/docs/phase9_agent_runbook.md) and
+[acceptance evidence](azure_databricks/evidence/phase_09/README.md).
+The authenticated App is Phase 10 work; no always-on agent deployment is created in Phase 9.
 
 The only bundle is `azure_databricks/databricks.yml`, with target `poc`, **zero
 resources**, no build hooks and marker-only sync eligibility. No sync is run in

@@ -12,7 +12,8 @@ dependencies = ["pydantic==2.13.4", "PyYAML==6.0.2"]
 [project.optional-dependencies]
 jobs = ["databricks-sdk==0.81.0"]
 serving = []
-agent = ["databricks-sdk==0.81.0"]
+agent = ["databricks-sdk==0.81.0", "mlflow==3.16.0", "fastapi==0.141.1", "uvicorn==0.51.0",
+         "httpx==0.28.1"]
 app = ["fastapi==0.141.1", "uvicorn==0.51.0"]
 dev = ["joblib==1.5.3", "numpy==2.5.1", "pandas==3.0.3", "pyarrow==24.0.0",
        "scikit-learn==1.9.0", "xgboost==3.3.0", "pytest==9.0.3", "ruff==0.12.5",
@@ -33,6 +34,11 @@ retail_hp_azure = ["py.typed"]
 python_version = "3.12"
 strict = true
 files = ["azure_databricks/src"]
+
+[[tool.mypy.overrides]]
+module = ["mlflow.*"]
+ignore_missing_imports = true
+follow_imports = "skip"
 
 [tool.ruff]
 target-version = "py312"
