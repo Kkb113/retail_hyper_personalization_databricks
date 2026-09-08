@@ -1,5 +1,5 @@
 {
-  "captured_at": "2026-09-08T01:27:36.026907+00:00",
+  "captured_at": "2026-09-08T05:31:28.087707+00:00",
   "inventory": {
     "scope_verified": true,
     "cloud_mutations_performed": false,
@@ -14,7 +14,7 @@
         "state": "STOPPED"
       }
     ],
-    "job_count": 1,
+    "job_count": 2,
     "app_count": 0,
     "serving_endpoint_count": 23,
     "project_serving_endpoint_count": 1,

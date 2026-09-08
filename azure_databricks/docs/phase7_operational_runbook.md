@@ -4,6 +4,12 @@ Phase 7 uses no Lakebase resource. The durable fallback consists of governed Del
 tables plus one manual-only export job. Current-session conversation state may be
 ephemeral inside the future Databricks App.
 
+See [the Phase 0–8 audit](phase0_8_readiness_audit.md) for current limitations.
+Actor filtering is enforced by trusted server code, not database row-level
+security. Run only one writer process with synthetic payloads. The runtime
+principal can read all operational rows directly; never expose it to end users.
+Physical expiry/deletion is not automated.
+
 ## Safe inspection
 
 ~~~powershell

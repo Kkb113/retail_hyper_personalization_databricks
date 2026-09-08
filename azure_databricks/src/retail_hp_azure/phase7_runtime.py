@@ -2,14 +2,15 @@
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import os
 import threading
 import time
 from datetime import UTC, datetime, timedelta
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
+from uuid import uuid4
 
 from retail_hp_azure.config import HOST
 from retail_hp_azure.phase2 import CloudContext, inspect_compute
@@ -22,6 +23,7 @@ from retail_hp_azure.phase2_compute import (
     _verify_warehouse_contract,
 )
 from retail_hp_azure.phase2_identity import _ensure_identity
+from retail_hp_azure.phase3 import _find_repo_root
 from retail_hp_azure.phase7 import (
     CATALOG,
     EXPORT_JOB_NAME,
@@ -50,7 +52,7 @@ from retail_hp_azure.safety import require
 if TYPE_CHECKING:
     from databricks.sdk import WorkspaceClient
 
-AZURE_ROOT = Path(__file__).resolve().parents[2]
+AZURE_ROOT = _find_repo_root() / "azure_databricks"
 NOTEBOOK_SOURCE = AZURE_ROOT / "notebooks" / "phase7_feedback_export.py"
 WORKSPACE_ROOT = "/Workspace/Shared/retail_hp_phase7"
 PHASE7_CEILING_INR = 250.0
@@ -104,7 +106,7 @@ def _lakebase_count(client: WorkspaceClient) -> int:
 def _ensure_export_job(client: WorkspaceClient) -> tuple[int, str, str]:
     from databricks.sdk.service.compute import Environment
     from databricks.sdk.service.jobs import JobEnvironment, JobSettings, NotebookTask, Task
-    from databricks.sdk.service.workspace import ImportFormat, Language
+    from databricks.sdk.service.workspace import ExportFormat, ImportFormat, Language
 
     source = NOTEBOOK_SOURCE.read_bytes()
     digest = hashlib.sha256(source).hexdigest()
@@ -112,6 +114,13 @@ def _ensure_export_job(client: WorkspaceClient) -> tuple[int, str, str]:
     client.workspace.mkdirs(WORKSPACE_ROOT)
     try:
         client.workspace.get_status(path)
+        exported = client.workspace.export(path, format=ExportFormat.SOURCE)
+        require(bool(exported.content), "Export notebook source is unavailable")
+        require(
+            base64.b64decode(str(exported.content)).replace(b"\r\n", b"\n").rstrip()
+            == source.replace(b"\r\n", b"\n").rstrip(),
+            "Existing export notebook source drift",
+        )
         notebook_operation = "NO_CHANGE"
     except Exception as exc:
         from databricks.sdk.errors import NotFound
@@ -157,6 +166,18 @@ def _ensure_export_job(client: WorkspaceClient) -> tuple[int, str, str]:
         require(existing.settings is not None, "Phase 7 job settings are missing")
         existing_settings = cast(JobSettings, existing.settings)
         require(existing_settings.schedule is None, "Phase 7 export job has a schedule")
+        require(
+            (existing_settings.tags or {}).get("project") == "retail-hyper-personalization",
+            "Refusing to overwrite an unrecognized export job",
+        )
+        require(
+            not list(client.jobs.list_runs(job_id=existing_job_id, active_only=True)),
+            "Cannot change an active export job",
+        )
+        require(
+            existing_settings.trigger is None and existing_settings.continuous is None,
+            "Export job must have no automatic trigger",
+        )
         client.jobs.reset(existing_job_id, settings)
         return existing_job_id, "UPDATED", notebook_operation
     created = client.jobs.create(
@@ -180,14 +201,18 @@ def _workload_client(context: CloudContext, principal: Any) -> tuple[WorkspaceCl
         str(principal.id), lifetime="3600s"
     )
     require(bool(secret.id) and bool(secret.secret), "Temporary OAuth secret was not returned")
-    config = Config(**{  # type: ignore[arg-type]
-        "host": HOST,
-        "auth_type": "oauth-m2m",
-        "client_id": str(principal.application_id),
-        "client_" + "secret": str(secret.secret),
-        "config_file": os.devnull,
-    })
-    return WorkspaceClient(config=config), str(secret.id), str(principal.id)
+    try:
+        config = Config(**{  # type: ignore[arg-type]
+            "host": HOST,
+            "auth_type": "oauth-m2m",
+            "client_id": str(principal.application_id),
+            "client_" + "secret": str(secret.secret),
+            "config_file": os.devnull,
+        })
+        return WorkspaceClient(config=config), str(secret.id), str(principal.id)
+    except BaseException:
+        context.client.service_principal_secrets_proxy.delete(str(principal.id), str(secret.id))
+        raise
 
 
 def inspect_phase7(context: CloudContext) -> dict[str, Any]:
@@ -336,6 +361,27 @@ def run_export_job(context: CloudContext) -> dict[str, Any]:
     settings = cast(Any, detail.settings)
     require(settings.schedule is None, "Phase 7 export job must remain unscheduled")
     require(
+        settings.trigger is None and settings.continuous is None,
+        "Phase 7 export job must have no automatic trigger",
+    )
+    tasks = settings.tasks or []
+    expected_path = (
+        f"{WORKSPACE_ROOT}/feedback_export_"
+        f"{hashlib.sha256(NOTEBOOK_SOURCE.read_bytes()).hexdigest()[:16]}"
+    )
+    require(
+        len(tasks) == 1 and (tasks[0].max_retries or 0) == 0
+        and tasks[0].timeout_seconds == EXPORT_JOB_TIMEOUT_SECONDS
+        and tasks[0].notebook_task is not None
+        and tasks[0].notebook_task.notebook_path == expected_path
+        and settings.max_concurrent_runs == 1,
+        "Phase 7 export task contract drift",
+    )
+    require(
+        not list(client.jobs.list_runs(job_id=job_id, active_only=True)),
+        "Phase 7 export already has an active run",
+    )
+    require(
         settings.timeout_seconds == EXPORT_JOB_TIMEOUT_SECONDS,
         "Phase 7 export timeout drift",
     )
@@ -344,10 +390,9 @@ def run_export_job(context: CloudContext) -> dict[str, Any]:
         len(warehouses) == 1 and getattr(warehouses[0].state, "value", None) == "STOPPED",
         "Warehouse must stay stopped during export",
     )
-    source_hash = hashlib.sha256(NOTEBOOK_SOURCE.read_bytes()).hexdigest()
     started = time.monotonic()
     waiter = client.jobs.run_now(
-        job_id, idempotency_token=f"retail-hp-phase7-export-{source_hash[:16]}"
+        job_id, idempotency_token=f"retail-hp-phase7-export-{uuid4().hex}"
     )
     run_id = waiter.run_id
     try:
@@ -376,7 +421,7 @@ def run_export_job(context: CloudContext) -> dict[str, Any]:
             RunLifeCycleState.INTERNAL_ERROR,
         }:
             client.jobs.cancel_run(run_id).result(timeout=timedelta(minutes=2))
-    elapsed = min(time.monotonic() - started, EXPORT_JOB_TIMEOUT_SECONDS)
+    elapsed = time.monotonic() - started
     estimated = (
         SERVERLESS_INR_PER_DBU_HOUR * SERVERLESS_PLANNING_DBU_PER_HOUR * elapsed / 3600
     )
@@ -445,6 +490,7 @@ def apply_phase7(context: CloudContext) -> dict[str, Any]:
     try:
         client.warehouses.start(warehouse_id).result(timeout=timedelta(minutes=3))
         for statement in migration_statements():
+            require(not deadline_fired.is_set(), "Phase 7 execution deadline reached")
             _execute(client, warehouse_id, statement)
         workload, secret_id, principal_id = _workload_client(context, principal)
         actor_secret = os.urandom(32)
@@ -515,15 +561,17 @@ def apply_phase7(context: CloudContext) -> dict[str, Any]:
     finally:
         finished.set()
         controller.join(timeout=1)
-        if secret_id and principal_id:
-            client.service_principal_secrets_proxy.delete(principal_id, secret_id)
-            secret_revoked = all(
-                item.id != secret_id
-                for item in client.service_principal_secrets_proxy.list(principal_id)
-            )
-        result["temporary_oauth_secret_revoked"] = secret_revoked
-        result["warehouse_final_state"] = _stop_and_verify(client, warehouse_id)
-        elapsed = min(time.monotonic() - started, WAREHOUSE_DEADLINE_MINUTES * 60)
+        try:
+            if secret_id and principal_id:
+                client.service_principal_secrets_proxy.delete(principal_id, secret_id)
+                secret_revoked = all(
+                    item.id != secret_id
+                    for item in client.service_principal_secrets_proxy.list(principal_id)
+                )
+        finally:
+            result["temporary_oauth_secret_revoked"] = secret_revoked
+            result["warehouse_final_state"] = _stop_and_verify(client, warehouse_id)
+        elapsed = time.monotonic() - started
         result["elapsed_seconds"] = round(elapsed, 2)
         result["estimated_elapsed_warehouse_cost_inr_pre_tax"] = round(
             RETAIL_DBU_HOURLY_INR * DBU_PER_HOUR * elapsed / 3600, 4

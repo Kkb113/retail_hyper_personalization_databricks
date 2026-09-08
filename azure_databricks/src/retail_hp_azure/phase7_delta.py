@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import json
+import threading
 import time
+from datetime import UTC, datetime
 from typing import Any
 
 from retail_hp_azure.phase7 import (
@@ -14,13 +16,29 @@ from retail_hp_azure.phase7 import (
     OPERATIONAL_TABLES,
     OWNER,
     RUNTIME_PRINCIPAL,
+    ActorContext,
     OperationalEvent,
     WriteResult,
     canonical_payload_hash,
+    pseudonymize_actor,
 )
 from retail_hp_azure.safety import SafetyError, require
 
 CONTRACT_VERSION = "retail_hp_operational_delta_v1"
+_WRITER_LOCK = threading.RLock()  # Single-process POC only; not a distributed lock.
+
+
+def _stored_event(table: str, row: dict[str, Any]) -> OperationalEvent:
+    def timestamp(value: str) -> datetime:
+        parsed = datetime.fromisoformat(value)
+        return parsed.replace(tzinfo=UTC) if parsed.tzinfo is None else parsed.astimezone(UTC)
+
+    return OperationalEvent(
+        table=table, event_id=row["event_id"], actor_hash=row["actor_hash"],
+        idempotency_key=row["idempotency_key"], correlation_id=row["correlation_id"],
+        payload=json.loads(row["payload_json"]), created_at=timestamp(row["created_at"]),
+        expires_at=timestamp(row["expires_at"]),
+    )
 
 
 def table_name(table: str) -> str:
@@ -106,6 +124,15 @@ def _execute(
     parameters: list[Any] | None = None,
     deadline_seconds: float = 45,
 ) -> Any:
+    from retail_hp_azure.phase2_compute import _verify_warehouse_contract
+
+    warehouse = client.warehouses.get(warehouse_id)
+    _verify_warehouse_contract(warehouse)
+    require(
+        getattr(getattr(warehouse, "state", None), "value", None) == "RUNNING",
+        "Operational SQL requires explicitly started compute; use ephemeral mode while stopped",
+    )
+    deadline = time.monotonic() + deadline_seconds
     response = client.statement_execution.execute_statement(
         statement=statement,
         warehouse_id=warehouse_id,
@@ -116,7 +143,6 @@ def _execute(
         byte_limit=1_048_576,
         wait_timeout="10s",
     )
-    deadline = time.monotonic() + deadline_seconds
     while response.status is not None and response.status.state.value in {"PENDING", "RUNNING"}:
         if time.monotonic() >= deadline:
             client.statement_execution.cancel_execution(response.statement_id)
@@ -130,6 +156,7 @@ def _execute(
 
 def _rows(response: Any) -> list[dict[str, Any]]:
     manifest = getattr(response, "manifest", None)
+    require(not getattr(manifest, "truncated", False), "Operational SQL result was truncated")
     schema = getattr(manifest, "schema", None)
     names = [column.name for column in (getattr(schema, "columns", None) or [])]
     data = getattr(getattr(response, "result", None), "data_array", None) or []
@@ -145,6 +172,10 @@ class DeltaOperationalStore:
         self.warehouse_id = warehouse_id
 
     def write(self, event: OperationalEvent) -> WriteResult:
+        with _WRITER_LOCK:
+            return self._write(event.model_copy(deep=True))
+
+    def _write(self, event: OperationalEvent) -> WriteResult:
         from databricks.sdk.service.sql import StatementParameterListItem
 
         full_name = table_name(event.table)
@@ -165,19 +196,20 @@ class DeltaOperationalStore:
             StatementParameterListItem(name="payload_sha256", value=payload_hash, type="STRING"),
             StatementParameterListItem(
                 name="created_at",
-                value=event.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                value=event.created_at.astimezone(UTC).strftime("%Y-%m-%d %H:%M:%S.%f"),
                 type="TIMESTAMP",
             ),
             StatementParameterListItem(
                 name="expires_at",
-                value=event.expires_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                value=event.expires_at.astimezone(UTC).strftime("%Y-%m-%d %H:%M:%S.%f"),
                 type="TIMESTAMP",
             ),
         ]
         before = self._get(event.table, event.event_id, event.actor_hash)
         if before:
+            require(len(before) == 1, "Duplicate operational event detected")
             require(before[0]["payload_sha256"] == payload_hash, "Idempotency payload conflict")
-            return WriteResult(event=event, replayed=True)
+            return WriteResult(event=_stored_event(event.table, before[0]), replayed=True)
         _execute(
             self.client,
             self.warehouse_id,
@@ -195,7 +227,7 @@ class DeltaOperationalStore:
         after = self._get(event.table, event.event_id, event.actor_hash)
         require(len(after) == 1, "Operational write did not produce exactly one event")
         require(after[0]["payload_sha256"] == payload_hash, "Idempotency payload conflict")
-        return WriteResult(event=event, replayed=False)
+        return WriteResult(event=_stored_event(event.table, after[0]), replayed=False)
 
     def _get(self, table: str, event_id: str, actor_hash: str) -> list[dict[str, Any]]:
         from databricks.sdk.service.sql import StatementParameterListItem
@@ -204,7 +236,7 @@ class DeltaOperationalStore:
         response = _execute(
             self.client,
             self.warehouse_id,
-            f"""SELECT event_id, payload_sha256 FROM {full_name}
+            f"""SELECT * FROM {full_name}
             WHERE event_id = :event_id AND actor_hash = :actor_hash""",  # noqa: S608
             parameters=[
                 StatementParameterListItem(name="event_id", value=event_id, type="STRING"),
@@ -229,3 +261,21 @@ class DeltaOperationalStore:
         rows = _rows(response)
         require(len(rows) == 1, "Operational count failed")
         return int(rows[0]["count"])
+
+    def list_for_actor(
+        self, *, table: str, actor: ActorContext, secret: bytes,
+    ) -> tuple[OperationalEvent, ...]:
+        """Trusted server API, not database RLS; fail rather than silently truncate."""
+        from databricks.sdk.service.sql import StatementParameterListItem
+
+        full_name = table_name(table)
+        response = _execute(
+            self.client, self.warehouse_id,
+            f"""SELECT * FROM {full_name}
+            WHERE actor_hash = :actor_hash AND expires_at > current_timestamp()
+            ORDER BY created_at, event_id""",  # noqa: S608
+            parameters=[StatementParameterListItem(
+                name="actor_hash", value=pseudonymize_actor(actor, secret), type="STRING"
+            )],
+        )
+        return tuple(_stored_event(table, row) for row in _rows(response))
