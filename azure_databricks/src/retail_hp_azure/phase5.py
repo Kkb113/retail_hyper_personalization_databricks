@@ -11,6 +11,8 @@ from typing import Any
 import numpy as np
 import pandas as pd  # type: ignore[import-untyped]
 
+from retail_hp_azure.model_identity import MODEL_OWNER as MODEL_OWNER
+from retail_hp_azure.model_identity import REGISTERED_MODEL as REGISTERED_MODEL
 from retail_hp_azure.phase2 import CATALOG, CloudContext, inspect_compute
 from retail_hp_azure.phase3 import REPO_ROOT, validate_local
 from retail_hp_azure.pickle_compat import load_approved_joblib
@@ -19,8 +21,6 @@ from retail_hp_azure.safety import require
 AZURE_ROOT = REPO_ROOT / "azure_databricks"
 EVIDENCE_ROOT = AZURE_ROOT / "evidence" / "phase_05"
 LOCAL_MODEL_ROOT = REPO_ROOT / "migration_assets" / "artifacts"
-REGISTERED_MODEL = f"{CATALOG}.ml.adaptive_recommender"
-MODEL_OWNER = "retail_hp_admins"
 PHASE5_VERSION = "azure_functional_recommender_v1"
 PHASE5_RUN_NAME = "retail-hp-phase5-functional-mlflow"
 AUTOMATED_SERVERLESS_INR_PER_DBU_HOUR = 44.91

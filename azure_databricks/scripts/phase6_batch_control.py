@@ -47,6 +47,7 @@ if args.command == "deploy":
                 environment_key="poc",
                 timeout_seconds=180,
                 max_retries=0,
+                disable_auto_optimization=True,
             )
         ],
         environments=[

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "captured_at": "2026-09-08T06:49:55.057305+00:00",
+  "champion_version": 3,
+  "endpoint_version": 3,
+  "endpoint_state": "STOPPED",
+  "mlflow_version": "3.16.0",
+  "matches_phase6_requirements": true,
+  "requirements_sha256": "563cc2a36f944e9e002b66eb06497ca13f362b5f89c47e9c69cbdfb3c3bdad12",
+  "compute_started": false,
+  "model_loaded": false,
+  "cloud_mutations": false
+}

@@ -1097,6 +1097,14 @@ Feedback and session state work with least privilege, bounded compute, and a tes
 
 ## Phase 8 — Semantic intelligence and governed tool layer
 
+POC implementation (2026-09-08): 2,860 eligible-product embeddings, ten typed tools,
+four governed serving views, and a manual reuse-aware publish job. Live non-admin
+tool acceptance passed; real-time/scenario adapters were additionally tested with
+the actual model locally without waking the cloud recommender. See
+[Phase 8 evidence and limitations](azure_databricks/evidence/phase_08/README.md).
+Regional filtering is intentionally rejected until a store/region mapping exists;
+aggregate quality currently reports verified batch coverage, not model accuracy.
+
 ### Objective
 
 Give the agent useful retail intelligence while ensuring that every action is deterministic, typed, observable, and permission-aware.

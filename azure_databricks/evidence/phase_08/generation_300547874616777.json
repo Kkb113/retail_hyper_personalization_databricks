@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "plan": {
+    "phase": 8,
+    "new_azure_resources": 0,
+    "new_dedicated_endpoints": 0,
+    "generation_job_timeout_seconds": 120,
+    "schedule": null,
+    "max_embedding_tokens": 500000,
+    "max_products": 3000,
+    "warehouse_max_minutes": 3,
+    "prior_compute_estimate_inr": 73.4994,
+    "prior_unreported_embedding_reserve_inr": 83.3979,
+    "known_embedding_estimate_inr": 6.2166,
+    "guarded_estimate_inr_pre_tax": 238.77,
+    "planning_allowance_inr": 250,
+    "hard_invoice_cap_guaranteed": false
+  },
+  "generation": {
+    "status": "PASS",
+    "eligible_products": 2860,
+    "embedded_new": 0,
+    "reused": 2860,
+    "embedding_tokens": 0,
+    "snapshot_version": "a5149aa3d946d8a1ab15a8108f7a54552b70f530284ef37a4e10d120d55e1bba",
+    "snapshot_path": "/Volumes/intellify_databricks_demo/serving/semantic_assets/a5149aa3d946d8a1ab15a8108f7a54552b70f530284ef37a4e10d120d55e1bba.json",
+    "model": "system.ai.gte_large_en_v1_5",
+    "views": [
+      "tool_customers",
+      "tool_opportunities",
+      "tool_products",
+      "tool_quality"
+    ],
+    "schedule": null,
+    "elapsed_seconds": 47.27
+  },
+  "elapsed_seconds": 76.06,
+  "estimated_job_cost_inr_pre_tax": 15.1822,
+  "final_inventory": {
+    "scope_verified": true,
+    "cloud_mutations_performed": false,
+    "azure_resource_types": [
+      "Microsoft.Databricks/workspaces"
+    ],
+    "cluster_count": 0,
+    "warehouse_count": 1,
+    "project_warehouses": [
+      {
+        "name": "retail-hp-poc-sql",
+        "state": "STOPPED"
+      }
+    ],
+    "job_count": 3,
+    "app_count": 0,
+    "serving_endpoint_count": 23,
+    "project_serving_endpoint_count": 1,
+    "note": "Pre-existing foundation endpoints are not invoked; counts are not billed usage",
+    "managed_resource_group_cost_coverage": "NOT_VERIFIED; no managed-group writes permitted"
+  },
+  "captured_at": "2026-09-08T06:27:05.921541+00:00"
+}

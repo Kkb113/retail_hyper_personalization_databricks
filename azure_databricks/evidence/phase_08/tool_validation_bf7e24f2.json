@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "non_admin_identity": true,
+  "new_azure_resources": 0,
+  "checks": {
+    "unauthorized_customer_denied": true,
+    "stopped_endpoint_not_invoked": true,
+    "product_details_compare_explain": true,
+    "batch_recommendations": true,
+    "quality_and_opportunities": true,
+    "feedback_idempotent": true,
+    "price_filter": true,
+    "semantic": [
+      {
+        "query": "warm jacket for cold winter weather",
+        "relevant_in_top_5": true
+      },
+      {
+        "query": "running shoes for jogging",
+        "relevant_in_top_5": true
+      },
+      {
+        "query": "headphones for listening to music",
+        "relevant_in_top_5": true
+      }
+    ]
+  },
+  "embedding_tokens": 25,
+  "trace_count": 15,
+  "index_products": 2860,
+  "source_version": "a5149aa3d946d8a1ab15a8108f7a54552b70f530284ef37a4e10d120d55e1bba",
+  "temporary_secret_revoked": true,
+  "warehouse_final_state": "STOPPED",
+  "warehouse_elapsed_seconds": 122.91,
+  "estimated_warehouse_cost_inr_pre_tax": 9.1336,
+  "hard_invoice_cap_guaranteed": false
+}

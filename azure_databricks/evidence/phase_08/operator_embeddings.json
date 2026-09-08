@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "model": "system.ai.gte_large_en_v1_5",
+  "products": 2860,
+  "snapshot_version": "a5149aa3d946d8a1ab15a8108f7a54552b70f530284ef37a4e10d120d55e1bba",
+  "ledger": {
+    "attempted_input_bytes": 278966,
+    "successful_tokens": 74542,
+    "requests": 90,
+    "throttles": 0
+  },
+  "warehouse_started": false,
+  "spark_started": false,
+  "estimated_embedding_cost_inr_pre_tax": 6.2166
+}

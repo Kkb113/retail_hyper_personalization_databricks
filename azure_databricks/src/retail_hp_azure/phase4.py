@@ -274,6 +274,7 @@ def inspect_lakehouse(context: CloudContext) -> dict[str, Any]:
     }
     observed: dict[str, set[str]] = {}
     later_phase_objects = {
+        f"{CATALOG}.features.product_embeddings",
         f"{CATALOG}.gold.customer_recommendation_current",
         f"{CATALOG}.gold.customer_recommendation_history",
     }
