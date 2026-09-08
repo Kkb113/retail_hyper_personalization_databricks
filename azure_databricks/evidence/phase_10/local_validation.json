@@ -1,0 +1,20 @@
+{
+  "status": "PASS_LOCAL_ONLY",
+  "python_tests_passed": 271,
+  "frontend_rank_diff_tests_passed": 1,
+  "frontend_chat_tests_passed": 5,
+  "ui_scope": "SINGLE_CHAT_INLINE_RECOMMENDATIONS_COLLAPSED_SOURCES",
+  "frontend_production_build": "PASS",
+  "frontend_dependency_audit": "ZERO_KNOWN_VULNERABILITIES_AT_CHECK_TIME",
+  "ruff": "PASS",
+  "strict_mypy": "PASS",
+  "source_credential_scan": "PASS",
+  "clean_hash_locked_app_wheel_import": "PASS",
+  "disconnected_preview_http": 200,
+  "disconnected_readiness_http": 503,
+  "browser_accessibility_validation": "PENDING",
+  "live_obo_flow_validation": "PENDING",
+  "live_workload_inference": "PENDING",
+  "independent_shutdown_validation": "BLOCKED_PROVIDER_NOT_REGISTERED",
+  "phase10_complete": false
+}

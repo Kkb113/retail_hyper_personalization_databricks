@@ -14,6 +14,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  app-ui:
+    name: phase10-app-ui
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: azure_databricks/app/frontend/package-lock.json
+      - name: Install locked frontend dependencies without install scripts
+        working-directory: azure_databricks/app/frontend
+        run: npm ci --ignore-scripts --no-fund
+      - name: Test and build the Databricks App UI
+        working-directory: azure_databricks/app/frontend
+        run: |
+          npm test
+          npm run build
+          npm audit --audit-level=moderate
+
   runtime-smoke:
     name: runtime-${{ matrix.runtime }}
     runs-on: ubuntu-latest
@@ -41,7 +62,7 @@ jobs:
 
   phase0-safety:
     name: phase0-safety
-    needs: [runtime-smoke]
+    needs: [runtime-smoke, app-ui]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -49,7 +70,8 @@ jobs:
       - name: Require every clean-runtime test to pass
         env:
           RUNTIME_RESULT: ${{ needs.runtime-smoke.result }}
-        run: test "$RUNTIME_RESULT" = success
+          APP_UI_RESULT: ${{ needs.app-ui.result }}
+        run: test "$RUNTIME_RESULT" = success && test "$APP_UI_RESULT" = success
       - name: Check out repository
         uses: actions/checkout@v4
       - name: Set up Python

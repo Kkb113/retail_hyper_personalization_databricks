@@ -223,8 +223,16 @@ def test_phase0_outputs_do_not_commit_raw_ids_credentials_or_personal_email():
         re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE),
     ]
     output_paths = [
-        path for path in [*AZURE_ROOT.rglob("*.json"), *AZURE_ROOT.rglob("*.md")]
-        if not {".databricks", ".build", "build", "dist", "__pycache__"}.intersection(path.parts)
+        path
+        for path in [*AZURE_ROOT.rglob("*.json"), *AZURE_ROOT.rglob("*.md")]
+        if not {
+            ".databricks",
+            ".build",
+            "build",
+            "dist",
+            "node_modules",
+            "__pycache__",
+        }.intersection(path.parts)
         and not path.name.endswith(".local.json")
     ]
     assert output_paths

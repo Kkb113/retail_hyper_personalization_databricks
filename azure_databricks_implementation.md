@@ -1336,6 +1336,15 @@ The cheapest qualifying model passes all hard gates, the agent is fully grounded
 
 ## Phase 10 — Databricks App and wow experiences
 
+**Implementation checkpoint (2026-09-08): IN PROGRESS, not accepted.**
+The chat-first React App and private HTTP/runtime boundary are implemented locally.
+One Medium App definition exists with no active deployment and is STOPPED.
+The actual App identity passed a keyless Luna token/model-metadata test; no inference
+or paid compute was started. Independent shutdown deployment is gated on IT registering
+`Microsoft.Automation` at subscription scope. See
+[Phase 10 runbook](azure_databricks/docs/phase10_app_runbook.md) for all remaining
+live, identity, packaging, browser and cost acceptance gates. Do not start Phase 11 yet.
+
 ### Objective
 
 Deliver a polished native application that makes the model and agent capabilities understandable, credible, and memorable.
@@ -1351,7 +1360,16 @@ Deliver a polished native application that makes the model and agent capabilitie
 - Pinned frontend and backend dependencies.
 - Git/bundle deployment and rollback.[R13][R14]
 
-### Screens
+### Current UI scope — single chat
+
+User clarification supersedes the original multi-screen design below: provide one
+conversation and message box. Show product recommendations inline, keep sources
+collapsed, and use only a small authorized-customer context selector. No sidebar,
+dashboard panels, dedicated what-if studio or feedback form in the current App.
+The agent reuses its existing governed tools; removing tool screens does not expand
+the agent's tool capabilities. Complete-message responses are implemented, not streaming.
+
+### Original screen concepts — reference only, not current acceptance scope
 
 1. **Demo home**
    - Scenario chooser.

@@ -16,7 +16,19 @@ SCAN_ROOTS = (
     ROOT / "azure_databricks_implementation.md",
     ROOT / "pyproject.toml",
 )
-TEXT_SUFFIXES = {"", ".json", ".md", ".py", ".toml", ".yml", ".yaml"}
+TEXT_SUFFIXES = {
+    "",
+    ".json",
+    ".md",
+    ".py",
+    ".toml",
+    ".yml",
+    ".yaml",
+    ".js",
+    ".jsx",
+    ".html",
+    ".css",
+}
 PATTERNS = {
     "Databricks personal access token": re.compile(r"\bdapi[a-zA-Z0-9]{20,}\b"),
     "OpenAI-style API key": re.compile(r"\bsk-[a-zA-Z0-9_-]{20,}\b"),
@@ -34,9 +46,16 @@ def _files():
         elif path.is_dir():
             for candidate in path.rglob("*"):
                 if (
-                    candidate.is_file() and candidate.suffix in TEXT_SUFFIXES
-                    and not {".databricks", ".build", "build", "dist", "__pycache__"}
-                    .intersection(candidate.parts)
+                    candidate.is_file()
+                    and candidate.suffix in TEXT_SUFFIXES
+                    and not {
+                        ".databricks",
+                        ".build",
+                        "build",
+                        "dist",
+                        "node_modules",
+                        "__pycache__",
+                    }.intersection(candidate.parts)
                     and not candidate.name.endswith(".local.json")
                 ):
                     yield candidate

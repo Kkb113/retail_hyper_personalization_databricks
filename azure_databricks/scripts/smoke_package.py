@@ -26,8 +26,12 @@ def main() -> None:
         assert WorkspaceClient is not None  # Import only: no client or network operation.
     if args.runtime == "app":
         from retail_hp_azure.app import create_app
+        from retail_hp_azure.phase10_app import create_app as create_workbench
+        from retail_hp_azure.phase10_runtime import WorkbenchRuntime
 
         assert create_app().title == "Retail HP Azure POC"
+        assert create_workbench().openapi_url is None
+        assert WorkbenchRuntime is not None
     if args.runtime == "agent":
         from retail_hp_azure.phase8 import tool_schemas
         from retail_hp_azure.phase8_backend import DatabricksToolBackend
