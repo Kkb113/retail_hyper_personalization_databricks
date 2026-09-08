@@ -243,7 +243,7 @@ class GovernedTools:
 
             TypeAdapter(Identifier).validate_python(request_id)
             if tool == "record_feedback":
-                require(write_confirmed, "EXPLICIT_WRITE_CONFIRMATION_REQUIRED")
+                require(write_confirmed is True, "EXPLICIT_WRITE_CONFIRMATION_REQUIRED")
                 feedback = FeedbackArgs.model_validate(arguments)
                 # Customer must have received this product in the authoritative batch.
                 eligible, provenance = self.backend.read(
@@ -254,7 +254,15 @@ class GovernedTools:
                     },
                     request_id,
                 )
-                require(bool(eligible), "FEEDBACK_REQUIRES_RECOMMENDED_PRODUCT")
+                require(
+                    0 < len(eligible) <= 20
+                    and any(
+                        Recommendation.model_validate(row).product_id
+                        == feedback.feedback.product_id
+                        for row in eligible
+                    ),
+                    "FEEDBACK_REQUIRES_RECOMMENDED_PRODUCT",
+                )
                 event = build_event(
                     table="feedback",
                     actor=actor,

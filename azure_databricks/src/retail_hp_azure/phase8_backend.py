@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import threading
 from typing import Any
 
 from retail_hp_azure.config import HOST
@@ -44,12 +45,16 @@ class EmbeddingClient:
         require(0 < max_calls <= 64, "Invalid embedding session quota")
         self.client, self.remaining = client, max_calls
         self.tokens = 0
+        self._quota_lock = threading.Lock()
 
     def embed(self, text: str) -> tuple[float, ...]:
         import requests
 
         require(0 < len(text) <= 300, "Embedding query length exceeds bound")
-        require(self.remaining > 0, "Embedding session quota exhausted")
+        # Reserve before network work. Failed calls still consume the session quota.
+        with self._quota_lock:
+            require(self.remaining > 0, "Embedding session quota exhausted")
+            self.remaining -= 1
         endpoint = self.client.serving_endpoints.get(EMBEDDING_ENDPOINT)
         entities = endpoint.config.served_entities if endpoint.config else []
         require(
@@ -58,7 +63,6 @@ class EmbeddingClient:
             and entities[0].foundation_model.name == EMBEDDING_MODEL,
             "Embedding endpoint identity drift",
         )
-        self.remaining -= 1
         response = requests.post(
             f"{HOST}/serving-endpoints/{EMBEDDING_ENDPOINT}/invocations",
             headers=self.client.config.authenticate(),
@@ -72,7 +76,9 @@ class EmbeddingClient:
         )
         body = response.json()
         require(len(body.get("data", [])) == 1, "Embedding response count mismatch")
-        self.tokens += int(body.get("usage", {}).get("total_tokens", 0))
+        require(body["data"][0].get("index") == 0, "Embedding response index mismatch")
+        with self._quota_lock:
+            self.tokens += int(body.get("usage", {}).get("total_tokens", 0))
         return normalize(body["data"][0]["embedding"])
 
 
@@ -153,6 +159,8 @@ class DatabricksToolBackend:
                 },
             )
             ids = set(json.loads(eligible[0]["ids"]))
+            assert self.index is not None
+            require(ids <= self.index.vectors.keys(), "SEMANTIC_INDEX_REBUILD_REQUIRED")
             if not ids:
                 rows = []
             else:
@@ -232,6 +240,7 @@ class DatabricksToolBackend:
             else:
                 rows = self._query(
                     f"SELECT {RECOMMENDATION_COLUMNS} FROM {RECOMMENDATIONS} r "
+                    f"JOIN {PRODUCT_VIEW} p ON r.product_id = p.product_id "
                     "WHERE r.customer_id = :customer AND r.rank <= CAST(:top_n AS INT) "
                     "AND (:product IS NULL OR r.product_id = :product) "
                     "AND r.registered_model_version = '3' ORDER BY r.rank LIMIT 20",  # noqa: S608

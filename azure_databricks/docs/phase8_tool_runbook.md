@@ -27,12 +27,19 @@ finds products; it does not replace personalized recommendation scores.
   either sealed Phase 3 transfer root.
 - Search filters current eligible product IDs before cosine ranking and checks
   returned facts again. Product text is untrusted data, never tool instructions.
+  A missing eligible product in the index fails closed with a rebuild-required
+  error before embedding inference; it is not silently omitted.
 - Feedback requires a server-supplied explicit confirmation, an authorized
   customer, a product present in that customer's batch recommendations, and an
   idempotency key. It uses Phase 7 Delta storage. It does not retrain the model.
 - Every attempt emits a redacted trace through an injected sink. Traces retain
   tool/version, pseudonymous actor, hashed request ID, status and elapsed time;
   no raw prompts, customer IDs, credentials or event payloads are logged.
+
+Review hardening and its offline/live verification boundaries are recorded in
+[the PR follow-up](../evidence/phase_08/review_followup.md). Live artifact verification
+confirmed the Phase 6 repair already put Champion 3 on MLflow 3.16.0; the archived
+3.8.1 requirements must not be reused for a new deployment.
 
 ## Tool surface
 

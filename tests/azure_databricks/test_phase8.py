@@ -149,6 +149,165 @@ def test_feedback_rejects_product_not_recommended():
     backend.write_feedback.assert_not_called()
 
 
+@pytest.mark.parametrize("confirmation", ["false", "true", 1, [True]])
+def test_feedback_rejects_truthy_non_boolean_confirmation(confirmation):
+    tools, backend, _ = suite()
+    with pytest.raises(SafetyError, match="CONFIRMATION"):
+        tools.execute(
+            "record_feedback",
+            FEEDBACK,
+            context=CONTEXT,
+            request_id="request-1",
+            write_confirmed=confirmation,
+        )
+    backend.read.assert_not_called()
+    backend.write_feedback.assert_not_called()
+
+
+def test_feedback_rejects_mismatched_backend_product():
+    tools, backend, _ = suite()
+    backend.read.return_value = ([{**REC, "product_id": "PRO000002"}], PROVENANCE)
+    with pytest.raises(SafetyError, match="RECOMMENDED_PRODUCT"):
+        tools.execute(
+            "record_feedback",
+            FEEDBACK,
+            context=CONTEXT,
+            request_id="request-1",
+            write_confirmed=True,
+        )
+    backend.write_feedback.assert_not_called()
+
+
+def snapshot_fixture():
+    return {
+        "model": EMBEDDING_MODEL,
+        "document_version": DOCUMENT_VERSION,
+        "snapshot_version": "a" * 64,
+        "generated_at": "2026-09-08T00:00:00+00:00",
+        "rows": [{"product_id": "PRO000001", "embedding": [1.0] + [0.0] * 1023}],
+    }
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("snapshot_version", "not-a-version"),
+        ("snapshot_version", None),
+        ("generated_at", "2026-09-08"),
+        ("generated_at", None),
+        ("generated_at", "invalid"),
+    ],
+)
+def test_semantic_snapshot_metadata_fails_closed(field, value):
+    with pytest.raises((SafetyError, ValueError)):
+        SemanticIndex({**snapshot_fixture(), field: value})
+
+
+def test_semantic_index_rejects_bad_ids_and_missing_eligible_products():
+    payload = snapshot_fixture()
+    payload["rows"][0]["product_id"] = "arbitrary-id"
+    with pytest.raises(SafetyError, match="identifier"):
+        SemanticIndex(payload)
+    index = SemanticIndex(snapshot_fixture())
+    with pytest.raises(SafetyError, match="REBUILD_REQUIRED"):
+        index.rank([1.0] + [0.0] * 1023, {"PRO000002"})
+
+
+def test_stale_search_index_fails_before_paid_embedding(monkeypatch):
+    embeddings = Mock()
+    backend = DatabricksToolBackend(
+        Mock(), "warehouse", index=SemanticIndex(snapshot_fixture()), embeddings=embeddings
+    )
+    monkeypatch.setattr(backend, "_query", lambda *_: [{"ids": '["PRO000002"]'}])
+    with pytest.raises(SafetyError, match="REBUILD_REQUIRED"):
+        backend.read("search_products", {"query": "jacket", "top_n": 5}, "request-1")
+    embeddings.embed.assert_not_called()
+
+
+def test_embedding_quota_is_atomic_under_concurrency(monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+
+    from retail_hp_azure.phase8_backend import EmbeddingClient
+
+    client = Mock()
+    entity = Mock()
+    entity.foundation_model.name = EMBEDDING_MODEL
+    client.serving_endpoints.get.return_value.config.served_entities = [entity]
+    response = Mock(status_code=200, content=b"ok")
+    response.json.return_value = {
+        "data": [{"index": 0, "embedding": [1.0] + [0.0] * 1023}],
+        "usage": {"total_tokens": 1},
+    }
+    post = Mock(return_value=response)
+    monkeypatch.setattr("requests.post", post)
+    embeddings = EmbeddingClient(client, max_calls=1)
+
+    def invoke(_):
+        try:
+            embeddings.embed("jacket")
+            return True
+        except SafetyError:
+            return False
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        assert sum(pool.map(invoke, range(8))) == 1
+    assert post.call_count == 1 and embeddings.remaining == 0 and embeddings.tokens == 1
+
+
+def test_batch_query_rechecks_current_product_eligibility(monkeypatch):
+    backend = DatabricksToolBackend(Mock(), "warehouse")
+    calls = []
+    monkeypatch.setattr(
+        backend,
+        "_query",
+        lambda sql, args: calls.append((sql, args))
+        or ([{"source_at": "2025-12-31"}] if "max(" in sql else []),
+    )
+    backend.read("get_recommendations", {"customer_id": "CUS000001", "top_n": 10}, "req")
+    assert "JOIN intellify_databricks_demo.serving.tool_products" in calls[0][0]
+    assert calls[0][1]["customer"] == "CUS000001"
+
+
+@pytest.mark.parametrize("version", ["3.16.0", "3.8.1"])
+def test_runtime_verifier_checks_artifact_without_loading_model(tmp_path, monkeypatch, version):
+    import io
+    import runpy
+
+    root = Path(__file__).resolve().parents[2]
+    verify = runpy.run_path(str(root / "azure_databricks/scripts/phase8_verify_runtime.py"))[
+        "verify"
+    ]
+    directory = tmp_path / "azure_databricks/environments"
+    directory.mkdir(parents=True)
+    (directory / "phase6_model_requirements.txt").write_text("mlflow==3.16.0\n")
+    (tmp_path / "azure_databricks/evidence/phase_08").mkdir(parents=True)
+    context = Mock()
+    context.client.api_client.do.return_value = {
+        "config": {"served_entities": [{"entity_version": "3"}]},
+        "state": {"suspend": "STOPPED"},
+    }
+    context.client.files.download.return_value.contents = io.BytesIO(
+        f"mlflow=={version}\n".encode()
+    )
+    monkeypatch.setitem(verify.__globals__, "CloudContext", lambda: context)
+    monkeypatch.setitem(
+        verify.__globals__, "inspect_registered_model", lambda _: {"aliases": {"champion": 3}}
+    )
+    monkeypatch.setitem(verify.__globals__, "_find_repo_root", lambda: tmp_path)
+    if version == "3.16.0":
+        result = verify()
+        assert result["matches_phase6_requirements"] and not result["model_loaded"]
+        assert not result["compute_started"]
+    else:
+        with pytest.raises(SafetyError, match="requirements differ"):
+            verify()
+    context.client.files.download.assert_called_once_with(
+        "/Models/intellify_databricks_demo/ml/adaptive_recommender/3/requirements.txt"
+    )
+    assert all(call.args[0] == "GET" for call in context.client.api_client.do.call_args_list)
+    context.client.warehouses.start.assert_not_called()
+
+
 def test_output_validation_and_redacted_audit():
     tools, backend, traces = suite()
     backend.read.return_value = ([{**PRODUCT, "credential": "should-not-leak"}], PROVENANCE)
@@ -219,8 +378,8 @@ def test_cosine_normalization_ties_and_eligibility():
         {
             "model": EMBEDDING_MODEL,
             "document_version": DOCUMENT_VERSION,
-            "snapshot_version": "fixture",
-            "generated_at": "2026-09-08",
+            "snapshot_version": "a" * 64,
+            "generated_at": "2026-09-08T00:00:00+00:00",
             "rows": [
                 {"product_id": pid, "embedding": vector}
                 for pid in ["PRO000002", "PRO000001", "PRO000003"]

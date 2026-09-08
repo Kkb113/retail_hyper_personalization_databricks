@@ -76,10 +76,11 @@ for the stored vectors. Small storage charges remain possible.
 
 ## Boundaries for Phase 9
 
-GitHub reports 19 existing MLflow dependency alerts, including six critical.
-See the [security follow-up](security_followup.md). Functional acceptance is not
-security clearance: complete that triage before deploying the agent or approving
-a broader demo. The frozen model runtime was not changed without revalidation.
+GitHub reports 19 alerts against the archived Phase 5 MLflow requirements.
+[Live verification](runtime_security_verification.json) confirms Champion 3 already
+uses MLflow 3.16.0, outside all 19 reported affected ranges. See the corrected
+[security follow-up](security_followup.md). These historical alerts do not require
+another model upgrade; new agent dependencies still need security review.
 
 The tool layer is ready for the next POC phase, not a production security boundary.
 The authenticated App must construct entitlements server-side and provide a

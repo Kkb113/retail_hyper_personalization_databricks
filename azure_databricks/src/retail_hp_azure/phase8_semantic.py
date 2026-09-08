@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import math
+import re
 from collections.abc import Sequence
+from datetime import datetime
 from typing import Any
 
 from retail_hp_azure.safety import require
@@ -20,9 +22,18 @@ VOLUME = "/Volumes/intellify_databricks_demo/serving/semantic_assets"
 
 def product_document(product: dict[str, Any]) -> tuple[str, str]:
     """Only descriptive public attributes invalidate an embedding, not price or stock."""
-    text = " | ".join(str(product.get(column) or "") for column in (
-        "product_name", "category_name", "department_name", "brand_name", "season", "color", "size"
-    ))
+    text = " | ".join(
+        str(product.get(column) or "")
+        for column in (
+            "product_name",
+            "category_name",
+            "department_name",
+            "brand_name",
+            "season",
+            "color",
+            "size",
+        )
+    )
     require(0 < len(text) <= 512, "Product document exceeds bound")
     return text, hashlib.sha256(text.encode()).hexdigest()
 
@@ -46,12 +57,29 @@ class SemanticIndex:
         require(snapshot.get("document_version") == DOCUMENT_VERSION, "Document version mismatch")
         rows = snapshot["rows"]
         require(0 < len(rows) <= MAX_PRODUCTS, "Product index exceeds approved catalog bound")
-        self.version = str(snapshot["snapshot_version"])
-        self.generated_at = str(snapshot["generated_at"])
-        self.vectors = {str(row["product_id"]): normalize(row["embedding"]) for row in rows}
+        self.version = snapshot["snapshot_version"]
+        require(
+            isinstance(self.version, str)
+            and re.fullmatch(r"[0-9a-f]{64}", self.version) is not None,
+            "Invalid snapshot version",
+        )
+        self.generated_at = snapshot["generated_at"]
+        require(isinstance(self.generated_at, str), "Invalid snapshot timestamp")
+        timestamp = datetime.fromisoformat(self.generated_at)
+        require(timestamp.tzinfo is not None, "Snapshot timestamp must include timezone")
+        require(
+            all(
+                isinstance(row["product_id"], str)
+                and re.fullmatch(r"PRO[0-9]{6}", row["product_id"])
+                for row in rows
+            ),
+            "Invalid snapshot product identifier",
+        )
+        self.vectors = {row["product_id"]: normalize(row["embedding"]) for row in rows}
         require(len(self.vectors) == len(rows), "Duplicate product embeddings")
 
     def rank(self, query: Sequence[float], eligible_ids: set[str]) -> list[str]:
+        require(eligible_ids <= self.vectors.keys(), "SEMANTIC_INDEX_REBUILD_REQUIRED")
         normalized = normalize(query)
         scores = [
             (round(math.fsum(a * b for a, b in zip(normalized, vector, strict=True)), 10), pid)

@@ -1,5 +1,28 @@
 # Dependency security follow-up — 2026-09-08
 
+## Correction after live artifact verification
+
+The initial gate below was overly broad: it did not account for the Phase 6
+packaging repair already applied to Champion 3. Read-only download of Champion's
+actual `requirements.txt` now confirms **MLflow 3.16.0**, exactly matching
+`environments/phase6_model_requirements.txt`. The stopped endpoint is configured
+to serve that same version 3. See `runtime_security_verification.json` and the
+existing [Phase 6 review](../phase_06/security_review.md).
+
+All 19 currently reported affected ranges exclude 3.16.0. These observed alerts
+therefore do not require another Champion upgrade or block Phase 9 on their own.
+They remain visible against the archived Phase 5 requirements; no alerts were
+dismissed and no historical pin was rewritten. The local 3.15.0 install attempt
+was cancelled before a model test, since it was unnecessary and older than the
+already validated runtime. No Azure compute was started.
+
+This is scoped triage, not a claim that all dependencies or managed platform
+components are vulnerability-free. New Phase 9 dependencies still require their
+own security and compatibility checks. The original caution is retained below
+as historical context, superseded by this verification.
+
+## Original caution (superseded where it implies Champion still needs upgrading)
+
 GitHub reported 19 open Dependabot alerts during the Phase 8 push: six critical,
 eight high, four medium and one low. All point to the historical/frozen
 `azure_databricks/environments/phase5_model_requirements.txt` pin `mlflow==3.8.1`.
