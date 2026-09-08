@@ -80,7 +80,7 @@ Phase 9 adds the bounded MLflow retail agent and evaluation harness; see the
 [acceptance evidence](azure_databricks/evidence/phase_09/README.md).
 The authenticated App is Phase 10 work; no always-on agent deployment is created in Phase 9.
 
-Phase 10 is now **in progress**, not live-ready: a local React workbench and guarded
+Phase 10 is now **in progress**, not live-ready: a local chat-first React App and guarded
 API are implemented, and the native Medium App is created but **STOPPED with no
 deployment**. Keyless App-principal access to Luna metadata passed without inference.
 IT must register `Microsoft.Automation` before the independent shutdown controller

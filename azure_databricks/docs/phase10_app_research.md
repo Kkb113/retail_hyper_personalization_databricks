@@ -32,7 +32,13 @@ Reviewed 2026-09-08. Findings below distinguish documentation from actual worksp
 
 ## UI scope
 
-The Sites-building skill informed the cohesive workbench layout, responsive states and
+The user clarified that the App should be a simple conversation, not an eight-view workbench.
+The UI now has a transcript and composer, inline product cards, collapsed sources and a
+minimal authorized-customer selector. Existing protected backend tools remain available;
+separate dashboards, filters and feedback forms are not part of this chat UI. Responses
+arrive as complete messages, not token streaming. No Azure resource change is required.
+
+The Sites-building skill informed the focused chat layout, responsive states and
 local preview loop. Azure Databricks hosting and existing Delta persistence override
 Sites-specific hosting/database defaults. No Cloudflare, D1, R2, Sites hosting or speculative
 WebMCP tools were added. No decorative/generated images are necessary for this operator UI.
