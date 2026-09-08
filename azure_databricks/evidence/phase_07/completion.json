@@ -1,0 +1,50 @@
+{
+  "version": "azure_phase7_completion_v1",
+  "status": "PASS",
+  "scope": "SYNTHETIC_POC_SINGLE_WRITER",
+  "selected_store": "delta_ephemeral_hybrid",
+  "lakebase_created": false,
+  "new_azure_resources": 0,
+  "operational_table_count": 8,
+  "feedback_export_table_count": 1,
+  "all_tables_append_only": true,
+  "all_tables_owned_by_project_admin_group": true,
+  "authenticated_non_admin_write": "PASS",
+  "idempotent_feedback_replay": "PASS",
+  "cross_actor_isolation": "PASS",
+  "raw_actor_persisted": false,
+  "temporary_oauth_secret_revoked": true,
+  "manual_export_job": {
+    "count": 1,
+    "schedule": null,
+    "max_retries": 0,
+    "timeout_seconds": 180,
+    "active_runs": 0,
+    "final_export_pass": true,
+    "second_pass_changes": 0
+  },
+  "local_gates": {
+    "pytest": "PASS_175",
+    "ruff": "PASS",
+    "mypy_strict": "PASS_24_SOURCE_FILES",
+    "credential_scan": "PASS",
+    "wheel_build": "PASS",
+    "clean_runtime_smokes": "PASS_4"
+  },
+  "cost": {
+    "currency": "INR",
+    "phase_ceiling": 250.0,
+    "cumulative_elapsed_estimate_pre_tax": 29.5774,
+    "hard_invoice_cap_guaranteed": false
+  },
+  "final_compute": {
+    "clusters": 0,
+    "apps": 0,
+    "sql_warehouse": "STOPPED",
+    "model_endpoint": "STOPPED",
+    "active_export_runs": 0
+  },
+  "production_oltp_ready": false,
+  "physical_retention_automated": false,
+  "next_phase": 8
+}

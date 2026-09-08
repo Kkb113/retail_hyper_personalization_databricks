@@ -1,0 +1,19 @@
+{
+  "active_export_runs": 0,
+  "cloud_mutations_performed": false,
+  "compute_started": false,
+  "expected_table_count": 9,
+  "export_job_count": 0,
+  "export_job_schedule": null,
+  "export_job_timeout_seconds": null,
+  "store_decision": {
+    "continuous_sync": false,
+    "fallback_read_only_supported": true,
+    "lakebase_project_count": 0,
+    "new_paid_resource_required": false,
+    "selected_store": "delta_ephemeral_hybrid"
+  },
+  "tables": [],
+  "version": "azure_phase7_inspection_v1",
+  "warehouse_state": "STOPPED"
+}
