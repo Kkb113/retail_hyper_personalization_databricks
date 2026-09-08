@@ -89,7 +89,8 @@ Zero clusters and persistent jobs remain, and the SQL warehouse is **STOPPED**.
 
 Phase 5 is complete. Unity Catalog contains one functional composite model
 version at `intellify_databricks_demo.ml.adaptive_recommender`. It is owned by
-`retail_hp_admins`, aliased **Candidate**, and deliberately has no Champion alias.
+`retail_hp_admins`; Phase 6 subsequently promoted validated version 3 to
+**Champion** for the synthetic POC.
 Exact golden parity, inventory validity, signature/example packaging and a
 three-environment compatibility matrix pass. The frozen environment is recorded
 in [phase5_model_requirements.txt](environments/phase5_model_requirements.txt).
@@ -98,6 +99,27 @@ No endpoint, app, schedule, GPU, LLM or Azure resource was created. All bounded
 serverless attempts terminated; zero clusters/jobs remain and the warehouse is
 **STOPPED**. See [Phase 5 evidence](evidence/phase_05/README.md). Do not rerun the
 registration job or promote Champion without a new phase authorization.
+
+## Phase 6 batch and real-time serving
+
+Phase 6 is complete for the explicit 100-customer demo cohort. The governed batch
+path contains 1,000 recommendations and matches Champion v3 endpoint output exactly.
+The custom Small CPU endpoint scales to zero and is currently **STOPPED**. The batch
+job is manual-only and has no active or scheduled run. Full 5,000-customer scoring
+and production approval remain out of scope. See [Phase 6 evidence](evidence/phase_06/README.md).
+
+## Phase 7 operational state and feedback
+
+Phase 7 is complete using the cost-minimal Delta/ephemeral fallback. Eight
+append-only operational tables, one append-only monitoring export, and one
+manual-only feedback export job are present. Authenticated non-admin writes,
+idempotent replay, cross-user isolation, pseudonymization, export idempotency, and
+read-only failure behavior pass. Lakebase was not created, the export job is
+unscheduled, and both the warehouse and model endpoint are **STOPPED**.
+
+This fallback is a low-volume single-writer POC design, not production OLTP. See
+[Phase 7 evidence](evidence/phase_07/README.md) and the
+[operational contract](contracts/phase7_operational_state_contract.md).
 
 The runtime lives only in `src/retail_hp_azure`. No legacy code is imported.
 The wheel contains configuration/preflight helpers and a local app skeleton;

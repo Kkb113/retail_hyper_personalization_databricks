@@ -5,8 +5,8 @@
 | Field | Value |
 |---|---|
 | Document status | Implementation source of truth |
-| Initial delivery status | Phases 0–4 complete; governed Lakehouse validated; platform stopped |
-| Last verified | 2026-09-07 |
+| Initial delivery status | Phases 0–7 complete for synthetic POC; platform stopped |
+| Last verified | 2026-09-08 |
 | Azure resource group boundary | **Databricks** only |
 | Azure Databricks workspace | **intellify-databricks-demo** |
 | Azure region | **West US** |
@@ -470,9 +470,9 @@ The workspace already exposes governed foundation endpoints and managed storage.
 | 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Complete; warehouse stopped; workload identity verified |
 | 3 | Immutable data and model transfer | Complete, hash-verified transfer package in Unity Catalog volumes | Complete |
 | 4 | Lakehouse and feature foundation | Bronze, Silver, Feature, Gold, lineage, and data-quality gates | Complete |
-| 5 | Functional MLflow recommender | Real composite inference package with Azure parity evidence | Complete; Candidate only; Champion HOLD |
-| 6 | Batch and real-time recommendation serving | Fast known-user path plus dynamic cold-start/what-if path | Not started |
-| 7 | Operational state and feedback | Low-latency sessions, feedback, notifications, and idempotency | Not started |
+| 5 | Functional MLflow recommender | Real composite inference package with Azure parity evidence | Complete; Champion v3 after Phase 6 validation |
+| 6 | Batch and real-time recommendation serving | Fast known-user path plus dynamic cold-start/what-if path | Complete for 100-customer demo cohort |
+| 7 | Operational state and feedback | Low-latency sessions, feedback, notifications, and idempotency | Complete using Delta/ephemeral fallback |
 | 8 | Semantic intelligence and governed tools | Product semantics and deterministic, permission-aware tool layer | Not started |
 | 9 | Agent implementation and evaluation | Grounded retail concierge with model bake-off and safeguards | Not started |
 | 10 | Databricks App and wow experiences | Polished end-to-end user experience | Not started |
@@ -2135,22 +2135,27 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-**Phases 0–6 are complete for the explicit synthetic POC scope.** The governed
-transfer remains sealed. Phase 6 adds history/current recommendation tables and
-a governed serving view to the Phase 4 foundation. Champion is registered model
-version 3, with stable ranking ties, matching batch/endpoint outputs for all
-1,000 recommendations in the representative 100-customer cohort, and MLflow
-3.16.0 packaging. This is not full-population or production approval.
+**Phases 0–7 are complete for the explicit synthetic POC scope.** Phase 7 selected
+the documented Delta/ephemeral fallback after live discovery found no Lakebase
+project and the cost policy kept Lakebase disabled. Eight append-only `agent`
+tables, one append-only monitoring export, and one manual-only export job now
+exist. The existing non-admin runtime identity passed authenticated write,
+idempotent replay, actor-isolation, pseudonymization, and export tests.
 
-Warm endpoint p95 is 3.236 seconds, warm SQL read is 4.297 seconds, and explicit
-cold resume passed in 99.062 seconds. The endpoint and warehouse are stopped;
-there are zero clusters and active job runs, and one unscheduled batch job
-definition. Native scale-to-zero is enabled but its 30-minute idle timer was not
-separately timed. Production remains gated by a future holdout.
+The export job has no schedule, no retries, a 180-second timeout, and zero active
+runs. The SQL warehouse and Champion v3 endpoint are stopped; there are zero
+clusters and apps. No Lakebase or Azure resource was created. Phase 7 elapsed
+compute was estimated at INR29.5774 pre-tax across acceptance and two bounded
+export validations. The initial guarded plan was INR178.9965, and the remedial run
+was admitted at INR107.1689 including prior elapsed estimates; both stayed below
+the INR250 ceiling. These estimates are not an Azure invoice cap; billing may lag
+and small managed-storage charges remain.
 
-The user approved an INR400 Phase 6 validation allowance; the guarded reservation
-is INR399.2408, not an invoice guarantee. Reported Azure costs may lag, and
-broad billing-table/managed-resource-group coverage is not verified. Review the
-Phase 6 evidence and reconcile costs before new paid work. **Phase 7 — Operational
-state and feedback** is the next roadmap step and requires a new implementation
-request; no Phase 7 resources or background workloads were started here.
+The Delta fallback is intentionally a low-volume, single-writer POC contract, not
+a production OLTP claim. Logical expiry is enforced in reads; physical deletion is
+not scheduled on append-only tables. The future Databricks App must receive its own
+identity grants when created.
+
+**Phase 8 — Semantic intelligence and governed tool layer** is the next roadmap
+step and requires a new implementation request. No vector endpoint, LLM capacity,
+agent, App, or new Azure resource was started in Phase 7.

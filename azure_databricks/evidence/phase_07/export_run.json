@@ -1,0 +1,27 @@
+{
+  "active_runs": 0,
+  "budget": {
+    "amount_inr": 12000,
+    "current_spend_inr": 0.0017598664296,
+    "notification_count": 5
+  },
+  "elapsed_seconds": 61.26,
+  "estimated_elapsed_cost_inr_pre_tax": 12.2285,
+  "hard_invoice_cap_guaranteed": false,
+  "planning_ceiling_inr": 250.0,
+  "run_identifier_recorded": false,
+  "schedule": null,
+  "status": "PASS",
+  "validation": {
+    "idempotent": true,
+    "rows_after": 1,
+    "rows_before": 1,
+    "schedule_created": false,
+    "second_pass_changes": 0,
+    "source": "agent.feedback",
+    "status": "PASS",
+    "target": "monitoring.feedback_event_export"
+  },
+  "version": "azure_phase7_export_run_v1",
+  "warehouse_state": "STOPPED"
+}

@@ -27,7 +27,9 @@
 | 3 | Approximately 13 MiB volume transfer, four terminated one-time serverless validations, and two seals | Cumulative INR 103.3578 estimated pre-tax; INR 206.7156 with 2x guard | Complete; warehouse STOPPED; zero clusters/jobs | evidence/phase_03 |
 | 4 | 50 governed Lakehouse objects; four terminated one-time serverless builds; one bounded read-only SQL validation | Cumulative INR 161.1619 estimated pre-tax | Complete; warehouse STOPPED; zero clusters/jobs | evidence/phase_04 |
 | 5 | Functional composite MLflow Candidate; six bounded serverless attempts | Cumulative INR 198.1409 estimated pre-tax | Complete; Candidate only; warehouse STOPPED; zero clusters/jobs | evidence/phase_05 |
-| 6+ | Batch/real-time serving, agent and app work | Not yet authorized | Blocked | Separate phase approval required |
+| 6 | Batch and real-time serving with Champion v3 | INR 399.2408 guarded reservation; actual billing not reconciled | Complete for demo100; endpoint and warehouse STOPPED | evidence/phase_06 |
+| 7 | Nine append-only Delta tables, authenticated state test, two bounded export validations | INR 29.5774 cumulative elapsed estimate; INR 178.9965 initial guarded plan | Complete; no Lakebase; no active/scheduled run; compute STOPPED | evidence/phase_07 |
+| 8+ | Semantic tools, agent and app work | Not yet authorized | Blocked | Separate phase approval required |
 
 Phase 2 created no new Azure resource, but it created one Databricks SQL warehouse
 inside the existing workspace. The warehouse is 2X-Small serverless, one cluster,
@@ -80,6 +82,24 @@ locally without compute; its owner was repaired through the control plane. No
 serving endpoint, schedule, GPU, app, LLM, vector index or Azure resource was
 created. Metered billing may lag and this estimate is not a hard invoice cap.
 
+Phase 6 used the owner-approved INR 400 validation allowance for bounded batch and
+custom-serving validation. The recorded guarded reservation was INR 399.2408; this
+is not actual metered spend or an invoice cap. Champion v3 passed exact batch/live
+parity for the 100-customer demo cohort. The endpoint and warehouse were explicitly
+stopped, the job remained unscheduled, and no GPU or new Azure resource was added.
+
+Phase 7 created no Azure resource and no Lakebase project. The existing one-minute
+auto-stop warehouse ran for 80.49 seconds during authenticated acceptance, estimated
+at INR 5.9811 pre-tax. One 56.95-second serverless export run was estimated at INR
+11.3678 pre-tax. A final retention-aware export validation ran for 61.26 seconds,
+estimated at INR 12.2285. The combined elapsed estimate is INR 29.5774. The initial
+conservative plan was INR 178.9965; the remedial run was admitted at INR 107.1689
+including prior elapsed estimates and a 2.5x timeout guard, both under the INR 250
+ceiling. The export job is unscheduled and
+inactive, and the warehouse/model endpoint are stopped. Nine small managed Delta
+tables and workspace metadata can still incur minor storage/control-plane charges.
+Billing lag, tax, discounts, and managed-resource-group coverage remain unresolved.
+
 ## Controls required for later phases
 
 - Zero all-purpose clusters.
@@ -101,10 +121,10 @@ created. Metered billing may lag and this estimate is not a hard invoice cap.
 - Zero vector-search endpoints by default.
 - Pay-per-token model calls with token and rate limits.
 
-## Remaining work before Phase 6
+## Remaining controls for later phases
 
-The budget, warehouse controls, transfer, Lakehouse and functional Candidate are
-complete. Before any Phase 6 compute:
+The budget, warehouse controls, transfer, Lakehouse, Champion serving, and
+operational-state fallback are complete. Before later paid compute:
 
 1. Confirm alert email delivery when Azure evaluates a real threshold.
 2. Add service-specific timeout/scale-to-zero tests only when those services are created.

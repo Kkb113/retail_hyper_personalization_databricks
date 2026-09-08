@@ -1,0 +1,114 @@
+{
+  "acceptance_ready": true,
+  "active_export_runs": 0,
+  "app_count": 0,
+  "captured_at": "2026-09-08T05:16:37.471362+00:00",
+  "cloud_mutations_performed": false,
+  "cluster_count": 0,
+  "compute_started": false,
+  "expected_table_count": 9,
+  "export_job_count": 1,
+  "export_job_max_retries": 0,
+  "export_job_schedule": null,
+  "export_job_timeout_seconds": 180,
+  "model_endpoint_state": "STOPPED",
+  "status": "PASS",
+  "store_decision": {
+    "continuous_sync": false,
+    "fallback_read_only_supported": true,
+    "lakebase_project_count": 0,
+    "new_paid_resource_required": false,
+    "selected_store": "delta_ephemeral_hybrid"
+  },
+  "tables": [
+    {
+      "append_only": true,
+      "name": "app_audit_event",
+      "owner": "retail_hp_admins",
+      "runtime_privileges": [
+        "MODIFY",
+        "SELECT"
+      ],
+      "schema": "agent"
+    },
+    {
+      "append_only": true,
+      "name": "conversation",
+      "owner": "retail_hp_admins",
+      "runtime_privileges": [
+        "MODIFY",
+        "SELECT"
+      ],
+      "schema": "agent"
+    },
+    {
+      "append_only": true,
+      "name": "feedback",
+      "owner": "retail_hp_admins",
+      "runtime_privileges": [
+        "MODIFY",
+        "SELECT"
+      ],
+      "schema": "agent"
+    },
+    {
+      "append_only": true,
+      "name": "idempotency_key",
+      "owner": "retail_hp_admins",
+      "runtime_privileges": [
+        "MODIFY",
+        "SELECT"
+      ],
+      "schema": "agent"
+    },
+    {
+      "append_only": true,
+      "name": "message",
+      "owner": "retail_hp_admins",
+      "runtime_privileges": [
+        "MODIFY",
+        "SELECT"
+      ],
+      "schema": "agent"
+    },
+    {
+      "append_only": true,
+      "name": "notification",
+      "owner": "retail_hp_admins",
+      "runtime_privileges": [
+        "MODIFY",
+        "SELECT"
+      ],
+      "schema": "agent"
+    },
+    {
+      "append_only": true,
+      "name": "recommendation_impression",
+      "owner": "retail_hp_admins",
+      "runtime_privileges": [
+        "MODIFY",
+        "SELECT"
+      ],
+      "schema": "agent"
+    },
+    {
+      "append_only": true,
+      "name": "scenario_session",
+      "owner": "retail_hp_admins",
+      "runtime_privileges": [
+        "MODIFY",
+        "SELECT"
+      ],
+      "schema": "agent"
+    },
+    {
+      "append_only": true,
+      "name": "feedback_event_export",
+      "owner": "retail_hp_admins",
+      "runtime_privileges": [],
+      "schema": "monitoring"
+    }
+  ],
+  "version": "azure_phase7_inspection_v1",
+  "warehouse_state": "STOPPED"
+}

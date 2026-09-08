@@ -1,0 +1,45 @@
+{
+  "version": "azure_phase7_validation_attempts_v1",
+  "phase_ceiling_inr": 250.0,
+  "hard_invoice_cap_guaranteed": false,
+  "attempts": [
+    {
+      "stage": "initial_job_definition_apply",
+      "result": "FAILED_BEFORE_COMPUTE",
+      "reason": "typed SDK job serialization mismatch",
+      "estimated_compute_cost_inr_pre_tax": 0.0
+    },
+    {
+      "stage": "authenticated_delta_acceptance",
+      "result": "PASS",
+      "elapsed_seconds": 80.49,
+      "estimated_compute_cost_inr_pre_tax": 5.9811
+    },
+    {
+      "stage": "initial_export_validation",
+      "result": "PASS_SUPERSEDED_BY_RETENTION_AWARE_SOURCE_FILTER",
+      "elapsed_seconds": 56.95,
+      "estimated_compute_cost_inr_pre_tax": 11.3678
+    },
+    {
+      "stage": "final_retention_aware_export_validation",
+      "result": "PASS",
+      "elapsed_seconds": 61.26,
+      "estimated_compute_cost_inr_pre_tax": 12.2285
+    }
+  ],
+  "cumulative_elapsed_estimate_inr_pre_tax": 29.5774,
+  "remedial_run_admission": {
+    "prior_elapsed_estimate_inr_pre_tax": 17.3489,
+    "single_export_timeout_base_inr_pre_tax": 35.928,
+    "risk_multiplier": 2.5,
+    "prior_plus_guarded_export_inr_pre_tax": 107.1689,
+    "within_phase_ceiling": true
+  },
+  "final_state": {
+    "warehouse": "STOPPED",
+    "model_endpoint": "STOPPED",
+    "active_export_runs": 0,
+    "export_schedule": null
+  }
+}
