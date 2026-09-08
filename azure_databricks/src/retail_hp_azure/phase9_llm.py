@@ -52,7 +52,7 @@ class DatabricksPlanner:
         import requests
 
         url, headers = self.connection()
-        body = {
+        body: dict[str, Any] = {
             "messages": [
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": json.dumps({"server_state": state, "request": text})},
