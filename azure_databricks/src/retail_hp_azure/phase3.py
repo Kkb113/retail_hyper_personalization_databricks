@@ -408,7 +408,10 @@ def inspect_remote(context: CloudContext) -> dict[str, Any]:
     control_drift += int(runtime_remote is not None and runtime_remote != runtime_expected)
     return {
         "version": "azure_phase3_remote_inspection_v1",
-        "status": "PASS" if drift == 0 and control_drift == 0 else "FAIL",
+        "status": "PASS" if (
+            drift == 0 and control_drift == 0 and missing == 0
+            and control_manifest_matching == len(ROOTS)
+        ) else "FAIL",
         "scope_verified": True,
         "expected_destination_count": 46,
         "present_count": present,

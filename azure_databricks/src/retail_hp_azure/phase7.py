@@ -104,6 +104,13 @@ class OperationalEvent(BaseModel):
     created_at: datetime
     expires_at: datetime
 
+    @field_validator("created_at", "expires_at")
+    @classmethod
+    def validate_timestamp(cls, value: datetime) -> datetime:
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ValueError("event timestamps must be timezone-aware")
+        return value.astimezone(UTC)
+
     @field_validator("event_id", "idempotency_key", "correlation_id")
     @classmethod
     def validate_safe_key(cls, value: str) -> str:
@@ -197,10 +204,10 @@ class InMemoryOperationalStore:
                     self._payload_hashes[event.event_id] == digest,
                     "Idempotency key was reused with a different payload",
                 )
-                return WriteResult(event=current, replayed=True)
-            self._events[event.event_id] = event
+                return WriteResult(event=current.model_copy(deep=True), replayed=True)
+            self._events[event.event_id] = event.model_copy(deep=True)
             self._payload_hashes[event.event_id] = digest
-            return WriteResult(event=event, replayed=False)
+            return WriteResult(event=event.model_copy(deep=True), replayed=False)
 
     def list_for_actor(
         self,
@@ -216,7 +223,7 @@ class InMemoryOperationalStore:
         require(moment.tzinfo is not None, "Read time must be timezone-aware")
         with self._lock:
             return tuple(
-                event
+                event.model_copy(deep=True)
                 for event in self._events.values()
                 if event.table == table
                 and event.expires_at > moment
