@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "registered_version": "2",
+  "first_four_request_seconds": 3.704,
+  "azure_batch_endpoint_exact_parity": false,
+  "disposition": "Stopped endpoint; deterministic tie handling prepared for version 3"
+}

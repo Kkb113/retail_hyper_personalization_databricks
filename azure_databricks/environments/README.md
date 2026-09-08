@@ -2,14 +2,17 @@
 
 These are **Phase 1 foundation locks**, not a claim that the frozen recommender
 already runs in Databricks. Python 3.12 is the supported local foundation version.
-No MLflow, Spark or model-loading dependency is required yet. Phase 5 must add
-and test the actual composite-model runtime against the frozen artifacts before
-logging or serving it. Installing a serving lock does not enable serving.
+The foundation locks intentionally exclude the scientific model runtime.
+The registered version 2 uses `phase6_model_requirements.txt`, independently
+validated by a real serving-container build. Installing a foundation serving
+lock alone does not provide the model or network client dependencies.
+`phase5_model_requirements.txt` is historical evidence: its MLflow 3.8.1 and
+pandas 3.0.3 pins conflict under clean resolution. Do not deploy that file.
 
 | Lock | Current purpose |
 | --- | --- |
 | `jobs.lock` | Configuration and Databricks SDK for future job tooling |
-| `serving.lock` | Configuration-only foundation; inference is not implemented |
+| `serving.lock` | Configuration-only foundation; registered inference has its own environment |
 | `agent.lock` | Configuration and SDK; no LLM selection or calls |
 | `app.lock` | Local FastAPI/uvicorn health skeleton; no cloud app deployment |
 

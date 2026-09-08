@@ -1,0 +1,10 @@
+{
+  "status": "SUBMITTED",
+  "version": 3,
+  "approved_phase_allowance_inr": 400,
+  "prior_and_batch_reserve_inr": 300,
+  "endpoint_reserve_inr": 99.24080000000001,
+  "launches_reserved": 2,
+  "hard_invoice_cap_guaranteed": false,
+  "started_epoch": 1788829526.801972
+}

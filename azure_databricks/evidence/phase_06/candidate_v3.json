@@ -1,0 +1,8 @@
+{
+  "status": "CANDIDATE_REGISTERED",
+  "version": 3,
+  "runtime_version": "azure_functional_recommender_v2_deterministic_ties",
+  "trained_weights_changed": false,
+  "production_approved": false,
+  "live_tests_required_before_champion": true
+}
