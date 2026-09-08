@@ -350,7 +350,8 @@ def test_cli_rejects_deploy_and_redacts_invalid_config(sandbox, monkeypatch, cap
 
 def test_ci_cannot_skip_runtime_gate_and_still_report_success():
     workflow = (ROOT / ".github/workflows/azure-phase0-ci.yml").read_text()
-    assert "needs: [runtime-smoke]" in workflow
+    assert "needs: [runtime-smoke, app-ui]" in workflow
+    assert 'test "$APP_UI_RESULT" = success' in workflow
     assert "if: ${{ always() }}" in workflow
     assert 'test "$RUNTIME_RESULT" = success' in workflow
 

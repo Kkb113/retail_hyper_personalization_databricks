@@ -35,6 +35,7 @@
 .build/
 build/
 dist/
+node_modules/
 *.egg-info/
 .mypy_cache/
 *.local.json

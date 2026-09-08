@@ -1,0 +1,23 @@
+{
+  "captured_at": "2026-09-08T11:39:09.212505+00:00",
+  "status": "LIVE_DEPLOYMENT_BLOCKED",
+  "app": {
+    "name": "retail-hp-poc-app",
+    "exists": true,
+    "compute_state": "STOPPED",
+    "size": "MEDIUM",
+    "dedicated_identity": true,
+    "active_deployment": false
+  },
+  "project_warehouse_states": ["STOPPED"],
+  "project_recommender_state": "STOPPED",
+  "active_jobs": 0,
+  "clusters": 0,
+  "credential_isolated_to_approved_workspace": true,
+  "app_acl_creator_and_workspace_admins_only": true,
+  "automation_provider_registration": "NotRegistered",
+  "phase10_inference_calls": 0,
+  "phase10_paid_compute_starts": 0,
+  "invoice_cap_guaranteed": false,
+  "managed_resource_group_cost_coverage": "NOT_VERIFIED_NO_OUT_OF_SCOPE_WRITES"
+}

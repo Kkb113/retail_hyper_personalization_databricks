@@ -1336,6 +1336,15 @@ The cheapest qualifying model passes all hard gates, the agent is fully grounded
 
 ## Phase 10 — Databricks App and wow experiences
 
+**Implementation checkpoint (2026-09-08): IN PROGRESS, not accepted.**
+The React workbench and private HTTP/runtime boundary are implemented locally.
+One Medium App definition exists with no active deployment and is STOPPED.
+The actual App identity passed a keyless Luna token/model-metadata test; no inference
+or paid compute was started. Independent shutdown deployment is gated on IT registering
+`Microsoft.Automation` at subscription scope. See
+[Phase 10 runbook](azure_databricks/docs/phase10_app_runbook.md) for all remaining
+live, identity, packaging, browser and cost acceptance gates. Do not start Phase 11 yet.
+
 ### Objective
 
 Deliver a polished native application that makes the model and agent capabilities understandable, credible, and memorable.

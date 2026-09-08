@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "identity": "actual_app_service_principal",
+  "credential": "retail_hp_luna_app",
+  "compute_started": false,
+  "inference_calls": 0,
+  "provider_http_status": 200,
+  "temporary_oauth_secret_revoked": true,
+  "acceptance_scope": "temporary_workload_token_exchange_and_model_metadata_only",
+  "inference_acceptance": "PENDING"
+}
