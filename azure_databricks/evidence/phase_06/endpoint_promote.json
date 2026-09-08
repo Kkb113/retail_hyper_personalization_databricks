@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "champion_version": 1,
+  "requests": 104,
+  "rows": 1040,
+  "registered_local_exact_parity": true,
+  "inventory_valid_pct": 100,
+  "production_approved": false,
+  "poc_status": "APPROVED_SYNTHETIC_ONLY"
+}

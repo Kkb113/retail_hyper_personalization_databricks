@@ -1,0 +1,10 @@
+# Registered model versions 2/3: packaging repair; version 3 stabilizes ranking ties.
+# Resolution checked locally; serving-container build passed in Azure.
+mlflow==3.16.0
+joblib==1.5.3
+numpy==2.5.1
+pandas==3.0.3
+pyarrow==24.0.0
+scikit-learn==1.9.0
+scipy==1.18.1
+xgboost==3.3.0

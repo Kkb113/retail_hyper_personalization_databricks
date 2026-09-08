@@ -1,0 +1,102 @@
+{
+  "captured_at": "2026-09-08T01:27:36.026907+00:00",
+  "inventory": {
+    "scope_verified": true,
+    "cloud_mutations_performed": false,
+    "azure_resource_types": [
+      "Microsoft.Databricks/workspaces"
+    ],
+    "cluster_count": 0,
+    "warehouse_count": 1,
+    "project_warehouses": [
+      {
+        "name": "retail-hp-poc-sql",
+        "state": "STOPPED"
+      }
+    ],
+    "job_count": 1,
+    "app_count": 0,
+    "serving_endpoint_count": 23,
+    "project_serving_endpoint_count": 1,
+    "note": "Pre-existing foundation endpoints are not invoked; counts are not billed usage",
+    "managed_resource_group_cost_coverage": "NOT_VERIFIED; no managed-group writes permitted"
+  },
+  "registry": {
+    "version": "azure_phase5_registry_inspection_v1",
+    "status": "PASS",
+    "registered_model_count": 1,
+    "owner": "retail_hp_admins",
+    "owner_valid": true,
+    "model_version_count": 3,
+    "aliases": {
+      "candidate": 3,
+      "champion": 3
+    },
+    "candidate_present": true,
+    "champion_present": true,
+    "compute_started": false,
+    "identifiers_recorded": false
+  },
+  "budget": {
+    "amount_inr": 12000,
+    "current_spend_inr": 0.0017598664296,
+    "notification_count": 5
+  },
+  "endpoint_state": {
+    "ready": "NOT_READY",
+    "config_update": "NOT_UPDATING",
+    "suspend": "STOPPED",
+    "system_update_failure": false
+  },
+  "project_endpoint_permissions": {
+    "retail_hp_engineers": [
+      "CAN_QUERY"
+    ],
+    "retail_hp_app_runtime": [
+      "CAN_QUERY"
+    ],
+    "retail_hp_admins": [
+      "CAN_MANAGE"
+    ]
+  },
+  "endpoint_config": {
+    "version": "3",
+    "scale_to_zero": true
+  },
+  "active_job_runs": 0,
+  "batch_runs": [
+    {
+      "result": "TIMEDOUT",
+      "duration_seconds": 619.74
+    },
+    {
+      "result": "SUCCESS",
+      "duration_seconds": 163.102
+    },
+    {
+      "result": "SUCCESS",
+      "duration_seconds": 167.404
+    }
+  ],
+  "job_schedule": null,
+  "job_timeout_seconds": 180,
+  "tables": [
+    {
+      "name": "gold.customer_recommendation_history",
+      "owner": "retail_hp_admins",
+      "type": "MANAGED"
+    },
+    {
+      "name": "gold.customer_recommendation_current",
+      "owner": "retail_hp_admins",
+      "type": "MANAGED"
+    },
+    {
+      "name": "serving.customer_recommendations",
+      "owner": "retail_hp_admins",
+      "type": "VIEW"
+    }
+  ],
+  "hard_invoice_cap_guaranteed": false,
+  "shutdown_verified": true
+}

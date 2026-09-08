@@ -1,0 +1,8 @@
+{
+  "status": "SUBMITTED",
+  "replaced_never_ready_version": 1,
+  "new_version": 2,
+  "reason": "Proven MLflow/pandas resolver conflict; update API refused while pending",
+  "models_and_source_data_deleted": false,
+  "creation_epoch": 1788827691.2405086
+}

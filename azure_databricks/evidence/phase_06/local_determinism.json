@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "runtime_version": "azure_functional_recommender_v2_deterministic_ties",
+  "customers": 100,
+  "rows_per_test": 1000,
+  "checks": [
+    {
+      "threads": 1,
+      "elapsed_seconds": 33.969,
+      "sha256": "2098964bb78c3e0b46c729b7c9ae9862e14782128b3104502afeb9a7652d3a5d"
+    },
+    {
+      "threads": 4,
+      "elapsed_seconds": 70.172,
+      "sha256": "2098964bb78c3e0b46c729b7c9ae9862e14782128b3104502afeb9a7652d3a5d"
+    }
+  ],
+  "azure_compute_started": false,
+  "azure_parity_retest_required": true,
+  "deployed": false
+}
