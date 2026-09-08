@@ -76,6 +76,11 @@ for the stored vectors. Small storage charges remain possible.
 
 ## Boundaries for Phase 9
 
+GitHub reports 19 existing MLflow dependency alerts, including six critical.
+See the [security follow-up](security_followup.md). Functional acceptance is not
+security clearance: complete that triage before deploying the agent or approving
+a broader demo. The frozen model runtime was not changed without revalidation.
+
 The tool layer is ready for the next POC phase, not a production security boundary.
 The authenticated App must construct entitlements server-side and provide a
 stable protected actor secret and a trusted trace sink. Current checks are
