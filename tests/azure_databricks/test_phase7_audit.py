@@ -2,6 +2,7 @@
 
 import hashlib
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
 
@@ -18,6 +19,14 @@ def make_event():
         idempotency_key="message-0001", correlation_id="request-0001",
         payload={"nested": {"text": "original"}}, now=datetime(2026, 9, 8, tzinfo=UTC),
     )
+
+
+def test_phase7_operator_assets_resolve_from_checkout_not_installed_package():
+    from retail_hp_azure import phase7_runtime as runtime
+
+    checkout = Path(__file__).resolve().parents[2]
+    assert runtime.AZURE_ROOT == checkout / "azure_databricks"
+    assert runtime.NOTEBOOK_SOURCE.is_file()
 
 
 @pytest.mark.parametrize("state", ["STOPPED", "STOPPING", "STARTING", "UNKNOWN"])

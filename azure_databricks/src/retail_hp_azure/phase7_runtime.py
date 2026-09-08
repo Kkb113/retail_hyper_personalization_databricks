@@ -9,7 +9,6 @@ import os
 import threading
 import time
 from datetime import UTC, datetime, timedelta
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 from uuid import uuid4
 
@@ -24,6 +23,7 @@ from retail_hp_azure.phase2_compute import (
     _verify_warehouse_contract,
 )
 from retail_hp_azure.phase2_identity import _ensure_identity
+from retail_hp_azure.phase3 import _find_repo_root
 from retail_hp_azure.phase7 import (
     CATALOG,
     EXPORT_JOB_NAME,
@@ -52,7 +52,7 @@ from retail_hp_azure.safety import require
 if TYPE_CHECKING:
     from databricks.sdk import WorkspaceClient
 
-AZURE_ROOT = Path(__file__).resolve().parents[2]
+AZURE_ROOT = _find_repo_root() / "azure_databricks"
 NOTEBOOK_SOURCE = AZURE_ROOT / "notebooks" / "phase7_feedback_export.py"
 WORKSPACE_ROOT = "/Workspace/Shared/retail_hp_phase7"
 PHASE7_CEILING_INR = 250.0
