@@ -5,8 +5,8 @@
 | Field | Value |
 |---|---|
 | Document status | Implementation source of truth |
-| Initial delivery status | Phases 0–4 complete; governed Lakehouse validated; platform stopped |
-| Last verified | 2026-09-07 |
+| Initial delivery status | Phases 0–7 complete for synthetic POC; platform stopped |
+| Last verified | 2026-09-08 |
 | Azure resource group boundary | **Databricks** only |
 | Azure Databricks workspace | **intellify-databricks-demo** |
 | Azure region | **West US** |
@@ -470,9 +470,9 @@ The workspace already exposes governed foundation endpoints and managed storage.
 | 2 | Governance and platform bootstrap | Schemas, volumes, identities, permissions, warehouse, tags, and budget controls | Complete; warehouse stopped; workload identity verified |
 | 3 | Immutable data and model transfer | Complete, hash-verified transfer package in Unity Catalog volumes | Complete |
 | 4 | Lakehouse and feature foundation | Bronze, Silver, Feature, Gold, lineage, and data-quality gates | Complete |
-| 5 | Functional MLflow recommender | Real composite inference package with Azure parity evidence | Complete; Candidate only; Champion HOLD |
-| 6 | Batch and real-time recommendation serving | Fast known-user path plus dynamic cold-start/what-if path | Not started |
-| 7 | Operational state and feedback | Low-latency sessions, feedback, notifications, and idempotency | Not started |
+| 5 | Functional MLflow recommender | Real composite inference package with Azure parity evidence | Complete; Champion v3 after Phase 6 validation |
+| 6 | Batch and real-time recommendation serving | Fast known-user path plus dynamic cold-start/what-if path | Complete for 100-customer demo cohort |
+| 7 | Operational state and feedback | Low-latency sessions, feedback, notifications, and idempotency | Complete using Delta/ephemeral fallback |
 | 8 | Semantic intelligence and governed tools | Product semantics and deterministic, permission-aware tool layer | Not started |
 | 9 | Agent implementation and evaluation | Grounded retail concierge with model bake-off and safeguards | Not started |
 | 10 | Databricks App and wow experiences | Polished end-to-end user experience | Not started |
@@ -950,6 +950,17 @@ The registered Candidate is a real end-to-end recommender, passes golden parity 
 
 ## Phase 6 — Batch and real-time recommendation serving
 
+Implementation scope update (2026-09-08): the initial batch is an explicit
+100-customer synthetic demo cohort (1,000 recommendations) selected across the
+5,000-customer population. Full-population scoring is not an acceptance claim.
+The first full run timed out without partial publication. The user approved an
+INR400 validation allowance for one deterministic-ranking retest. Known-customer
+demo traffic uses the governed Delta view; dynamic requests use one Small CPU
+endpoint. Explicit stop/start is the validated cold lifecycle, with native
+scale-to-zero retained as an additional idle safeguard. Consult Phase 6 evidence
+for actual gate results; endpoint creation and alias assignment alone do not
+establish readiness.
+
 ### Objective
 
 Serve recommendations through the least expensive path appropriate to each customer state.
@@ -995,7 +1006,9 @@ Rules are applied deterministically:
 - Batch and endpoint results agree for identical supported inputs.
 - Atomic promotion prevents partial current tables.
 - Endpoint health, invalid-input, timeout, and retry tests pass.
-- A scaled-down endpoint successfully wakes and returns a valid response.
+- An explicitly stopped endpoint successfully resumes through the demo warm-up
+  action and returns a valid response; separately record whether the native idle
+  scale-to-zero timer was timed (do not conflate the two tests).
 - No returned product violates inventory or eligibility.
 - Repeated idempotent requests do not create duplicate feedback or audit events.
 
@@ -1083,6 +1096,14 @@ Feedback and session state work with least privilege, bounded compute, and a tes
 ---
 
 ## Phase 8 — Semantic intelligence and governed tool layer
+
+POC implementation (2026-09-08): 2,860 eligible-product embeddings, ten typed tools,
+four governed serving views, and a manual reuse-aware publish job. Live non-admin
+tool acceptance passed; real-time/scenario adapters were additionally tested with
+the actual model locally without waking the cloud recommender. See
+[Phase 8 evidence and limitations](azure_databricks/evidence/phase_08/README.md).
+Regional filtering is intentionally rejected until a store/region mapping exists;
+aggregate quality currently reports verified batch coverage, not model accuracy.
 
 ### Objective
 
@@ -1174,6 +1195,15 @@ The complete tool suite is contract-tested, grounded, permission-aware, and usab
 
 ## Phase 9 — Agent implementation and evaluation
 
+Implementation: see `azure_databricks/docs/phase9_agent_runbook.md` and
+`azure_databricks/evidence/phase_09/README.md` for the current release and its explicit
+fixture/live-evaluation boundaries. The owner-requested one-call planner is now configured for
+exactly GPT-5.6 Luna, Azure version `2026-07-09`, on the approved token-billed S0 / GlobalStandard
+Azure OpenAI account inside `Databricks`. The GPT-OSS-20B results remain a historical baseline.
+No fallback, dedicated Databricks agent endpoint, App, or continuous evaluation is created.
+See the current evidence ledger for estimates; the earlier INR 17 figure was before Luna
+migration, not an invoice cap. The deployed App workload identity remains a Phase 10 gate.
+
 ### Objective
 
 Build a reliable retail concierge that plans and explains through governed tools while preserving the recommender as the ranking authority.
@@ -1183,7 +1213,7 @@ Build a reliable retail concierge that plans and explains through governed tools
 - MLflow **ResponsesAgent** interface for standard streaming and structured agent responses.[R17]
 - MLflow **AgentServer** for local and Databricks App serving, tracing, health, and invocation routes.[R18]
 - OpenAI Agents SDK or a minimal compatible tool loop, selected based on dependency and observability tests.
-- One primary LLM and at most one quality fallback.
+- One primary LLM: exactly GPT-5.6 Luna; no quality fallback enabled.
 - No multi-agent graph in the POC.
 
 ### Agent responsibilities
@@ -1207,7 +1237,9 @@ Build a reliable retail concierge that plans and explains through governed tools
 
 ### Foundation-model bake-off
 
-Evaluate live available endpoints rather than fixing a model in advance. Initial candidates:
+The original candidate list below is historical. The owner subsequently selected exactly
+GPT-5.6 Luna; it must pass a fresh benchmark and cannot reuse baseline acceptance.
+Original candidates:
 
 - databricks-gpt-oss-20b
 - databricks-meta-llama-3-1-8b-instruct
@@ -2122,12 +2154,27 @@ All architecture claims were checked against primary Microsoft Learn, Azure Data
 
 ## 22. Immediate next action
 
-**Phases 0–5 are complete and the platform is stopped.** The governed transfer is
-hash-identical and sealed, and the Phase 4 Lakehouse reconciles end to end with
-all 50 expected objects present. The functional MLflow recommender is registered
-as Candidate with deterministic parity and reproducible dependencies; Champion
-remains gated by the future holdout. There are zero clusters and persistent jobs,
-and the warehouse is STOPPED. Broad Databricks billing-table access remains
-denied, so reported actual usage may lag. Phase 6 serving is the next roadmap
-step and requires separate owner authorization plus a fresh cost and shutdown
-review.
+**Phases 0–7 are complete for the explicit synthetic POC scope.** Phase 7 selected
+the documented Delta/ephemeral fallback after live discovery found no Lakebase
+project and the cost policy kept Lakebase disabled. Eight append-only `agent`
+tables, one append-only monitoring export, and one manual-only export job now
+exist. The existing non-admin runtime identity passed authenticated write,
+idempotent replay, actor-isolation, pseudonymization, and export tests.
+
+The export job has no schedule, no retries, a 180-second timeout, and zero active
+runs. The SQL warehouse and Champion v3 endpoint are stopped; there are zero
+clusters and apps. No Lakebase or Azure resource was created. Phase 7 elapsed
+compute was estimated at INR29.5774 pre-tax across acceptance and two bounded
+export validations. The initial guarded plan was INR178.9965, and the remedial run
+was admitted at INR107.1689 including prior elapsed estimates; both stayed below
+the INR250 ceiling. These estimates are not an Azure invoice cap; billing may lag
+and small managed-storage charges remain.
+
+The Delta fallback is intentionally a low-volume, single-writer POC contract, not
+a production OLTP claim. Logical expiry is enforced in reads; physical deletion is
+not scheduled on append-only tables. The future Databricks App must receive its own
+identity grants when created.
+
+**Phase 8 — Semantic intelligence and governed tool layer** is the next roadmap
+step and requires a new implementation request. No vector endpoint, LLM capacity,
+agent, App, or new Azure resource was started in Phase 7.

@@ -1,0 +1,115 @@
+{
+  "status": "PASS",
+  "captured_at": "2026-09-08T06:30:46.962771+00:00",
+  "objects": [
+    {
+      "name": "intellify_databricks_demo.features.product_embeddings",
+      "owner": "retail_hp_admins",
+      "type": "MANAGED"
+    },
+    {
+      "name": "intellify_databricks_demo.serving.tool_customers",
+      "owner": "retail_hp_admins",
+      "type": "VIEW"
+    },
+    {
+      "name": "intellify_databricks_demo.serving.tool_opportunities",
+      "owner": "retail_hp_admins",
+      "type": "VIEW"
+    },
+    {
+      "name": "intellify_databricks_demo.serving.tool_products",
+      "owner": "retail_hp_admins",
+      "type": "VIEW"
+    },
+    {
+      "name": "intellify_databricks_demo.serving.tool_quality",
+      "owner": "retail_hp_admins",
+      "type": "VIEW"
+    }
+  ],
+  "semantic_volume_owner": "retail_hp_admins",
+  "jobs": [
+    {
+      "name": "retail-hp-poc-semantic-build",
+      "timeout_seconds": 120,
+      "manual_only": true,
+      "disable_auto_optimization": true,
+      "max_retries_zero": true,
+      "active_runs": 0
+    },
+    {
+      "name": "retail-hp-poc-feedback-export",
+      "timeout_seconds": 180,
+      "manual_only": true,
+      "disable_auto_optimization": true,
+      "max_retries_zero": true,
+      "active_runs": 0
+    },
+    {
+      "name": "retail-hp-poc-batch-recommendations",
+      "timeout_seconds": 180,
+      "manual_only": true,
+      "disable_auto_optimization": true,
+      "max_retries_zero": true,
+      "active_runs": 0
+    }
+  ],
+  "inventory": {
+    "scope_verified": true,
+    "cloud_mutations_performed": false,
+    "azure_resource_types": [
+      "Microsoft.Databricks/workspaces"
+    ],
+    "cluster_count": 0,
+    "warehouse_count": 1,
+    "project_warehouses": [
+      {
+        "name": "retail-hp-poc-sql",
+        "state": "STOPPED"
+      }
+    ],
+    "job_count": 3,
+    "app_count": 0,
+    "serving_endpoint_count": 23,
+    "project_serving_endpoint_count": 1,
+    "note": "Pre-existing foundation endpoints are not invoked; counts are not billed usage",
+    "managed_resource_group_cost_coverage": "NOT_VERIFIED; no managed-group writes permitted"
+  },
+  "recommender_state": "STOPPED",
+  "lakehouse": {
+    "version": "azure_phase4_metadata_inspection_v1",
+    "status": "PASS",
+    "scope_verified": true,
+    "expected_object_count": 50,
+    "observed_expected_count": 50,
+    "missing": [],
+    "owner_mismatches": [],
+    "required_owner": "retail_hp_admins",
+    "unexpected_project_objects": [],
+    "recognized_later_phase_objects": [
+      "intellify_databricks_demo.features.product_embeddings",
+      "intellify_databricks_demo.gold.customer_recommendation_current",
+      "intellify_databricks_demo.gold.customer_recommendation_history"
+    ],
+    "cloud_mutations_performed": false,
+    "compute_started": false
+  },
+  "registry": {
+    "version": "azure_phase5_registry_inspection_v1",
+    "status": "PASS",
+    "registered_model_count": 1,
+    "owner": "retail_hp_admins",
+    "owner_valid": true,
+    "model_version_count": 3,
+    "aliases": {
+      "candidate": 3,
+      "champion": 3
+    },
+    "candidate_present": true,
+    "champion_present": true,
+    "compute_started": false,
+    "identifiers_recorded": false
+  },
+  "compute_started": false
+}

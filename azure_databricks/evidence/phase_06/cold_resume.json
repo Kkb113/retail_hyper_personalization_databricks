@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "method": "EXPLICIT_STOP_START",
+  "native_idle_timer_tested": false,
+  "elapsed_seconds": 99.062,
+  "rows": 10
+}

@@ -1,0 +1,11 @@
+{
+  "registered_version": "3",
+  "status": "PASS",
+  "customers": 100,
+  "rows": 1000,
+  "exact_local_cloud_parity": true,
+  "differences": {},
+  "sha256": "c9ee4cd35e6aaa350cc0c782f4020c2cf51089fd417f6fb65d60e1be30d3ea34",
+  "azure_compute_started": false,
+  "note": "Cross-platform diagnostic; Azure batch/endpoint parity is a separate required gate"
+}

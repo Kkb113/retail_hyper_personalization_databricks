@@ -1,0 +1,12 @@
+{
+  "active_runs": 0,
+  "compute_started": false,
+  "identifiers_recorded": false,
+  "incremental_compute_cost_inr": 0,
+  "job_operation": "UPDATED",
+  "notebook_operation": "CREATED",
+  "schedule": null,
+  "status": "PASS",
+  "timeout_seconds": 180,
+  "version": "azure_phase7_export_deploy_v1"
+}

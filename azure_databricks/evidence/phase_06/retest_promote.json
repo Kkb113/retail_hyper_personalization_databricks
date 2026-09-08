@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "champion_version": 3,
+  "production_approved": false,
+  "release_scope": "SYNTHETIC_POC_DEMO100",
+  "endpoint_stopped": true
+}

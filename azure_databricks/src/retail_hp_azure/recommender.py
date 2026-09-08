@@ -23,7 +23,7 @@ from retail_hp_azure.pickle_compat import load_approved_joblib
 
 MODEL_VERSION = "retail_hyper_personalization_demo_v1"
 POLICY_VERSION = "adaptive_router_v1"
-RUNTIME_VERSION = "azure_functional_recommender_v1"
+RUNTIME_VERSION = "azure_functional_recommender_v2_deterministic_ties"
 DEFAULT_AS_OF = pd.Timestamp("2026-01-01T00:00:00Z")
 REQUEST_TYPES = {"existing_customer", "new_customer", "scenario"}
 PROFILE_FIELDS = (
@@ -157,7 +157,7 @@ def _snake(name: str) -> str:
 
 
 def _percentile(values: pd.Series) -> pd.Series:
-    return values.rank(method="average", pct=True).fillna(0.0)
+    return values.round(12).rank(method="average", pct=True).fillna(0.0)
 
 
 class AdaptiveRetailRecommender:
@@ -399,6 +399,10 @@ class AdaptiveRetailRecommender:
 
     @staticmethod
     def _source_frame(values: list[tuple[str, float]], source: str, maximum: int) -> pd.DataFrame:
+        # Never let platform-specific equal-score ordering decide candidate quotas.
+        values = sorted(
+            ((p, round(float(s), 12)) for p, s in values), key=lambda item: (-item[1], item[0])
+        )
         rows = [
             {"ProductID": product, "Source": source, "SourceRank": rank, "SourceScore": score}
             for rank, (product, score) in enumerate(values[:maximum], 1)
@@ -410,11 +414,14 @@ class AdaptiveRetailRecommender:
     ) -> list[tuple[str, float]]:
         if scores is None:
             return []
-        return [
-            (str(product), float(score))
-            for product, score in scores.items()
-            if str(product) in self.eligible_ids
-        ][:maximum]
+        return sorted(
+            [
+                (str(product), float(score))
+                for product, score in scores.items()
+                if str(product) in self.eligible_ids
+            ],
+            key=lambda item: (-round(item[1], 12), item[0]),
+        )[:maximum]
 
     def _retrieval_sources(
         self, request: Request, profile: dict[str, Any], history: pd.DataFrame
@@ -423,7 +430,7 @@ class AdaptiveRetailRecommender:
         maximum = 160
         if request.customer_id in self.customer_map:
             user = self.user_factors[self.customer_map[request.customer_id]]
-            score = self.item_factors @ user
+            score = np.round(self.item_factors.astype(np.float64) @ user.astype(np.float64), 12)
             order = np.argsort(-score, kind="stable")
             values = [
                 (self.index_to_product[int(index)], float(score[int(index)]))
@@ -460,7 +467,9 @@ class AdaptiveRetailRecommender:
                 else:
                     input_frame[column] = input_frame[column].astype("string").fillna("Unknown")
             predicted = self.metadata_factor_model.predict(input_frame)[0]
-            score = self.item_factors @ predicted
+            score = np.round(
+                self.item_factors.astype(np.float64) @ predicted.astype(np.float64), 12
+            )
             order = np.argsort(-score, kind="stable")
             values = [
                 (self.index_to_product[int(index)], float(score[int(index)]))
@@ -497,16 +506,24 @@ class AdaptiveRetailRecommender:
         anchors = [event["product_id"] for event in request.session_events] + anchors
         content_scores: dict[str, float] = {}
         session_scores: dict[str, float] = {}
+        content_product_ids = self.tables["products"].ProductID.to_numpy()
         for position, anchor in enumerate(dict.fromkeys(anchors)):
             index = self.content_product_map.get(anchor)
             if index is None:
                 continue
             distances, indices = self.content_neighbors.kneighbors(
-                self.content_matrix[index], n_neighbors=min(31, self.content_matrix.shape[0])
+                self.content_matrix[index], n_neighbors=self.content_matrix.shape[0]
             )
             target = session_scores if position < len(request.session_events) else content_scores
-            for distance, neighbor in zip(distances[0], indices[0], strict=False):
-                product = str(self.tables["products"].iloc[int(neighbor)].ProductID)
+            neighbors = sorted(
+                zip(distances[0], indices[0], strict=True),
+                key=lambda pair: (
+                    round(float(pair[0]), 12),
+                    str(content_product_ids[int(pair[1])]),
+                ),
+            )[:31]
+            for distance, neighbor in neighbors:
+                product = str(content_product_ids[int(neighbor)])
                 if product != anchor and product in self.eligible_ids:
                     target[product] = max(target.get(product, 0.0), 1.0 - float(distance))
         for source, source_scores in (

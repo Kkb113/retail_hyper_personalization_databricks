@@ -35,6 +35,9 @@ jobs:
         run: python -m pip check
       - name: Import from installed package without working-directory imports
         run: python -I azure_databricks/scripts/smoke_package.py --runtime ${{ matrix.runtime }}
+      - name: Test MLflow agent HTTP and streaming contracts without cloud calls
+        if: matrix.runtime == 'agent'
+        run: python -I azure_databricks/scripts/phase9_adapter_smoke.py
 
   phase0-safety:
     name: phase0-safety

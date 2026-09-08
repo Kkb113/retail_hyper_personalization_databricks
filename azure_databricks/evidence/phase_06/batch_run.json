@@ -1,0 +1,24 @@
+{
+  "state": {
+    "life_cycle_state": "TERMINATED",
+    "result_state": "SUCCESS",
+    "state_message": "",
+    "user_cancelled_or_timedout": false
+  },
+  "duration_seconds": 167.404,
+  "validation": {
+    "status": "PASS",
+    "customers": 100,
+    "population_customers": 5000,
+    "coverage": "DEMO_COHORT_ONLY",
+    "history_batch_rows": 1000,
+    "current_rows": 1000,
+    "eligible_view_rows": 1000,
+    "batch_id": "poc_candidate_3_demo100_20260101",
+    "registered_model_version": "3",
+    "release_scope": "SYNTHETIC_POC_ONLY",
+    "atomic_current_publish": true,
+    "elapsed_seconds": 85.19,
+    "schedule_created": false
+  }
+}

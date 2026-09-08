@@ -123,6 +123,7 @@ def test_remote_inspection_detects_missing_matching_and_drift() -> None:
     files = FakeFiles()
     empty = inspect_remote(FakeContext(files))  # type: ignore[arg-type]
     assert empty["missing_count"] == 46
+    assert empty["status"] == "FAIL"
     assert empty["drift_count"] == 0
     _populate_payload(files)
     good = inspect_remote(FakeContext(files))  # type: ignore[arg-type]

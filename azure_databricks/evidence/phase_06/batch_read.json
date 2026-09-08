@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "rows": 10,
+  "parameterized_query": true,
+  "registered_version": "3",
+  "first_read_seconds": 22.812,
+  "warm_read_seconds": 4.297,
+  "repeat_identical": true
+}

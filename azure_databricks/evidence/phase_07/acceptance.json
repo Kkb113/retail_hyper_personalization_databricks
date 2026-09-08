@@ -1,0 +1,61 @@
+{
+  "active_export_runs": 0,
+  "budget": {
+    "amount_inr": 12000,
+    "current_spend_inr": 0.0017598664296,
+    "notification_count": 5
+  },
+  "checks": {
+    "actor_a_visible": true,
+    "authenticated_runtime_write": true,
+    "cross_actor_hidden": true,
+    "feedback_exported_once": true,
+    "idempotent_replay": true,
+    "no_raw_actor_persisted": true
+  },
+  "contract_version": "retail_hp_operational_delta_v1",
+  "cost_plan": {
+    "base_estimate_inr_pre_tax": 71.5986,
+    "export_job_schedule": null,
+    "export_job_timeout_seconds": 180,
+    "guarded_estimate_inr_pre_tax": 178.9965,
+    "hard_invoice_cap_guaranteed": false,
+    "lakebase_compute_inr": 0,
+    "lakebase_enabled": false,
+    "new_azure_resources": 0,
+    "phase_ceiling_inr": 250.0,
+    "risk_multiplier": 2.5,
+    "version": "azure_phase7_cost_plan_v1",
+    "warehouse_auto_stop_minutes": 1,
+    "warehouse_deadline_minutes": 8
+  },
+  "deadline_fired": false,
+  "elapsed_seconds": 80.49,
+  "estimated_elapsed_warehouse_cost_inr_pre_tax": 5.9811,
+  "export_job_schedule": null,
+  "export_job_timeout_seconds": 180,
+  "feedback_export_tables": 1,
+  "identity": {
+    "account_admin_roles": 0,
+    "identity_cost_inr": 0,
+    "identity_created": false,
+    "runtime_group_membership_added": false,
+    "workspace_admin": false
+  },
+  "job_operation": "CREATED",
+  "lakebase_projects": 0,
+  "logical_retention_enforced_by_read_contract": true,
+  "model_endpoint_state": "STOPPED",
+  "new_azure_resources": 0,
+  "notebook_operation": "NO_CHANGE",
+  "oauth_secret_recorded": false,
+  "operational_tables": 8,
+  "physical_retention_automated": false,
+  "production_oltp_ready": false,
+  "selected_store": "delta_ephemeral_hybrid",
+  "status": "PASS",
+  "temporary_oauth_secret_revoked": true,
+  "test_identifiers_recorded": false,
+  "version": "azure_phase7_acceptance_v1",
+  "warehouse_final_state": "STOPPED"
+}

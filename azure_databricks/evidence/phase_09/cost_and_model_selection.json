@@ -1,0 +1,51 @@
+{
+  "selected_primary": "databricks-gpt-oss-20b",
+  "fallback": null,
+  "selection_reason": "Cheaper published rates; release passes planned gates",
+  "comparison_caveat": "Diagnostic screens/full test differ in sample count and prompt; not a controlled comparative quality experiment",
+  "models": [
+    {
+      "endpoint": "databricks-gpt-oss-20b",
+      "mode": "full",
+      "sample_count": 135,
+      "paid_attempts": 113,
+      "selection_rate": 0.9555555555555556,
+      "input_tokens": 81085,
+      "output_tokens": 19124,
+      "p50_provider_latency_ms": 1671.9999999913853,
+      "p95_provider_latency_ms": 2342.9999999934807,
+      "cost_estimate_inr": 7.3226,
+      "cost_per_successful_case_inr": 0.0572
+    },
+    {
+      "endpoint": "databricks-meta-llama-3-1-8b-instruct",
+      "mode": "screen",
+      "sample_count": 24,
+      "paid_attempts": 19,
+      "selection_rate": 0.9583333333333334,
+      "input_tokens": 23758,
+      "output_tokens": 751,
+      "p50_provider_latency_ms": 1422.0000000059372,
+      "p95_provider_latency_ms": 1780.9999999881256,
+      "cost_estimate_inr": 2.5034,
+      "cost_per_successful_case_inr": 0.1088
+    }
+  ],
+  "cumulative_llm_ledger": {
+    "reserved_or_spent_inr": 12.118753725390004,
+    "calls": 165,
+    "input_tokens": 127943,
+    "output_tokens": 26397
+  },
+  "warehouse_cost_estimate_inr_pre_tax": 4.8849,
+  "embedding_cost_estimate_inr_pre_tax": 0.00041698935,
+  "incremental_phase_estimate_inr_pre_tax": 17.0,
+  "estimate_with_100_percent_margin_and_1_inr_storage_reserve": 35.01,
+  "planning_allowance_inr": 250,
+  "hard_invoice_cap_guaranteed": false,
+  "existing_gateway_usage_tracking_enabled": true,
+  "shared_gateway_rate_limits_modified": false,
+  "inference_payload_logging_enabled_by_this_phase": false,
+  "new_azure_resources": 0,
+  "new_dedicated_endpoints": 0
+}

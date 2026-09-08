@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "registered_version": "2",
+  "previous_version": "1",
+  "golden_parity": true,
+  "retrained": false,
+  "production_approved": false,
+  "dependency_repair": "mlflow 3.16.0 is compatible with pandas 3.0.3"
+}

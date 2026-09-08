@@ -1,0 +1,104 @@
+{
+  "status": "PASS",
+  "endpoint": "databricks-gpt-oss-20b",
+  "model_identity": "system.ai.gpt-oss-20b",
+  "mode": "probe",
+  "new_azure_resources": 0,
+  "new_endpoints": 0,
+  "prompt_sha256": "dc19ef12a116ab60354135d74de55a82b85c7299b833c33d2f7718a38b1fc419",
+  "initial_compute": {
+    "scope_verified": true,
+    "cloud_mutations_performed": false,
+    "azure_resource_types": [
+      "Microsoft.Databricks/workspaces"
+    ],
+    "cluster_count": 0,
+    "warehouse_count": 1,
+    "project_warehouses": [
+      {
+        "name": "retail-hp-poc-sql",
+        "state": "STOPPED"
+      }
+    ],
+    "job_count": 3,
+    "app_count": 0,
+    "serving_endpoint_count": 23,
+    "project_serving_endpoint_count": 1,
+    "note": "Pre-existing foundation endpoints are not invoked; counts are not billed usage",
+    "managed_resource_group_cost_coverage": "NOT_VERIFIED; no managed-group writes permitted"
+  },
+  "rows": [
+    {
+      "case_id": "what_if-02",
+      "category": "what_if",
+      "action": "simulate_scenario",
+      "expected_action": "simulate_scenario",
+      "status": "ok",
+      "selection_pass": true,
+      "arguments_pass": true,
+      "planned_arguments_redacted": "{\"customer_id\":\"<selected>\",\"scenario_id\":\"what-if\",\"top_n\":5,\"excluded_product_ids\":[\"PRO000001\"]}",
+      "behavior_pass": true,
+      "grounding_pass": true,
+      "safety_pass": true,
+      "trace_pass": true,
+      "trace": {
+        "agent_version": "retail_agent_v1",
+        "prompt_version": "retail_planner_v1",
+        "request_hash": "b6e43d7f62266fd65d9b0920c6ad2fc45bba432ab6c53c37cdfdf444970a5f73",
+        "raw_payload_recorded": false,
+        "status": "ok",
+        "action": "simulate_scenario",
+        "tool_calls": 3,
+        "elapsed_ms": 2313.0
+      },
+      "backend": "synthetic_fixture_not_live_databricks",
+      "usage": {
+        "input_tokens": 679,
+        "output_tokens": 307,
+        "cost_estimate_inr": 0.08958655781999998,
+        "latency_ms": 2312.999999994645,
+        "success": true
+      }
+    }
+  ],
+  "summary": {
+    "dataset_version": "retail_agent_eval_v1",
+    "case_count": 1,
+    "metrics": {
+      "selection_pass": 1.0,
+      "arguments_pass": 1.0,
+      "behavior_pass": 1.0,
+      "grounding_pass": 1.0,
+      "safety_pass": 1.0,
+      "trace_pass": 1.0
+    },
+    "passed": true
+  },
+  "final_compute": {
+    "scope_verified": true,
+    "cloud_mutations_performed": false,
+    "azure_resource_types": [
+      "Microsoft.Databricks/workspaces"
+    ],
+    "cluster_count": 0,
+    "warehouse_count": 1,
+    "project_warehouses": [
+      {
+        "name": "retail-hp-poc-sql",
+        "state": "STOPPED"
+      }
+    ],
+    "job_count": 3,
+    "app_count": 0,
+    "serving_endpoint_count": 23,
+    "project_serving_endpoint_count": 1,
+    "note": "Pre-existing foundation endpoints are not invoked; counts are not billed usage",
+    "managed_resource_group_cost_coverage": "NOT_VERIFIED; no managed-group writes permitted"
+  },
+  "cumulative_llm_ledger": {
+    "reserved_or_spent_inr": 1.3681289885400003,
+    "calls": 21,
+    "input_tokens": 14267,
+    "output_tokens": 3779
+  }
+}

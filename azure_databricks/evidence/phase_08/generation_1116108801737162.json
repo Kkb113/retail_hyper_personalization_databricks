@@ -1,0 +1,40 @@
+{
+  "status": "FAIL",
+  "plan": {
+    "phase": 8,
+    "new_azure_resources": 0,
+    "new_dedicated_endpoints": 0,
+    "generation_job_timeout_seconds": 180,
+    "schedule": null,
+    "max_embedding_tokens": 500000,
+    "max_products": 3000,
+    "warehouse_max_minutes": 8,
+    "guarded_estimate_inr_pre_tax": 226.59,
+    "planning_allowance_inr": 250,
+    "hard_invoice_cap_guaranteed": false
+  },
+  "elapsed_seconds": 107.12,
+  "estimated_job_cost_inr_pre_tax": 21.3821,
+  "final_inventory": {
+    "scope_verified": true,
+    "cloud_mutations_performed": false,
+    "azure_resource_types": [
+      "Microsoft.Databricks/workspaces"
+    ],
+    "cluster_count": 0,
+    "warehouse_count": 1,
+    "project_warehouses": [
+      {
+        "name": "retail-hp-poc-sql",
+        "state": "STOPPED"
+      }
+    ],
+    "job_count": 3,
+    "app_count": 0,
+    "serving_endpoint_count": 23,
+    "project_serving_endpoint_count": 1,
+    "note": "Pre-existing foundation endpoints are not invoked; counts are not billed usage",
+    "managed_resource_group_cost_coverage": "NOT_VERIFIED; no managed-group writes permitted"
+  },
+  "captured_at": "2026-09-08T05:57:16.818229+00:00"
+}

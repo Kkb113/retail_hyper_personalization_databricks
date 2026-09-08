@@ -394,9 +394,9 @@ def test_package_has_no_legacy_or_cloud_side_effect_imports():
         "mlflow",
     }
     for source in (AZURE / "src/retail_hp_azure").glob("*.py"):
-        # Phase 5 adds one explicit MLflow serialization boundary. It has no
-        # import-time connection and is not imported by the package root.
-        allowed = {"mlflow"} if source.name == "mlflow_model.py" else set()
+        # Explicit model/agent MLflow boundaries have no import-time connection
+        # and are not imported by the package root or lean tool runtime.
+        allowed = {"mlflow"} if source.name in {"mlflow_model.py", "phase9_responses.py"} else set()
         for node in ast.walk(ast.parse(source.read_text(encoding="utf-8"))):
             if isinstance(node, ast.Import):
                 assert all(

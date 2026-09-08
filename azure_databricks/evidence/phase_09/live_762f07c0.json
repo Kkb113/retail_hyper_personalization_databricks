@@ -1,0 +1,98 @@
+{
+  "status": "PASS",
+  "non_admin_identity": true,
+  "non_admin_identity_scope": "Databricks governed tools only",
+  "llm_identity": "azure_operator_validation_only",
+  "llm_model": "gpt-5.6-luna",
+  "deployed_workload_azure_identity_verified": false,
+  "new_azure_resources": 0,
+  "checks": [
+    "unauthorized_customer_denied",
+    "stopped_scenario_not_started",
+    "live_batch_rank_and_facts",
+    "live_multiturn_comparison",
+    "live_semantic_search"
+  ],
+  "new_endpoints": 0,
+  "traces": [
+    {
+      "agent_version": "retail_agent_v1",
+      "prompt_version": "retail_planner_v2",
+      "request_hash": "461304236c96e3c9b621af6b7d8f191bd26ac28cb6f7306085dbeb5a4c10bc95",
+      "raw_payload_recorded": false,
+      "status": "refused",
+      "action": "refuse",
+      "tool_calls": 0,
+      "elapsed_ms": 0.0
+    },
+    {
+      "agent_version": "retail_agent_v1",
+      "prompt_version": "retail_planner_v2",
+      "request_hash": "f62b6cc2dd35b80f9faee5cb727361f3e6d73c95d23950f7ee55d6e0b0ae4555",
+      "raw_payload_recorded": false,
+      "error_type": "SafetyError",
+      "status": "unavailable",
+      "action": "simulate_scenario",
+      "tool_calls": 1,
+      "elapsed_ms": 3797.0
+    },
+    {
+      "agent_version": "retail_agent_v1",
+      "prompt_version": "retail_planner_v2",
+      "request_hash": "47243205bee1b7562969a4566e5cf41f0563b280ed7c4999a2168cf990da574e",
+      "raw_payload_recorded": false,
+      "status": "ok",
+      "action": "get_recommendations",
+      "tool_calls": 3,
+      "elapsed_ms": 23594.0
+    },
+    {
+      "agent_version": "retail_agent_v1",
+      "prompt_version": "retail_planner_v2",
+      "request_hash": "1301bf00f8f2045f7746c18cda6275b97af52d3571911bc2eedf929b1f591e4b",
+      "raw_payload_recorded": false,
+      "status": "ok",
+      "action": "compare_products",
+      "tool_calls": 1,
+      "elapsed_ms": 7156.0
+    },
+    {
+      "agent_version": "retail_agent_v1",
+      "prompt_version": "retail_planner_v2",
+      "request_hash": "e4b3fec45ae984648b7350c46686302117b3c104b36db29b882f930b10b418f2",
+      "raw_payload_recorded": false,
+      "status": "ok",
+      "action": "search_products",
+      "tool_calls": 1,
+      "elapsed_ms": 22797.0
+    }
+  ],
+  "embedding_tokens": 6,
+  "temporary_secret_revoked": true,
+  "warehouse_final_state": "STOPPED",
+  "warehouse_elapsed_seconds": 63.89,
+  "estimated_warehouse_cost_inr_pre_tax": 4.7479,
+  "hard_invoice_cap_guaranteed": false,
+  "final_compute": {
+    "scope_verified": true,
+    "cloud_mutations_performed": false,
+    "azure_resource_types": [
+      "Microsoft.CognitiveServices/accounts",
+      "Microsoft.Databricks/workspaces"
+    ],
+    "cluster_count": 0,
+    "warehouse_count": 1,
+    "project_warehouses": [
+      {
+        "name": "retail-hp-poc-sql",
+        "state": "STOPPED"
+      }
+    ],
+    "job_count": 3,
+    "app_count": 0,
+    "serving_endpoint_count": 23,
+    "project_serving_endpoint_count": 1,
+    "note": "Pre-existing foundation endpoints are not invoked; counts are not billed usage",
+    "managed_resource_group_cost_coverage": "NOT_VERIFIED; no managed-group writes permitted"
+  }
+}

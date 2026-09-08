@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "registered_version": "3",
+  "first_four_request_seconds": 2.282,
+  "azure_batch_endpoint_exact_parity": true,
+  "batch_parity_rows": 1000,
+  "exact_golden_parity": true,
+  "warm_requests": 12,
+  "warm_p95_seconds": 3.236,
+  "inventory_valid_pct": 100,
+  "invalid_request_status": 400,
+  "explicit_stop_requested": true
+}

@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "jobs": [
+    {
+      "job": "retail-hp-poc-batch-recommendations",
+      "disable_auto_optimization": true,
+      "max_retries": 0
+    },
+    {
+      "job": "retail-hp-poc-feedback-export",
+      "disable_auto_optimization": true,
+      "max_retries": 0
+    }
+  ],
+  "compute_started": false
+}

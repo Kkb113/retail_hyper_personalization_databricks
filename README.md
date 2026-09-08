@@ -51,11 +51,11 @@ orphan, temporal-leakage, idempotency and local-feature-parity checks pass. See 
 [Lakehouse contract](azure_databricks/contracts/phase4_lakehouse_contract.md).
 
 Phase 5 is complete. The functional composite recommender—not a snapshot lookup—
-is registered as `intellify_databricks_demo.ml.adaptive_recommender`, version 1,
+was initially registered as `intellify_databricks_demo.ml.adaptive_recommender`, version 1,
 owned by `retail_hp_admins` with alias **Candidate**. Repository, Databricks and
 downloaded-artifact compatibility checks produced the same deterministic golden
-output; signature, input example and dependencies are packaged. **Champion is
-intentionally unset** pending the future holdout and later release approvals. See
+output; signature, input example and dependencies are packaged. Phase 6 subsequently
+promoted version 3 to **Champion** for this synthetic POC. See
 the [Phase 5 status and evidence](azure_databricks/evidence/phase_05/README.md).
 
 The agreed monthly target is INR 12,000, with an internal stop target of INR
@@ -65,10 +65,20 @@ test deadline, and an unconditional final stop with STOPPED-state verification.
 Azure budgets are not hard billing caps, so the INR 250 phase ceilings are
 admission/runtime controls, not invoice guarantees. Phase 3's work is estimated
 at INR 103.3578 pre-tax, Phase 4's work at INR 161.1619 pre-tax, and Phase 5's
-work at INR 198.1409 pre-tax. Metered usage can lag. There are zero clusters and
-persistent jobs, and the warehouse is **STOPPED**. Model release remains POC-only;
-Phase 6 serving is not authorized and Champion remains gated by holdout, privacy,
-security and owner approvals.
+work at INR 198.1409 pre-tax. Metered usage can lag. Model release remains POC-only;
+production use requires separate holdout, privacy, security and owner approvals.
+
+Phase 6 provides Champion 3 batch and explicitly activated real-time serving.
+Phase 7 supplies bounded operational state and idempotent feedback using Delta,
+without Lakebase. Phase 8 adds semantic product retrieval and ten governed tools;
+see the [Phase 8 runbook](azure_databricks/docs/phase8_tool_runbook.md) and
+[validation evidence](azure_databricks/evidence/phase_08/README.md).
+Jobs are manual-only definitions, not continuous compute. The warehouse and
+recommender endpoint must remain stopped outside bounded validation/demo sessions.
+Phase 9 adds the bounded MLflow retail agent and evaluation harness; see the
+[agent runbook](azure_databricks/docs/phase9_agent_runbook.md) and
+[acceptance evidence](azure_databricks/evidence/phase_09/README.md).
+The authenticated App is Phase 10 work; no always-on agent deployment is created in Phase 9.
 
 The only bundle is `azure_databricks/databricks.yml`, with target `poc`, **zero
 resources**, no build hooks and marker-only sync eligibility. No sync is run in
