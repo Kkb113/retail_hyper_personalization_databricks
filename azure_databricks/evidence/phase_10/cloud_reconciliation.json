@@ -1,6 +1,6 @@
 {
-  "captured_at": "2026-09-08T11:39:09.212505+00:00",
-  "status": "LIVE_DEPLOYMENT_BLOCKED",
+  "captured_at": "2026-09-09T05:25:38.379278+00:00",
+  "status": "COMPUTE_STOPPED_ACCEPTANCE_RECORDED_SEPARATELY",
   "app": {
     "name": "retail-hp-poc-app",
     "exists": true,
@@ -14,10 +14,9 @@
   "active_jobs": 0,
   "clusters": 0,
   "credential_isolated_to_approved_workspace": true,
-  "app_acl_creator_and_workspace_admins_only": true,
-  "automation_provider_registration": "NotRegistered",
-  "phase10_inference_calls": 0,
-  "phase10_paid_compute_starts": 0,
+  "app_acl": "Operator, administrators, shutdown identity and non-admin acceptance identity",
+  "automation_provider_registration": "Registered",
+  "historical_usage": "Two bounded paid windows; live API and browser inference passed",
   "invoice_cap_guaranteed": false,
   "managed_resource_group_cost_coverage": "NOT_VERIFIED_NO_OUT_OF_SCOPE_WRITES"
 }

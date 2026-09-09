@@ -1,6 +1,6 @@
 {
   "status": "PASS_LOCAL_ONLY",
-  "python_tests_passed": 276,
+  "python_tests_passed": 286,
   "frontend_rank_diff_tests_passed": 1,
   "frontend_chat_tests_passed": 5,
   "ui_scope": "SINGLE_CHAT_INLINE_RECOMMENDATIONS_COLLAPSED_SOURCES",
@@ -12,9 +12,10 @@
   "clean_hash_locked_app_wheel_import": "PASS",
   "disconnected_preview_http": 200,
   "disconnected_readiness_http": 503,
-  "browser_accessibility_validation": "PENDING",
-  "live_obo_flow_validation": "PENDING",
-  "live_workload_inference": "PENDING",
-  "independent_shutdown_validation": "PASS_STOPPED_STATE_IDENTITY_ONLY_LIVE_STOP_PENDING",
-  "phase10_complete": false
+  "browser_accessibility_validation": "DESKTOP_KEYBOARD_AND_VISUAL_PASS_FORMAL_AUDIT_NOT_PERFORMED",
+  "live_obo_flow_validation": "PASS",
+  "live_workload_inference": "PASS",
+  "independent_shutdown_validation": "PASS_RUNNING_TO_STOPPED",
+  "phase10_complete": true,
+  "acceptance_scope": "BOUNDED_SYNTHETIC_POC_NOT_PRODUCTION"
 }

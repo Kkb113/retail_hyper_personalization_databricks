@@ -1336,17 +1336,15 @@ The cheapest qualifying model passes all hard gates, the agent is fully grounded
 
 ## Phase 10 — Databricks App and wow experiences
 
-**Implementation checkpoint (2026-09-08): IN PROGRESS, not accepted.**
-The chat-first React App and private HTTP/runtime boundary are implemented locally.
-One Medium App definition exists with no active deployment and is STOPPED.
-The actual App identity passed a keyless Luna token/model-metadata test; no inference
-or paid Databricks compute was started. As of 2026-09-09, `Microsoft.Automation` is
-registered and the Basic shutdown account/runbook are deployed. Its first stopped-state
-test failed because SQL-access entitlement is required. The user subsequently approved it;
-the entitlement is applied and the stopped-state identity retest passed. Live shutdown
-and App acceptance remain pending. No warehouse/App/endpoint start was made. See
-[Phase 10 runbook](azure_databricks/docs/phase10_app_runbook.md) for all remaining
-live, identity, packaging, browser and cost acceptance gates. Do not start Phase 11 yet.
+**Implementation checkpoint (2026-09-09): BOUNDED POC ACCEPTANCE PASSED.**
+The native simple-chat App deployed and passed live App-identity Luna recommendations,
+semantic discovery, real-time scenarios, feedback replay, non-admin authorization and
+cross-customer denial. Operator browser chat, keyboard and source-expansion checks passed.
+The independent controller completed and all three compute resources are STOPPED.
+Two bounded validation windows retained INR 440 in owner-approved planning reservations;
+this is not measured spend or an invoice cap. New demo starts require allowance review.
+See [acceptance evidence, launch procedure and POC limitations](azure_databricks/docs/phase10_live_acceptance.md).
+Mobile/formal accessibility audits and a third live relaunch are not claimed.
 
 ### Objective
 
@@ -1357,11 +1355,11 @@ Deliver a polished native application that makes the model and agent capabilitie
 - Databricks App with MEDIUM compute, the smallest current app compute size.
 - React/Vite front end.
 - AgentServer/FastAPI back end.
-- App resource bindings for SQL warehouse, serving endpoint, Lakebase, and other supported resources.
+- App resource bindings for the existing SQL warehouse, serving endpoint and private secrets; no Lakebase.
 - App service principal for shared resources.
 - On-behalf-of user authorization for customer-specific governed data where supported.[R11][R12]
 - Pinned frontend and backend dependencies.
-- Git/bundle deployment and rollback.[R13][R14]
+- Git-reviewed, content-addressed deployment packages; separately reviewed upgrade/rollback.[R13][R14]
 
 ### Current UI scope — single chat
 

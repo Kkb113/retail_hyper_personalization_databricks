@@ -10,7 +10,7 @@ from retail_hp_azure.safety import require
 
 
 def audit():
-    context = CloudContext()
+    context = CloudContext(direct_operator_token=True)
     inventory = inspect_compute(context)
     app = inspect_app(context)
     require(app.get("compute_state") == "STOPPED", "App must be stopped")
@@ -39,7 +39,7 @@ def audit():
     )
     return {
         "captured_at": datetime.now(UTC).isoformat(),
-        "status": "LIVE_DEPLOYMENT_BLOCKED",
+        "status": "COMPUTE_STOPPED_ACCEPTANCE_RECORDED_SEPARATELY",
         "app": app,
         "project_warehouse_states": [x["state"] for x in inventory["project_warehouses"]],
         "project_recommender_state": "STOPPED",
@@ -47,8 +47,7 @@ def audit():
         "clusters": 0,
         "credential_isolated_to_approved_workspace": True,
         "automation_provider_registration": provider,
-        "phase10_inference_calls": 0,
-        "phase10_paid_compute_starts": 0,
+        "historical_usage": "See live validation evidence; metadata cannot prove zero usage",
         "invoice_cap_guaranteed": False,
         "managed_resource_group_cost_coverage": "NOT_VERIFIED_NO_OUT_OF_SCOPE_WRITES",
     }

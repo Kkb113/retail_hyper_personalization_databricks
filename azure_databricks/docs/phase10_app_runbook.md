@@ -1,7 +1,12 @@
 # Phase 10 — Retail chat assistant
 
-Status: **IN PROGRESS — live deployment blocked**. A stopped App definition is not
-a deployed application. Do not report Phase 10 acceptance or move to Phase 11 yet.
+Status: **POC live acceptance passed on 2026-09-09; compute stopped afterward.**
+Current evidence, launch instructions and limitations are in
+[Phase 10 live acceptance](phase10_live_acceptance.md).
+
+The remainder of this document is the HISTORICAL pre-release checkpoint. Its pending
+gates, zero-start counts, absent entrypoint and provider status are superseded by the
+live acceptance record; they must not be used as current operational status.
 
 ## Implemented in this branch
 

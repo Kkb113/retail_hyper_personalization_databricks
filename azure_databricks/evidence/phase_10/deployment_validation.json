@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-09",
+  "status": "PASS_BOUNDED_POC",
+  "release": "8d1a8f9341ee03c03f8d4763a3c3ab0310884a854822c1bb9165cd0ad5b10b0f",
+  "deployment_state": "SUCCEEDED",
+  "clean_locked_python_312_import": "PASS",
+  "split_snapshot_reassembly_and_hashes": "PASS",
+  "paid_validation_windows": 2,
+  "build_repair_inside_second_window": true,
+  "cumulative_owner_approved_allowance_inr": 440,
+  "retained_planning_reservations_inr": 440,
+  "measured_invoice_cost_inr": null,
+  "invoice_cap_guaranteed": false,
+  "new_azure_resources_this_release": 0,
+  "final_controller_jobs": [
+    {"role": "absolute_deadline", "state": "Completed", "all_targets_stopped": true},
+    {"role": "early_operator_stop", "state": "Completed", "all_targets_stopped": true}
+  ],
+  "final_app": "STOPPED",
+  "final_warehouse": "STOPPED",
+  "final_recommender": "STOPPED",
+  "live_relaunch_validation": "NOT_RUN_ALLOWANCE_RESERVED"
+}

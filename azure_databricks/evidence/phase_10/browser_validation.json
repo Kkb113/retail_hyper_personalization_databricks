@@ -1,0 +1,13 @@
+{
+  "date": "2026-09-09",
+  "status": "PASS_DESKTOP_POC",
+  "authenticated_operator_session": true,
+  "live_recommendation_cards": 3,
+  "enter_sends": true,
+  "shift_enter_adds_line_without_send": true,
+  "sources_expand": true,
+  "new_chat_resets_conversation": true,
+  "desktop_visual_inspection": "PASS",
+  "mobile_and_formal_accessibility_audit": "NOT_PERFORMED",
+  "cosmetic_issue": "HTML-escaped apostrophe in narrative; product card correct"
+}

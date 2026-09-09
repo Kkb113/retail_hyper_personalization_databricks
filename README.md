@@ -80,13 +80,14 @@ Phase 9 adds the bounded MLflow retail agent and evaluation harness; see the
 [acceptance evidence](azure_databricks/evidence/phase_09/README.md).
 The authenticated App is Phase 10 work; no always-on agent deployment is created in Phase 9.
 
-Phase 10 is now **in progress**, not live-ready: a local chat-first React App and guarded
-API are implemented, and the native Medium App is created but **STOPPED with no
-deployment**. Keyless App-principal access to Luna metadata passed without inference.
-`Microsoft.Automation` is registered and the Basic shutdown account/runbook are deployed.
-The approved SQL-access entitlement is applied and the controller's stopped-state identity
-test passed. Live shutdown and App acceptance remain incomplete. Local preview instructions are in
-[the Phase 10 runbook](azure_databricks/docs/phase10_app_runbook.md).
+Phase 10 **bounded POC acceptance passed on 2026-09-09**: the native simple-chat App
+deployed successfully. Live Luna planning, recommendation cards, semantic search,
+scenario execution, feedback replay and cross-customer denial passed. Browser chat
+and keyboard checks passed. The independent shutdown controller completed, and the
+App, warehouse and endpoint are **STOPPED** between demonstrations. The INR 440
+validation allowance remains fully reserved, not measured invoice spend. A new demo
+requires a reviewed bounded launch, not a manual portal start. See
+[live acceptance and limitations](azure_databricks/docs/phase10_live_acceptance.md).
 
 The only bundle is `azure_databricks/databricks.yml`, with target `poc`, **zero
 resources**, no build hooks and marker-only sync eligibility. No sync is run in

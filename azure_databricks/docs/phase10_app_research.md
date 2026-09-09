@@ -2,6 +2,19 @@
 
 Reviewed 2026-09-08. Findings below distinguish documentation from actual workspace tests.
 
+2026-09-09 RELEASE UPDATE (supersedes historical pending claims below): live App
+inference, API/browser acceptance and running-to-stopped controller tests passed.
+See [live acceptance](phase10_live_acceptance.md). Research found that the
+[Apps environment](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/databricks-apps/system-env)
+uses Python 3.11 for pip, while
+[uv dependency management](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/databricks-apps/dependencies)
+supports an explicit Python version with pyproject.toml and uv.lock. The release
+therefore uses locked Python 3.12. Actual source export rejected a 33.5 MB file at
+the 10 MB limit; verified 8 MB parts resolved it. The
+[App API authentication guidance](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/databricks-apps/connect-local)
+requires Databricks OAuth rather than a direct Entra token. Non-admin OAuth and
+browser OBO both passed. No new Azure resource or hosting service was added for these fixes.
+
 2026-09-09 shutdown update: registration is verified and the Basic managed-identity
 Automation account/runbook are deployed. The first stopped-state test returned HTTP 403
 because SQL APIs require the SQL-access entitlement. Explicit approval for that entitlement
