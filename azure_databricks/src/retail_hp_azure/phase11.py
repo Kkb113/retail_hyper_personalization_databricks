@@ -219,7 +219,7 @@ def incident_findings(quality: dict[str, Any], coverage: dict[str, Any]) -> list
 
 
 def dashboard_spec() -> dict[str, Any]:
-    # Native AI/BI table widgets keep exact denominators and timestamps visible.
+    # Native AI/BI widgets use the current documented encoding contract.
     columns = {
         "coverage": "published_rows published_customers active_published_customers "
         "recommended_eligible_products active_customer_population eligible_product_population "
@@ -235,66 +235,158 @@ def dashboard_spec() -> dict[str, Any]:
         "requests": "model_version requests non_success_responses p95_latency_ms "
         "input_tokens output_tokens estimated_llm_inr last_observed",
     }
-    datasets, layout = [], []
-    for index, (name, query) in enumerate(monitoring_queries().items()):
+    datasets = []
+    for name, sql_query in monitoring_queries().items():
         datasets.append(
-            {"name": name, "displayName": name.replace("_", " ").title(), "queryLines": [query]}
-        )
-        layout.append(
             {
-                "widget": {
-                    "name": f"widget_{name}",
-                    "queries": [
-                        {
-                            "name": "main_query",
-                            "query": {
-                                "datasetName": name,
-                                "fields": [
-                                    {"name": field, "expression": f"`{field}`"}
-                                    for field in columns[name].split()
-                                ],
-                                "disaggregated": True,
-                            },
-                        }
-                    ],
-                    "spec": {
-                        "version": 1,
-                        "widgetType": "table",
-                        "encodings": {
-                            "columns": [
-                                {
-                                    "fieldName": field,
-                                    "title": field.replace("_", " ").title(),
-                                    "type": "string",
-                                    "displayAs": "string",
-                                    "visible": True,
-                                    "order": i,
-                                    "allowHTML": False,
-                                }
-                                for i, field in enumerate(columns[name].split())
-                            ]
-                        },
-                        "frame": {"showTitle": True, "title": name.replace("_", " ").title()},
-                    },
-                },
-                "position": {"x": 0, "y": index * 5 + 2, "width": 6, "height": 5},
+                "name": name,
+                "displayName": name.replace("_", " ").title(),
+                "queryLines": [sql_query],
             }
         )
-    layout.insert(
-        0,
+
+    def widget_query(
+        dataset: str, fields: list[tuple[str, str]], *, disaggregated: bool = True
+    ) -> list[dict[str, Any]]:
+        return [
+            {
+                "name": "main_query",
+                "query": {
+                    "datasetName": dataset,
+                    "fields": [
+                        {"name": name, "expression": expression} for name, expression in fields
+                    ],
+                    "disaggregated": disaggregated,
+                },
+            }
+        ]
+
+    def counter(
+        name: str, field: str, title: str, x: int, *, percent: bool = False
+    ) -> dict[str, Any]:
+        encoding: dict[str, Any] = {"fieldName": field, "displayName": title}
+        if percent:
+            encoding["format"] = {
+                "type": "number-percent",
+                "decimalPlaces": {"type": "max", "places": 1},
+            }
+        return {
+            "widget": {
+                "name": name,
+                "queries": widget_query("coverage", [(field, f"`{field}`")]),
+                "spec": {
+                    "version": 2,
+                    "widgetType": "counter",
+                    "encodings": {"value": encoding},
+                    "frame": {"showTitle": True, "title": title},
+                },
+            },
+            "position": {"x": x, "y": 2, "width": 2, "height": 3},
+        }
+
+    def bar(
+        name: str, dataset: str, category: str, value: str, title: str, x: int, y: int
+    ) -> dict[str, Any]:
+        return {
+            "widget": {
+                "name": name,
+                "queries": widget_query(
+                    dataset, [(category, f"`{category}`"), (value, f"`{value}`")]
+                ),
+                "spec": {
+                    "version": 3,
+                    "widgetType": "bar",
+                    "encodings": {
+                        "x": {
+                            "fieldName": value,
+                            "displayName": value.replace("_", " ").title(),
+                            "scale": {"type": "quantitative"},
+                        },
+                        "y": {
+                            "fieldName": category,
+                            "displayName": category.replace("_", " ").title(),
+                            "scale": {"type": "categorical"},
+                        },
+                        "label": {"show": True},
+                    },
+                    "frame": {"showTitle": True, "title": title},
+                },
+            },
+            "position": {"x": x, "y": y, "width": 3, "height": 6},
+        }
+
+    def table(name: str, dataset: str, title: str, y: int) -> dict[str, Any]:
+        fields = columns[dataset].split()
+        return {
+            "widget": {
+                "name": name,
+                "queries": widget_query(dataset, [(field, f"`{field}`") for field in fields]),
+                "spec": {
+                    "version": 2,
+                    "widgetType": "table",
+                    "encodings": {
+                        "columns": [
+                            {"fieldName": field, "displayName": field.replace("_", " ").title()}
+                            for field in fields
+                        ]
+                    },
+                    "frame": {"showTitle": True, "title": title},
+                },
+            },
+            "position": {"x": 0, "y": y, "width": 6, "height": 5},
+        }
+
+    layout = [
         {
             "widget": {
                 "name": "scope_note",
-                "textbox_spec": "## Retail POC operations\n"
-                "Synthetic, historical data—not live revenue or inventory. "
-                "Refresh on demand only. Coverage is not recommendation accuracy. "
-                "Candidate-source combinations are not causal contribution. "
-                "Missing feedback attribution is not zero engagement. "
-                "Billing is delayed and is not a hard spending cap.",
+                "multilineTextboxSpec": {
+                    "lines": [
+                        "## Retail POC operations\n",
+                        "\n",
+                        "Synthetic, historical data—not live revenue or inventory. "
+                        "Refresh on demand only. Coverage is not recommendation accuracy. "
+                        "Missing feedback attribution is not zero engagement.",
+                    ]
+                },
             },
             "position": {"x": 0, "y": 0, "width": 6, "height": 2},
         },
-    )
+        counter("published_recommendations", "published_rows", "Recommendations", 0),
+        counter("active_demo_customers", "active_published_customers", "Demo Customers", 2),
+        counter("inventory_validity", "inventory_validity", "Inventory Validity", 4, percent=True),
+        bar(
+            "route_mix",
+            "routes",
+            "route",
+            "recommendation_rows",
+            "Recommendation Strategy Mix",
+            0,
+            5,
+        ),
+        bar(
+            "opportunity_mix",
+            "opportunities",
+            "opportunity_type",
+            "opportunities",
+            "Customer Opportunities",
+            3,
+            5,
+        ),
+        bar(
+            "candidate_source_mix",
+            "candidate_sources",
+            "source_combination",
+            "recommendation_rows",
+            "Candidate Source Mix",
+            0,
+            11,
+        ),
+        table("quality_detail", "quality", "Recommendation Quality Controls", 17),
+        table("feedback_detail", "feedback", "Customer Feedback", 22),
+        table("evaluation_detail", "evaluation", "Agent Evaluation", 27),
+        table("request_detail", "requests", "Observed Agent Requests", 32),
+    ]
     return {
         "datasets": datasets,
         "pages": [{"name": "operations", "displayName": "Operations", "layout": layout}],
