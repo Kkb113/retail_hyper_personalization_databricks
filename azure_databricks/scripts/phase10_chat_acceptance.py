@@ -61,6 +61,23 @@ def validate(context):
         require(len(reply["cards"]) == 5, "Expected five actual recommendations")
         require([r["rank"] for r in reply["cards"]] == [1, 2, 3, 4, 5], "Ranking drift")
         require(all(r.get("product_name") for r in reply["cards"]), "Missing product hydration")
+        narrative = json.dumps({"text": reply["text"], "sections": reply["sections"]}).lower()
+        require(
+            not any(
+                term in narrative
+                for term in (
+                    "adaptive_blend",
+                    "earlybehavior",
+                    "cold_start_ranker",
+                    "warm_ranker",
+                    "model score",
+                    "reason_codes",
+                    "intellify_databricks_demo",
+                )
+            ),
+            "Business narrative contains internal terminology",
+        )
+        report["checks"]["business_narrative_no_internal_terminology"] = True
         chat("followup", "Explain why the first recommendation fits, and suggest a next step.")
         chat("general_retail", "How can a retailer improve loyalty without excessive discounting?")
         denied = post("/api/chat", {"text": "Recommend for CUS000002"})

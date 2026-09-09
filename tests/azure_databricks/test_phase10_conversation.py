@@ -10,6 +10,7 @@ from retail_hp_azure.phase8 import GovernedTools, ToolContext
 from retail_hp_azure.phase9 import Plan, Session
 from retail_hp_azure.phase9_evaluation import PROVENANCE, Case, FixtureBackend
 from retail_hp_azure.phase10_conversation import (
+    WRITING,
     ConversationAgent,
     ConversationalPlanner,
     Narrative,
@@ -126,6 +127,35 @@ def test_provider_failure_keeps_actual_recommendations_without_generic_safety_er
     assert reply.status == "ok" and len(reply.cards) == 5
     assert "verified" in reply.text
     assert "safely complete" not in reply.text
+
+
+def test_business_fallback_never_dumps_internal_model_fields():
+    agent, planner, context, session = setup()
+    planner.compose.side_effect = RuntimeError("provider unavailable")
+    reply = run(agent, context, session, "Recommend for CUS000001")
+    rendered = json.dumps(reply.sections)
+    assert "Customer overview" in rendered
+    assert "Loyalty status" in rendered
+    for internal in ("reason_codes", "adaptive_blend", "ranker", "score", "get_customer_360"):
+        assert internal not in rendered
+    assert len(reply.cards) == 5
+    assert [row["rank"] for row in reply.cards] == [1, 2, 3, 4, 5]
+
+
+def test_business_composer_contract_preserves_grounding_and_plain_language():
+    planner = ConversationalPlanner(lambda: "synthetic", None)
+    planner._request = Mock(return_value={"summary": "Business summary", "sections": []})
+    planner.compose("Recommend products", {}, timeout=10)
+    assert planner._request.call_args.kwargs["prompt"] == WRITING
+    for instruction in (
+        "Write for business users",
+        "Next best",
+        "omit numeric model scores",
+        "Do not invent purchases",
+        "not confirmed customer preferences",
+        "An existing recommendation is not an additional discovery",
+    ):
+        assert instruction in WRITING
 
 
 def test_customer_comparison_uses_distinct_profiles_and_revocation_clears_memory():

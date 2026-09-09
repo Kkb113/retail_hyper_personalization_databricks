@@ -140,8 +140,9 @@ def start(context, *, owner_demo=False, chat_upgrade=False):
     # first startup timeout. Reservations persist even when actual billing lags.
     # Separate additional INR 220 chat-fix validation explicitly approved by owner.
     # Owner approved one further INR 220 chat test after the transition failure.
-    # Preserve the first INR 220 reservation; no third chat window is authorized.
-    ceiling = 220 if owner_demo else 440
+    # Owner approved one additional INR 220 business-response deployment window
+    # on 2026-09-09. Preserve both earlier chat reservations; no fourth is authorized.
+    ceiling = 660 if chat_upgrade else 220 if owner_demo else 440
     require(ledger["reserved_inr"] + reserve <= ceiling, "Phase 10 launch allowance exhausted")
     ticket = uuid4().hex
     ledger["reserved_inr"] += reserve

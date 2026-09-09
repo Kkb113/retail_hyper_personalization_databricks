@@ -1,6 +1,6 @@
 {
   "status": "PASS_CONVERSATIONAL_API",
-  "release": "a4c6799700817f5b2633170e6bc274feebc023faf9a73ddcde6dc2953da3855d",
+  "release": "060af8794ef109786e1c3f9627cda555c16e239c2e5fbed830fd1541f8151e77",
   "checks": {
     "personalization": {
       "action": "get_recommendations",
@@ -8,16 +8,17 @@
       "sections": 5,
       "mode": "llm"
     },
+    "business_narrative_no_internal_terminology": true,
     "followup": {
       "action": "explain_recommendation",
       "cards": 1,
-      "sections": 3,
+      "sections": 4,
       "mode": "llm"
     },
     "general_retail": {
       "action": "retail_advice",
       "cards": 0,
-      "sections": 6,
+      "sections": 4,
       "mode": "llm"
     },
     "unauthorized_prompt_customer_denied": true
