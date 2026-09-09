@@ -1,0 +1,14 @@
+{
+  "status": "BLOCKED_DEPLOYMENT_TRANSITION",
+  "release": "d8a0b0b92ef0074cabcd67b4d3db39bbd0eedf1372657ac8187647dd5edf0fd7",
+  "local_python_tests_passed": 301,
+  "local_frontend_tests_passed": 6,
+  "live_conversation_tests_run": 0,
+  "new_resources_created": 0,
+  "additional_validation_reservation_inr": 220,
+  "invoice_amount": "NOT_YET_VERIFIED",
+  "reason": "Automatic old-release restart was still pending when new snapshot deployment was requested; it consumed the refreshed one-use ticket. No ticket was replayed or spending ledger reset.",
+  "corrective_change": "Wait for a newly observed terminal automatic deployment while the old release still receives an expired lease; publish the new live lease only afterward.",
+  "corrective_change_live_verified": false,
+  "shutdown": "Immediate independent shutdown requested; terminal inventory recorded separately."
+}

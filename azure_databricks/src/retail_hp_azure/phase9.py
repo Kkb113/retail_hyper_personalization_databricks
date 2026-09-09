@@ -66,6 +66,7 @@ class Plan(Contract):
         "get_quality_summary",
         "clarify",
         "refuse",
+        "retail_advice",
     ]
     arguments: str = Field(default="{}", max_length=4096)
 
@@ -74,7 +75,9 @@ class AgentReply(Contract):
     status: Literal["ok", "clarify", "refused", "unavailable"]
     text: str
     cards: list[dict[str, Any]] = Field(default_factory=list, max_length=20)
-    evidence: list[dict[str, Any]] = Field(default_factory=list, max_length=3)
+    evidence: list[dict[str, Any]] = Field(default_factory=list, max_length=8)
+    sections: list[dict[str, Any]] = Field(default_factory=list, max_length=8)
+    response_mode: str = "legacy"
     agent_version: str = VERSION
     action: str
 
@@ -89,6 +92,9 @@ class Session:
     last_arguments: dict[str, Any] = field(default_factory=dict)
     product_ids: list[str] = field(default_factory=list)
     turns: int = 0
+    history: list[dict[str, str]] = field(default_factory=list)
+    verified_evidence: list[dict[str, Any]] = field(default_factory=list)
+    evidence_customers: set[str] = field(default_factory=set)
     lock: Any = field(default_factory=threading.Lock, repr=False, compare=False)
 
 

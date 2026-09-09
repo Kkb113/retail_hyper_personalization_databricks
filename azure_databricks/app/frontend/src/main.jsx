@@ -5,7 +5,6 @@ import "./style.css";
 
 function App() {
   const [session, setSession] = useState(null);
-  const [customer, setCustomer] = useState("");
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
@@ -20,7 +19,6 @@ function App() {
     try {
       const next = await request("/api/session", {});
       setSession(next);
-      setCustomer(next.customers[0] ?? "");
       setMessages([]);
       setDraft("");
       setNotice("");
@@ -50,7 +48,7 @@ function App() {
     try {
       const reply = await request(
         "/api/chat",
-        { text, customer_id: customer || null },
+        { text },
         session.csrf,
       );
       setMessages((previous) => [...previous, { ...reply, role: "assistant" }]);
@@ -91,8 +89,8 @@ function App() {
               </span>
               <h1>What are you looking for?</h1>
               <p>
-                Ask for recommendations, compare products, or explore something
-                new.
+                Ask any retail question, or include a customer ID such as CUS000001
+                for personalized recommendations. Follow up naturally.
               </p>
             </div>
           )}
@@ -100,6 +98,14 @@ function App() {
             <article key={index} className={"message " + message.role}>
               <h2>{message.role === "user" ? "You" : "Retail assistant"}</h2>
               <p className="message-text">{message.text}</p>
+              {message.sections?.map((section, sectionIndex) => (
+                <section className="answer-section" key={sectionIndex}>
+                  <h3>{section.heading}</h3>
+                  {section.text && <p className="message-text">{section.text}</p>}
+                  {!!section.items?.length && <ul>{section.items.map((item, itemIndex) =>
+                    <li key={itemIndex}>{item}</li>)}</ul>}
+                </section>
+              ))}
               {!!message.cards?.length && (
                 <div className="products">
                   {message.cards.map((card, i) => (
@@ -159,26 +165,6 @@ function App() {
           <div ref={bottom} />
         </section>
         <div className="composer-area">
-          {session && session.customers.length > 0 && (
-            <label className="customer">
-              Chat for
-              <select
-                aria-label="Customer context"
-                disabled={busy}
-                value={customer}
-                onChange={(event) => {
-                  setCustomer(event.target.value);
-                  setMessages([]);
-                  setDraft("");
-                }}
-              >
-                <option value="">Guest</option>
-                {session.customers.map((id) => (
-                  <option key={id}>{id}</option>
-                ))}
-              </select>
-            </label>
-          )}
           {notice && (
             <p className="notice" role="status">
               {notice}{" "}
@@ -193,7 +179,7 @@ function App() {
               aria-label="Message the retail assistant"
               placeholder="Ask the retail assistant…"
               rows={2}
-              maxLength={1600}
+              maxLength={6000}
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
               onKeyDown={(event) => {

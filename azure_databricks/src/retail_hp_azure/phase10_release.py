@@ -80,6 +80,8 @@ def build_app(root: Path, client: Any, config: str, actor_secret: str) -> Any:
                     "event": "retail_tool",
                     "status": record.get("status"),
                     "action": record.get("action"),
+                    "event_type": record.get("event"),
+                    "error_type": record.get("error_type"),
                 }
             )
         ),

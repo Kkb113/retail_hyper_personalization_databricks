@@ -49,7 +49,7 @@ class Action(Contract):
 
 
 class Chat(Contract):
-    text: str = Field(min_length=1, max_length=1600)
+    text: str = Field(min_length=1, max_length=6000)
     customer_id: str | None = Field(default=None, pattern=r"^CUS[0-9]{6}$")
 
 
@@ -101,7 +101,7 @@ def create_app(
             body = bytearray()
             async for chunk in request.stream():
                 body.extend(chunk)
-                if len(body) > 12_000:
+                if len(body) > (32_000 if request.url.path == "/api/chat" else 12_000):
                     return JSONResponse({"detail": "Request too large"}, 413)
             request._body = bytes(body)
         response = await call_next(request)
@@ -257,7 +257,10 @@ def create_app(
             raise HTTPException(403, "Customer is not authorized.")
 
         def execute() -> Any:
-            if session.agent_session.selected_customer != body.customer_id:
+            if (
+                body.customer_id is not None
+                and session.agent_session.selected_customer != body.customer_id
+            ):
                 session.agent_session = Session(
                     subject=session.context.subject, selected_customer=body.customer_id
                 )

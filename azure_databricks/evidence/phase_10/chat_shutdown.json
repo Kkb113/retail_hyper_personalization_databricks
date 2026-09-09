@@ -1,0 +1,10 @@
+{
+  "captured_at": "2026-09-09T06:34:56.911196+00:00",
+  "app": "STOPPED",
+  "warehouse": "STOPPED",
+  "recommender": "STOPPED",
+  "active_jobs": 0,
+  "clusters": 0,
+  "new_resources_created": 0,
+  "invoice_cap_guaranteed": false
+}

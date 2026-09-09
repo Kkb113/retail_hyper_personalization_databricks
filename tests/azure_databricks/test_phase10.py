@@ -173,6 +173,23 @@ def test_chat_cannot_select_an_unauthorized_customer():
     adapter.agent.assert_not_called()
 
 
+def test_prompt_only_chat_preserves_server_resolved_customer_for_followup():
+    from retail_hp_azure.phase9 import AgentReply
+
+    client, adapter, _, _ = suite()
+    observed = []
+
+    def answer(text, *, session, **kwargs):
+        observed.append(session.selected_customer)
+        session.selected_customer = "CUS000001"
+        return AgentReply(status="ok", text="Grounded answer", action="retail_advice")
+
+    adapter.agent.return_value.run.side_effect = answer
+    assert client.post("/api/chat", json={"text": "Recommend for CUS000001"}).status_code == 200
+    assert client.post("/api/chat", json={"text": "Why the first one?"}).status_code == 200
+    assert observed == [None, "CUS000001"]
+
+
 def test_stopped_warehouse_refuses_sql_and_feedback_without_starting():
     from retail_hp_azure.phase10_runtime import RunningBackend
     from retail_hp_azure.safety import SafetyError

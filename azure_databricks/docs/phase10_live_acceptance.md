@@ -1,5 +1,10 @@
 # Phase 10 live acceptance — 2026-09-09
 
+This records the earlier narrow-chat release, not acceptance of the subsequent
+[conversational revision](phase10_conversational_revision.md). The owner later
+reported a failed multipart personalization prompt; the new release has its own
+`chat_validation.json` record and an additional approved INR 220 validation allowance.
+
 **POC acceptance passed; App, warehouse and endpoint stopped afterward.**
 This is a bounded synthetic-data demonstration, not an always-on production service.
 

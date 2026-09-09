@@ -10,7 +10,7 @@ export async function request(path, body, csrf = "") {
         "x-csrf-token": csrf,
       },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(85000),
+      signal: AbortSignal.timeout(180000),
     });
   } catch {
     throw new Error(
@@ -21,6 +21,8 @@ export async function request(path, body, csrf = "") {
     throw new Error(
       response.status === 401 || response.status === 403
         ? "Please start a new chat to reconnect securely."
+        : response.status === 503
+          ? "The demo service is paused or temporarily unavailable. Ask the demo owner to confirm the active demo window, then try again."
         : "I couldn't complete that request. Please try again when the demo is available.",
     );
   }

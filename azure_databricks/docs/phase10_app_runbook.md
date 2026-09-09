@@ -1,5 +1,9 @@
 # Phase 10 — Retail chat assistant
 
+The customer-selector and single-route behavior described below is superseded by the
+[conversational revision](phase10_conversational_revision.md). Its separate live
+acceptance record must be checked before claiming the new experience is accepted.
+
 Status: **POC live acceptance passed on 2026-09-09; compute stopped afterward.**
 Current evidence, launch instructions and limitations are in
 [Phase 10 live acceptance](phase10_live_acceptance.md).

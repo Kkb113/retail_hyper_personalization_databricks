@@ -49,32 +49,52 @@ class DatabricksPlanner:
         return tuple(rate * INR_PER_DBU for rate in RATES[self.endpoint])  # type: ignore[return-value]
 
     def plan(self, text: str, state: dict[str, Any], *, timeout: float) -> Plan:
+        return Plan.model_validate(self._request(text, state, timeout=timeout))
+
+    def _request(
+        self,
+        text: str,
+        state: dict[str, Any],
+        *,
+        timeout: float,
+        schema: Any = Plan,
+        prompt: str = SYSTEM_PROMPT,
+        function: str = "route_retail_request",
+        output_limit: int = OUTPUT_LIMIT,
+        payload_limit: int = 9000,
+    ) -> Any:
         import requests
 
         url, headers = self.connection()
         body: dict[str, Any] = {
             "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": prompt},
                 {"role": "user", "content": json.dumps({"server_state": state, "request": text})},
             ],
             "tools": [
                 {
                     "type": "function",
                     "function": {
-                        "name": "route_retail_request",
-                        "description": "Select one governed retail action.",
-                        "parameters": Plan.model_json_schema(),
+                        "name": function,
+                        "description": "Return the requested structured retail response.",
+                        "parameters": schema.model_json_schema(),
                     },
                 }
             ],
-            "tool_choice": {"type": "function", "function": {"name": "route_retail_request"}},
-            "max_tokens": OUTPUT_LIMIT,
+            "tool_choice": {"type": "function", "function": {"name": function}},
+            "max_tokens": output_limit,
             "temperature": 0,
         }
         rates = self.configure(body)
         payload = json.dumps(body).encode()
-        require(len(payload) <= 9000 and 0 < timeout <= 30, "Request token/time bound exceeded")
-        reservation = (len(payload) * rates[0] + OUTPUT_LIMIT * rates[1]) / 1e6
+        require(
+            0 < output_limit <= 2200 and 0 < payload_limit <= 40000,
+            "Invalid bounded generation configuration",
+        )
+        require(
+            len(payload) <= payload_limit and 0 < timeout <= 30, "Request token/time bound exceeded"
+        )
+        reservation = (len(payload) * rates[0] + output_limit * rates[1]) / 1e6
         self.ledger.parent.mkdir(parents=True, exist_ok=True)
         lock_path = self.ledger.with_suffix(".lock")
         # One process/session at a time. An orphan lock fails closed for operator reconciliation.
@@ -143,7 +163,7 @@ class DatabricksPlanner:
                 type(input_tokens) is int
                 and type(output_tokens) is int
                 and 0 <= input_tokens <= len(payload)
-                and 0 <= output_tokens <= OUTPUT_LIMIT,
+                and 0 <= output_tokens <= output_limit,
                 "LLM usage unavailable or outside reserved bound",
             )
             actual = (input_tokens * rates[0] + output_tokens * rates[1]) / 1e6
@@ -165,10 +185,10 @@ class DatabricksPlanner:
             )
             calls = choices[0].get("message", {}).get("tool_calls", [])
             require(
-                len(calls) == 1 and calls[0]["function"]["name"] == "route_retail_request",
+                len(calls) == 1 and calls[0]["function"]["name"] == function,
                 "LLM must return exactly one registered route",
             )
-            plan = Plan.model_validate_json(calls[0]["function"]["arguments"])
+            plan = schema.model_validate_json(calls[0]["function"]["arguments"])
             self.last_usage["success"] = True
             return plan
         finally:

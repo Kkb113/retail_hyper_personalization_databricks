@@ -13,14 +13,16 @@ from retail_hp_azure.phase8 import GovernedTools, ToolContext
 from retail_hp_azure.phase8_backend import DatabricksToolBackend, EmbeddingClient
 from retail_hp_azure.phase8_semantic import SemanticIndex
 from retail_hp_azure.phase9 import RetailAgent
-from retail_hp_azure.phase9_llm import AzureLunaPlanner
+from retail_hp_azure.phase10_conversation import ConversationAgent, ConversationalPlanner
 from retail_hp_azure.safety import require
 
 SERVICE_CREDENTIAL = "retail_hp_luna_app"
 
 
 class RunningBackend(DatabricksToolBackend):
-    """SQL Statement Execution can auto-start a warehouse. Refuse before every SQL call."""
+    """Permit bounded warehouse wake-up only inside an authorized demo lease."""
+
+    lease_expires: float = 0
 
     def _query(self, statement: str, values: dict[str, Any]) -> list[dict[str, Any]]:
         self.check_running()
@@ -28,6 +30,26 @@ class RunningBackend(DatabricksToolBackend):
 
     def check_running(self) -> None:
         warehouse = self.client.warehouses.get(self.warehouse_id)
+        require(warehouse.name == "retail-hp-poc-sql", "Warehouse identity drift")
+        require(warehouse.state is not None, "WAREHOUSE_UNAVAILABLE")
+        if self.lease_expires and warehouse.state.value != "RUNNING":
+            require(time.time() < self.lease_expires - 75, "DEMO_WINDOW_ENDING")
+            stop_wait = time.monotonic() + 40
+            requested = False
+            while warehouse.state.value != "RUNNING":
+                require(
+                    time.time() < self.lease_expires - 60 and time.monotonic() < stop_wait,
+                    "WAREHOUSE_WARMING",
+                )
+                require(
+                    warehouse.state.value in {"STOPPED", "STOPPING", "STARTING"},
+                    "WAREHOUSE_UNAVAILABLE",
+                )
+                if warehouse.state.value == "STOPPED" and not requested:
+                    self.client.warehouses.start(self.warehouse_id)
+                    requested = True
+                time.sleep(2)
+                warehouse = self.client.warehouses.get(self.warehouse_id)
         require(
             warehouse.name == "retail-hp-poc-sql"
             and warehouse.state is not None
@@ -73,7 +95,7 @@ class WorkbenchRuntime:
         self.entitlements, self.actor_secret = entitlements, actor_secret
         self.index, self.lease_expires, self.trace_sink = index, lease_expires, trace_sink
         self.user_client_factory = user_client_factory or self._user_client
-        self.planner = AzureLunaPlanner(self._luna_token, ledger)
+        self.planner = ConversationalPlanner(self._luna_token, ledger)
 
     @staticmethod
     def _user_client(token: str) -> Any:
@@ -133,17 +155,21 @@ class WorkbenchRuntime:
     def tools(self, token: str) -> GovernedTools:
         self._admit()
         client = self.user_client_factory(token)
+        backend = RunningBackend(
+            client,
+            self.warehouse_id,
+            index=self.index,
+            embeddings=EmbeddingClient(client, max_calls=1),
+        )
+        backend.lease_expires = self.lease_expires
         return GovernedTools(
-            RunningBackend(
-                client,
-                self.warehouse_id,
-                index=self.index,
-                embeddings=EmbeddingClient(client, max_calls=1),
-            ),
+            backend,
             actor_secret=self.actor_secret,
             trace_sink=self.trace_sink,
         )
 
     def agent(self, token: str) -> RetailAgent:
         self._admit()
-        return RetailAgent(self.planner, self.tools(token), self.trace_sink)
+        return ConversationAgent(self.planner, self.tools(token), self.trace_sink)
+
+    lease_expires: float = 0

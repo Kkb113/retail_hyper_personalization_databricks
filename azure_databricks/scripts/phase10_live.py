@@ -3,6 +3,7 @@
 import argparse
 import json
 import time
+from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
@@ -17,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 STATE = ROOT / "build/phase10-live.local.json"
 LEDGER = ROOT / "build/phase10-cost.local.json"
 DEMO_LEDGER = ROOT / "build/phase10-owner-demo.local.json"
+CHAT_LEDGER = ROOT / "build/phase10-chat-validation.local.json"
 APP = "retail-hp-poc-app"
 ENDPOINT = "retail-hp-poc-recommender"
 
@@ -84,7 +86,8 @@ def stopped(context, warehouse):
     require(endpoint["state"].get("suspend") == "STOPPED", "Endpoint running")
 
 
-def start(context, *, owner_demo=False):
+def start(context, *, owner_demo=False, chat_upgrade=False):
+    require(not (owner_demo and chat_upgrade), "Choose one authorized launch purpose")
     preflight = json.loads(
         (ROOT / "azure_databricks/evidence/phase_10/release_preflight.json").read_text()
     )
@@ -110,7 +113,8 @@ def start(context, *, owner_demo=False):
         if succeeded:
             existing_deployment = max(succeeded, key=lambda item: item.create_time or "")
     require(
-        existing_deployment is None
+        chat_upgrade
+        or existing_deployment is None
         or (
             existing_deployment.source_code_path == control["source_path"]
             and existing_deployment.status.state.value == "SUCCEEDED"
@@ -121,7 +125,7 @@ def start(context, *, owner_demo=False):
     require(_verify_budget(context)["current_spend_inr"] < 9000, "Monthly spend safety margin")
     # Explicit owner-requested demo is separate from completed validation history.
     # Neither ledger is reset; this option permits one bounded demo only.
-    ledger_path = DEMO_LEDGER if owner_demo else LEDGER
+    ledger_path = CHAT_LEDGER if chat_upgrade else DEMO_LEDGER if owner_demo else LEDGER
     ledger = (
         json.loads(ledger_path.read_text())
         if ledger_path.exists()
@@ -132,7 +136,8 @@ def start(context, *, owner_demo=False):
     reserve = 220
     # Owner approved a cumulative INR 440 allowance on 2026-09-09 after the
     # first startup timeout. Reservations persist even when actual billing lags.
-    ceiling = 220 if owner_demo else 440
+    # Separate additional INR 220 chat-fix validation explicitly approved by owner.
+    ceiling = 220 if owner_demo or chat_upgrade else 440
     require(ledger["reserved_inr"] + reserve <= ceiling, "Phase 10 launch allowance exhausted")
     ticket = uuid4().hex
     ledger["reserved_inr"] += reserve
@@ -168,7 +173,13 @@ def start(context, *, owner_demo=False):
     Launch.model_validate_json(json.dumps(launch))
     job = arm(context, deadline)
     require(time.time() < deadline - 480, "Insufficient safe launch window")
-    client.secrets.put_secret("retail-hp-app-private", "launch", string_value=json.dumps(launch))
+    # An installed old release can restart automatically with App compute. Give
+    # that process an expired lease so it cannot claim this ticket or serve calls.
+    # Only the reviewed new snapshot receives the live lease at deployment time.
+    initial_launch = {**launch, "expires": 1} if chat_upgrade else launch
+    client.secrets.put_secret(
+        "retail-hp-app-private", "launch", string_value=json.dumps(initial_launch)
+    )
     state = {
         **control,
         "ticket": ticket,
@@ -188,7 +199,31 @@ def start(context, *, owner_demo=False):
                 break
             require(compute == "STARTING", "App compute failed to start")
             time.sleep(5)
-        if existing_deployment is None:
+        if chat_upgrade:
+            # ACTIVE compute is not proof that its automatic deployment finished.
+            # Keep the expired secret until that transition is terminal; otherwise
+            # the restarting old process can consume the new release's ticket.
+            while existing_deployment is not None:
+                require(time.time() < deadline - 240, "Old deployment exceeded safe window")
+                history = list(client.apps.list_deployments(APP))
+                pending = [
+                    item
+                    for item in history
+                    if item.status and item.status.state.value not in {"SUCCEEDED", "FAILED"}
+                ]
+                restarted = any(
+                    item.create_time
+                    and datetime.fromisoformat(item.create_time.replace("Z", "+00:00")).timestamp()
+                    >= state["start_time"]
+                    for item in history
+                )
+                if restarted and not pending:
+                    break
+                time.sleep(5)
+            client.secrets.put_secret(
+                "retail-hp-app-private", "launch", string_value=json.dumps(launch)
+            )
+        if existing_deployment is None or chat_upgrade:
             deployment = client.api_client.do(
                 "POST",
                 f"/api/2.0/apps/{APP}/deployments",
@@ -276,15 +311,21 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("command", choices=["start", "inspect", "stop", "redeploy"])
     parser.add_argument(
+        "--chat-upgrade",
+        action="store_true",
+        help="One owner-approved INR 220 chat revision validation with expired old-release lease",
+    )
+    parser.add_argument(
         "--owner-demo",
         action="store_true",
         help="One explicitly requested demo; preserve validation reservations",
     )
     args = parser.parse_args()
     require(not args.owner_demo or args.command == "start", "Demo flag requires start")
+    require(not args.chat_upgrade or args.command == "start", "Upgrade flag requires start")
     context = CloudContext(apply=args.command != "inspect", direct_operator_token=True)
     if args.command == "start":
-        result = start(context, owner_demo=args.owner_demo)
+        result = start(context, owner_demo=args.owner_demo, chat_upgrade=args.chat_upgrade)
     elif args.command == "stop":
         result = {"stop_job": arm(context, int(time.time()))}
     elif args.command == "redeploy":
