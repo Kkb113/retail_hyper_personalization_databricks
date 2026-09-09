@@ -55,21 +55,22 @@ endpoint. Databricks does not provide a stop-only role for this combination. Exi
 direct ACLs are retained and checked after additive updates; no workspace-admin or UC
 data grants were made. The runbook itself contains no compute-start operations.
 
-Its first stopped-state cloud test **failed** because warehouse APIs require the
-`databricks-sql-access` entitlement. Granting this broader workspace entitlement was
-blocked by the execution safety reviewer pending explicit user approval. The proposed
-additive change is implemented but **has not been applied**. Do not claim shutdown
-acceptance, deploy/start the App, or start warehouse/serving compute yet.
+Its first stopped-state cloud test failed because warehouse APIs require the
+`databricks-sql-access` entitlement. The user explicitly approved it, and the additive
+entitlement has now been applied to the existing shutdown identity. The second cloud
+test completed in approximately 5.8 seconds and emitted `CONTROLLER_ARMED` and
+`ALL_TARGETS_STOPPED`. No new resources or data/admin grants were added during this retry.
+This verifies managed-identity metadata access and stopped-state checks, **not** a
+running-to-stopped transition or failure recovery. Those acceptance tests remain pending.
 
-One short Automation test job ran and failed; no Databricks compute or inference was
+Two short Automation test jobs ran (first failed, second passed); no Databricks compute or inference was
 started. Automation free units are subscription-wide and eligibility/remaining units
 have not been confirmed, so do not claim the job is guaranteed free.
 
 ## Remaining release gates after registration
 
-1. Obtain explicit approval for the controller's SQL-access entitlement, then apply
-   the additive entitlement and rerun the stopped-state identity test. The Basic account
-   and runbook already exist; do not create duplicates. No workspace-admin/data grants.
+1. The SQL-access approval and stopped-state identity test are complete. Reuse the
+   existing Basic account/runbook; do not create duplicates or add workspace-admin/data grants.
 2. Test the runbook's identity and exact App/warehouse/endpoint stop permissions.
    Arm and verify the independent controller before any paid start. Prefer a short,
    fixed demo window (initially 10 minutes), not an always-on service. Keep stop

@@ -5,7 +5,9 @@ Reviewed 2026-09-08. Findings below distinguish documentation from actual worksp
 2026-09-09 shutdown update: registration is verified and the Basic managed-identity
 Automation account/runbook are deployed. The first stopped-state test returned HTTP 403
 because SQL APIs require the SQL-access entitlement. Explicit approval for that entitlement
-is pending; no paid Databricks compute start occurred. API references used:
+was subsequently granted by the user. The additive entitlement is applied and the second
+stopped-state test completed successfully in about 5.8 seconds. Live stop/failure recovery
+remain untested; no paid Databricks compute start occurred. API references used:
 [Automation account creation](https://learn.microsoft.com/en-us/rest/api/automation/automation-account/create-or-update?view=rest-automation-2024-10-23),
 [managed identity token access](https://learn.microsoft.com/en-us/azure/automation/enable-managed-identity-for-automation),
 [additive permissions versus replacement](https://docs.databricks.com/api/access-management/v1/update-object-permissions),

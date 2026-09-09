@@ -1342,8 +1342,9 @@ One Medium App definition exists with no active deployment and is STOPPED.
 The actual App identity passed a keyless Luna token/model-metadata test; no inference
 or paid Databricks compute was started. As of 2026-09-09, `Microsoft.Automation` is
 registered and the Basic shutdown account/runbook are deployed. Its first stopped-state
-test failed because SQL-access entitlement is required; granting it awaits explicit
-approval after execution safety review. No warehouse/App/endpoint start was made. See
+test failed because SQL-access entitlement is required. The user subsequently approved it;
+the entitlement is applied and the stopped-state identity retest passed. Live shutdown
+and App acceptance remain pending. No warehouse/App/endpoint start was made. See
 [Phase 10 runbook](azure_databricks/docs/phase10_app_runbook.md) for all remaining
 live, identity, packaging, browser and cost acceptance gates. Do not start Phase 11 yet.
 

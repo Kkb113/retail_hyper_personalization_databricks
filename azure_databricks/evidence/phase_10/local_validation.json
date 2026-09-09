@@ -15,6 +15,6 @@
   "browser_accessibility_validation": "PENDING",
   "live_obo_flow_validation": "PENDING",
   "live_workload_inference": "PENDING",
-  "independent_shutdown_validation": "BLOCKED_SQL_ENTITLEMENT_APPROVAL",
+  "independent_shutdown_validation": "PASS_STOPPED_STATE_IDENTITY_ONLY_LIVE_STOP_PENDING",
   "phase10_complete": false
 }
