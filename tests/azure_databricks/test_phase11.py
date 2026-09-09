@@ -95,11 +95,21 @@ def test_dashboard_has_explicit_fields_no_embedded_credentials_or_schedules():
     spec = dashboard_spec()
     queries = monitoring_queries()
     assert {d["name"] for d in spec["datasets"]} == set(queries)
-    for item in spec["pages"][0]["layout"][1:]:
+    widgets = spec["pages"][0]["layout"]
+    assert "multilineTextboxSpec" in widgets[0]["widget"]
+    visual_types = [item["widget"].get("spec", {}).get("widgetType") for item in widgets]
+    assert visual_types.count("counter") == 3
+    assert visual_types.count("bar") == 3
+    assert visual_types.count("table") == 4
+    for item in widgets[1:]:
         widget = item["widget"]
         fields = widget["queries"][0]["query"]["fields"]
         assert fields and all(f["expression"] != "*" for f in fields)
-        assert len(widget["spec"]["encodings"]["columns"]) == len(fields)
+        if widget["spec"]["widgetType"] == "table":
+            assert widget["spec"]["version"] == 2
+            columns = widget["spec"]["encodings"]["columns"]
+            assert len(columns) == len(fields)
+            assert all(column.get("displayName") for column in columns)
     assert "NULL AS DOUBLE" in queries["feedback"]
     assert "try_divide" in queries["coverage"]
 

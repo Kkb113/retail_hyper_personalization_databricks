@@ -20,9 +20,12 @@ See `evidence/phase_11` for separate SQL, trace and shutdown acceptance records.
 
 Dashboard: **Retail POC — Business and operations**, under `/Shared/retail_hp_phase11`.
 Open it during an approved demo window using your Databricks account. Check all eight
-tables display, column labels fit, and snapshot/unknown-metric qualifications remain
-visible. Refresh can start warehouse compute; no automatic refresh schedule exists.
-Browser verification was blocked by sign-in and explicitly left for your manual check.
+datasets display, column labels fit, and snapshot/unknown-metric qualifications remain
+visible. The published layout contains three KPI cards, three bar charts and four
+detail tables. The 2026-09-09 visual correction moved tables to the current schema-v2
+field-binding contract and republished the same dashboard without starting compute.
+Refresh can start warehouse compute; no automatic refresh schedule exists. Browser
+verification was blocked by sign-in and remains a manual check.
 
 ## Business dashboard
 

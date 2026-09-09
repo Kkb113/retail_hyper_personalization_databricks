@@ -98,6 +98,37 @@ def stage(context):
     return state
 
 
+def publish_dashboard(context):
+    """Update and republish only the existing dashboard; never execute SQL or start compute."""
+    require(context.apply, "Apply required")
+    control = json.loads(CONTROL.read_text())
+    dashboard = context.client.lakeview.get(control["dashboard_id"])
+    require(dashboard.display_name == DASHBOARD_NAME, "Dashboard identity drift")
+    require(dashboard.parent_path == PARENT, "Dashboard ownership scope mismatch")
+    dashboard.serialized_dashboard = json.dumps(dashboard_spec())
+    dashboard.warehouse_id = WAREHOUSE
+    context.client.lakeview.update(dashboard.dashboard_id, dashboard)
+    context.client.lakeview.publish(
+        dashboard.dashboard_id, embed_credentials=False, warehouse_id=WAREHOUSE
+    )
+    published = context.client.lakeview.get_published(dashboard.dashboard_id)
+    require(published.embed_credentials is False, "Dashboard must use viewer permissions")
+    result = {
+        "status": "PASS_DASHBOARD_VISUAL_BINDINGS",
+        "dashboard_id": dashboard.dashboard_id,
+        "table_schema_version": 2,
+        "counter_widgets": 3,
+        "bar_widgets": 3,
+        "detail_tables": 4,
+        "embed_credentials": False,
+        "compute_started": False,
+        "new_resources": 0,
+        "browser_render_verified": False,
+    }
+    (EVIDENCE / "dashboard_visual_fix.json").write_text(json.dumps(result, indent=2))
+    return result
+
+
 def evaluation_rows():
     source = ROOT / "azure_databricks/evidence/phase_09/full_gpt-5.6-luna_20260908T081333.json"
     report = json.loads(source.read_text())
@@ -249,7 +280,13 @@ def apply(context):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["stage", "apply"])
+    parser.add_argument("command", choices=["stage", "apply", "publish-dashboard"])
     args = parser.parse_args()
     ctx = CloudContext(apply=True, direct_operator_token=True)
-    print(json.dumps(stage(ctx) if args.command == "stage" else apply(ctx), indent=2))
+    if args.command == "stage":
+        result = stage(ctx)
+    elif args.command == "apply":
+        result = apply(ctx)
+    else:
+        result = publish_dashboard(ctx)
+    print(json.dumps(result, indent=2))
