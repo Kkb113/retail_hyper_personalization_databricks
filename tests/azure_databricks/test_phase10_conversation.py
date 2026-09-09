@@ -9,7 +9,12 @@ import pytest
 from retail_hp_azure.phase8 import GovernedTools, ToolContext
 from retail_hp_azure.phase9 import Plan, Session
 from retail_hp_azure.phase9_evaluation import PROVENANCE, Case, FixtureBackend
-from retail_hp_azure.phase10_conversation import ConversationAgent, Narrative, Section
+from retail_hp_azure.phase10_conversation import (
+    ConversationAgent,
+    ConversationalPlanner,
+    Narrative,
+    Section,
+)
 from retail_hp_azure.phase10_runtime import RunningBackend
 from retail_hp_azure.safety import SafetyError
 
@@ -171,3 +176,13 @@ def test_warehouse_near_deadline_never_wakes():
     with pytest.raises(SafetyError, match="DEMO_WINDOW_ENDING"):
         backend.check_running()
     client.warehouses.start.assert_not_called()
+
+
+def test_shared_llm_allowance_blocks_before_paid_request(tmp_path, monkeypatch):
+    paid = Mock()
+    monkeypatch.setattr("requests.post", paid)
+    planner = ConversationalPlanner(lambda: "synthetic", tmp_path / "ledger.json")
+    planner.allowance_inr = 0.000001
+    with pytest.raises(SafetyError, match="spending gate"):
+        planner.compose("Explain retail loyalty", {}, timeout=10)
+    paid.assert_not_called()

@@ -104,7 +104,12 @@ def test_single_claim_deploy_or_restart(tmp_path, monkeypatch, installed, owner_
     if chat_upgrade:
         launches = client.secrets.put_secret.call_args_list
         assert json.loads(launches[0].kwargs["string_value"])["expires"] == 1
-        assert json.loads(launches[1].kwargs["string_value"])["expires"] == 1720
+        assert json.loads(launches[1].kwargs["string_value"])["expires"] == 2200
+        assert not any(
+            call.args[:2]
+            == ("POST", "/api/2.0/serving-endpoints/retail-hp-poc-recommender/config:start")
+            for call in client.api_client.do.call_args_list
+        )
     ledger = (
         module.CHAT_LEDGER
         if chat_upgrade

@@ -96,6 +96,7 @@ class WorkbenchRuntime:
         self.index, self.lease_expires, self.trace_sink = index, lease_expires, trace_sink
         self.user_client_factory = user_client_factory or self._user_client
         self.planner = ConversationalPlanner(self._luna_token, ledger)
+        self.planner.allowance_inr = 25.0  # Shared testing + owner chat; no per-request allowance.
 
     @staticmethod
     def _user_client(token: str) -> Any:

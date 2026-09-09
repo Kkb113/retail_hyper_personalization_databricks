@@ -131,13 +131,17 @@ def start(context, *, owner_demo=False, chat_upgrade=False):
         if ledger_path.exists()
         else {"reserved_inr": 0, "runs": []}
     )
-    # 12-minute deadline + 5-minute stop allowance; 100 bounded LLM requests;
-    # includes conservative tax/rate/storage margin, not an invoice guarantee.
+    # Chat: 20-minute deadline + 5-minute stop headroom, INR 25 LLM gate,
+    # XXSmall warehouse with 1-minute idle stop, no real-time endpoint start.
+    # Other launches retain 12 minutes. Tax/rate/storage margin is a planning
+    # assumption, not a guaranteed Azure invoice ceiling.
     reserve = 220
     # Owner approved a cumulative INR 440 allowance on 2026-09-09 after the
     # first startup timeout. Reservations persist even when actual billing lags.
     # Separate additional INR 220 chat-fix validation explicitly approved by owner.
-    ceiling = 220 if owner_demo or chat_upgrade else 440
+    # Owner approved one further INR 220 chat test after the transition failure.
+    # Preserve the first INR 220 reservation; no third chat window is authorized.
+    ceiling = 220 if owner_demo else 440
     require(ledger["reserved_inr"] + reserve <= ceiling, "Phase 10 launch allowance exhausted")
     ticket = uuid4().hex
     ledger["reserved_inr"] += reserve
@@ -156,7 +160,9 @@ def start(context, *, owner_demo=False, chat_upgrade=False):
             ]
         },
     )
-    deadline = int(time.time()) + 720
+    # Owner asked to test too: one shared 20-minute window, not immediate teardown.
+    # Chat uses batch recommendations; the real-time endpoint stays stopped.
+    deadline = int(time.time()) + (1200 if chat_upgrade else 720)
     launch = {
         "ticket": ticket,
         "expires": deadline,
@@ -209,7 +215,8 @@ def start(context, *, owner_demo=False, chat_upgrade=False):
                 pending = [
                     item
                     for item in history
-                    if item.status and item.status.state.value not in {"SUCCEEDED", "FAILED"}
+                    if item.status
+                    and item.status.state.value not in {"SUCCEEDED", "FAILED", "CANCELLED"}
                 ]
                 restarted = any(
                     item.create_time
@@ -239,7 +246,8 @@ def start(context, *, owner_demo=False, chat_upgrade=False):
         STATE.write_text(json.dumps(state))
         # Do not pay for dependencies while waiting for App compute allocation.
         client.warehouses.start(control["warehouse_id"])
-        client.api_client.do("POST", f"/api/2.0/serving-endpoints/{ENDPOINT}/config:start")
+        if not chat_upgrade:
+            client.api_client.do("POST", f"/api/2.0/serving-endpoints/{ENDPOINT}/config:start")
     except BaseException:
         # Independent controller remains armed if operator cleanup itself fails.
         for operation in [

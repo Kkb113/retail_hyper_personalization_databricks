@@ -32,6 +32,8 @@ def validate(context):
 
     def chat(label, text):
         reply = post("/api/chat", {"text": text})
+        # Keep even a failed synthetic reply for diagnosis, never public credentials.
+        (ROOT / f"build/phase10-chat-{label}.local.json").write_text(json.dumps(reply, indent=2))
         require(reply["status"] == "ok", f"{label}: response not ok")
         require(reply["response_mode"] == "llm", f"{label}: narrative fell back")
         require(reply["sections"], f"{label}: no rich sections")
@@ -41,8 +43,6 @@ def validate(context):
             "sections": len(reply["sections"]),
             "mode": reply["response_mode"],
         }
-        # Synthetic content retained privately for factual inspection, not public evidence.
-        (ROOT / f"build/phase10-chat-{label}.local.json").write_text(json.dumps(reply, indent=2))
         return reply
 
     try:

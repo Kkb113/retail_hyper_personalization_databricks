@@ -1,0 +1,16 @@
+{
+  "status": "LIVE_API_ACCEPTED_OWNER_TEST_WINDOW_OPEN",
+  "release": "a4c6799700817f5b2633170e6bc274feebc023faf9a73ddcde6dc2953da3855d",
+  "app_deployment": "SUCCEEDED",
+  "owner_requested_no_early_shutdown": true,
+  "shutdown_deadline_utc": "2026-09-09T07:15:46Z",
+  "shutdown_deadline_ist": "2026-09-09T12:45:46+05:30",
+  "recommender_endpoint": "STOPPED",
+  "warehouse_idle_timeout_minutes": 1,
+  "shared_llm_allowance_inr": 25,
+  "this_window_reservation_inr": 220,
+  "cumulative_chat_validation_reservations_inr": 440,
+  "new_resources_created": 0,
+  "invoice_cap_guaranteed": false,
+  "final_shutdown_observed": false
+}

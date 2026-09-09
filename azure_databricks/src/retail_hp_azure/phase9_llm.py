@@ -33,6 +33,7 @@ def _save_ledger(path: Path, value: dict[str, Any]) -> None:
 
 
 class DatabricksPlanner:
+    allowance_inr: float = PHASE_LLM_ALLOWANCE
     def __init__(self, client: Any, endpoint: str, ledger: Path) -> None:
         require(endpoint in RATES, "Unapproved foundation endpoint")
         self.client, self.endpoint, self.ledger = client, endpoint, ledger
@@ -113,7 +114,7 @@ class DatabricksPlanner:
             )
             require(ledger["calls"] < 400, "Phase LLM call quota exhausted")
             require(
-                ledger["reserved_or_spent_inr"] + reservation < PHASE_LLM_ALLOWANCE,
+                ledger["reserved_or_spent_inr"] + reservation < self.allowance_inr,
                 "Phase LLM spending gate reached",
             )
             ledger["reserved_or_spent_inr"] += reservation

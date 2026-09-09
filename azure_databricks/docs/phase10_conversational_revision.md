@@ -2,12 +2,14 @@
 
 This revision addresses the owner's failed rich-personalization demonstration. The
 previous narrow API acceptance was not sufficient evidence for that conversation.
-**Current status: implemented and locally tested, NOT live accepted.** The first
-upgrade attempt was blocked by Azure's still-pending automatic old-release restart.
-That restart consumed the refreshed one-use ticket, so validation was stopped rather
-than replaying it or resetting a spending ledger. The launcher now waits for a newly
-observed terminal restart before publishing the live ticket. This race fix has an
-offline regression test; its live verification needs another authorized window.
+**Current status: conversational API live acceptance passed on 2026-09-09.**
+The first upgrade attempt was blocked by Azure's still-pending automatic old-release
+restart. The corrected launcher waited for that transition before publishing the
+live ticket, and the second deployment succeeded. No ticket was replayed and no
+spending reservation was erased. The owner explicitly requested the App remain
+available for personal testing until the armed deadline, 2026-09-09 07:15:46 UTC
+(12:45:46 PM IST). The real-time endpoint remains stopped. This does not claim a
+subsequent shutdown has already been observed or browser acceptance was repeated.
 Live acceptance for this revision is recorded separately in
 `../evidence/phase_10/chat_validation.json`; absence or FAIL is not acceptance.
 
@@ -48,6 +50,18 @@ INR 220 owner-demo reservations are preserved. These are estimates, not invoice 
 The upgrade starts the old snapshot with an expired lease, then deploys the new
 snapshot with the live one-use ticket, after the shutdown controller is armed.
 
+### Shared test window adjustment
+
+The owner subsequently approved one further INR 220 test and asked to test personally
+before shutdown. The chat ledger's authorized cumulative reservation is INR 440;
+the original reservation is not erased. The second window is 20 minutes including
+startup, with five minutes of shutdown-retry headroom. The App's shared LLM gate is
+reduced to INR 25, and the real-time endpoint is not started. Batch personalization,
+customer/product tools and general chat remain in scope; real-time scenarios are not
+part of this economical window. SQL retains one-minute idle auto-stop. No four-hour
+runtime or further launch is authorized by this change. The operator must hand off
+the exact deadline and must not stop early immediately after automated checks.
+
 ## Validation
 
 Local tests cover prompt customer resolution, quoted multipart recommendations,
@@ -57,6 +71,15 @@ API session continuity and lease-bounded warehouse wake-up. Existing phase tests
 The live test uses the existing non-admin identity and prompt-only requests; temporary
 OAuth credentials are revoked in finally. It requires real LLM narratives, not fallback,
 for personalization, follow-up and general retail, plus unauthorized-ID denial.
+
+Live results: five hydrated, model-ranked recommendations with five narrative sections;
+follow-up resolved the first product without repeating the customer ID and returned
+three sections; general retail advice returned six sections without new live-data
+queries. All three used Luna (not the verified-data fallback), and an unauthorized
+customer ID in the prompt was denied. Responses were inspected against their returned
+evidence: limited behavioral history, unspecified currency and snapshot inventory
+were disclosed rather than fabricated. A new cross-category discovery was unavailable
+and was explicitly identified as such. The temporary OAuth test secret was revoked.
 
 ## Research used
 
