@@ -1340,8 +1340,10 @@ The cheapest qualifying model passes all hard gates, the agent is fully grounded
 The chat-first React App and private HTTP/runtime boundary are implemented locally.
 One Medium App definition exists with no active deployment and is STOPPED.
 The actual App identity passed a keyless Luna token/model-metadata test; no inference
-or paid compute was started. Independent shutdown deployment is gated on IT registering
-`Microsoft.Automation` at subscription scope. See
+or paid Databricks compute was started. As of 2026-09-09, `Microsoft.Automation` is
+registered and the Basic shutdown account/runbook are deployed. Its first stopped-state
+test failed because SQL-access entitlement is required; granting it awaits explicit
+approval after execution safety review. No warehouse/App/endpoint start was made. See
 [Phase 10 runbook](azure_databricks/docs/phase10_app_runbook.md) for all remaining
 live, identity, packaging, browser and cost acceptance gates. Do not start Phase 11 yet.
 

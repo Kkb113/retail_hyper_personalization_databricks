@@ -2,6 +2,17 @@
 
 Reviewed 2026-09-08. Findings below distinguish documentation from actual workspace tests.
 
+2026-09-09 shutdown update: registration is verified and the Basic managed-identity
+Automation account/runbook are deployed. The first stopped-state test returned HTTP 403
+because SQL APIs require the SQL-access entitlement. Explicit approval for that entitlement
+is pending; no paid Databricks compute start occurred. API references used:
+[Automation account creation](https://learn.microsoft.com/en-us/rest/api/automation/automation-account/create-or-update?view=rest-automation-2024-10-23),
+[managed identity token access](https://learn.microsoft.com/en-us/azure/automation/enable-managed-identity-for-automation),
+[additive permissions versus replacement](https://docs.databricks.com/api/access-management/v1/update-object-permissions),
+and [Automation pricing](https://azure.microsoft.com/en-us/pricing/details/automation/).
+Automation's 500 monthly job minutes are shared at subscription scope and subject to
+rate-plan eligibility; no assertion of guaranteed free execution is made.
+
 | Topic | Decision and evidence |
 | --- | --- |
 | Hosting | Native Databricks App only. [App overview](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/databricks-apps/) describes OAuth/Unity Catalog integration. Existing workspace is Premium; no workspace SKU upgrade was made. |

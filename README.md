@@ -83,8 +83,9 @@ The authenticated App is Phase 10 work; no always-on agent deployment is created
 Phase 10 is now **in progress**, not live-ready: a local chat-first React App and guarded
 API are implemented, and the native Medium App is created but **STOPPED with no
 deployment**. Keyless App-principal access to Luna metadata passed without inference.
-IT must register `Microsoft.Automation` before the independent shutdown controller
-can be deployed. Remaining acceptance gates and local preview instructions are in
+`Microsoft.Automation` is registered and the Basic shutdown account/runbook are deployed.
+The stopped-state test needs approval for the controller's SQL-access entitlement;
+shutdown and live App acceptance remain incomplete. Local preview instructions are in
 [the Phase 10 runbook](azure_databricks/docs/phase10_app_runbook.md).
 
 The only bundle is `azure_databricks/databricks.yml`, with target `poc`, **zero

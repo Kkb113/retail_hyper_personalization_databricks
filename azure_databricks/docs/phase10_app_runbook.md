@@ -42,28 +42,34 @@ a deployed application. Do not report Phase 10 acceptance or move to Phase 11 ye
   GET succeeded. The temporary Databricks OAuth test secret was revoked in finally.
   This is **not** an inference acceptance test.
 
-## Required IT-admin action
+## Shutdown checkpoint (2026-09-09)
 
-The subscription reports `Microsoft.Automation` as `NotRegistered`. A subscription
-administrator must register that resource provider. This is outside the authorized
-resource-group-only mutation boundary, so this branch does not do it automatically.
+`Microsoft.Automation` registration is verified. The former registration blocker is cleared.
+One Basic Automation account, `retail-hp-poc-shutdown`, now exists in `Databricks`/West US
+with system-assigned managed identity, local authentication disabled and public webhook/
+agent access disabled. No hybrid worker, Log Analytics workspace or recurring schedule
+was created. The fixed-target `retail-hp-stop-demo` runbook was published.
 
-In Azure Portal: **Subscriptions → target subscription → Resource providers →
-Microsoft.Automation → Register**. Alternatively, the administrator can use:
+The controller has CAN_MANAGE on only the existing project App, SQL warehouse and model
+endpoint. Databricks does not provide a stop-only role for this combination. Existing
+direct ACLs are retained and checked after additive updates; no workspace-admin or UC
+data grants were made. The runbook itself contains no compute-start operations.
 
-```powershell
-az provider register --namespace Microsoft.Automation --wait
-```
+Its first stopped-state cloud test **failed** because warehouse APIs require the
+`databricks-sql-access` entitlement. Granting this broader workspace entitlement was
+blocked by the execution safety reviewer pending explicit user approval. The proposed
+additive change is implemented but **has not been applied**. Do not claim shutdown
+acceptance, deploy/start the App, or start warehouse/serving compute yet.
 
-They must first select the correct subscription. Registration is not deployment of
-an Automation account, and does not itself implement shutdown.
+One short Automation test job ran and failed; no Databricks compute or inference was
+started. Automation free units are subscription-wide and eligibility/remaining units
+have not been confirmed, so do not claim the job is guaranteed free.
 
 ## Remaining release gates after registration
 
-1. Create one Basic Azure Automation account in the approved RG and a dedicated
-   managed-identity stop-only runbook. No hybrid worker VM, Log Analytics workspace,
-   public webhook or recurring idle job. Verify current pricing and provider availability
-   before creation. The subscription-wide free minute allowance may be shared.
+1. Obtain explicit approval for the controller's SQL-access entitlement, then apply
+   the additive entitlement and rerun the stopped-state identity test. The Basic account
+   and runbook already exist; do not create duplicates. No workspace-admin/data grants.
 2. Test the runbook's identity and exact App/warehouse/endpoint stop permissions.
    Arm and verify the independent controller before any paid start. Prefer a short,
    fixed demo window (initially 10 minutes), not an always-on service. Keep stop

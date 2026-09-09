@@ -1,6 +1,6 @@
 {
   "status": "PASS_LOCAL_ONLY",
-  "python_tests_passed": 271,
+  "python_tests_passed": 276,
   "frontend_rank_diff_tests_passed": 1,
   "frontend_chat_tests_passed": 5,
   "ui_scope": "SINGLE_CHAT_INLINE_RECOMMENDATIONS_COLLAPSED_SOURCES",
@@ -15,6 +15,6 @@
   "browser_accessibility_validation": "PENDING",
   "live_obo_flow_validation": "PENDING",
   "live_workload_inference": "PENDING",
-  "independent_shutdown_validation": "BLOCKED_PROVIDER_NOT_REGISTERED",
+  "independent_shutdown_validation": "BLOCKED_SQL_ENTITLEMENT_APPROVAL",
   "phase10_complete": false
 }
