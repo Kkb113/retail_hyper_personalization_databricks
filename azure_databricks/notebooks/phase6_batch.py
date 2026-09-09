@@ -9,8 +9,8 @@ import mlflow
 import pandas as pd
 from mlflow.tracking import MlflowClient
 from pyspark.sql import functions as F
-from threadpoolctl import threadpool_limits
 from retail_hp_azure.demo_cohort import select_demo_customers
+from threadpoolctl import threadpool_limits
 
 CATALOG = "intellify_databricks_demo"
 MODEL = f"{CATALOG}.ml.adaptive_recommender"

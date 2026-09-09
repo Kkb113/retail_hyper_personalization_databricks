@@ -51,8 +51,28 @@ def prepare(context, *, active_window=False):
     accepted = [entry for entry in sources if entry["status"] == "PASS"]
     require(len(accepted) == 1, "Semantic release ambiguity")
     version = accepted[0]["generation"]["snapshot_version"]
-    with client.files.download(f"{VOLUME}/{version}.json").contents as stream:
-        snapshot = stream.read(80_000_001)
+    # Reuse only the previous immutable package's verified, unchanged public vectors.
+    previous_control = ROOT / "build/phase10-release.local.json"
+    snapshot = None
+    if previous_control.exists():
+        old = json.loads(previous_control.read_text())
+        cached = Path(old["local_package"]).resolve()
+        require(cached.is_relative_to((ROOT / "build").resolve()), "Cache path outside build")
+        manifest = json.loads((cached / "manifest.json").read_text())
+        require(
+            hashlib.sha256((cached / "manifest.json").read_bytes()).hexdigest() == old["release"],
+            "Cached release hash drift",
+        )
+        candidate = (cached / "semantic.json").read_bytes()
+        require(
+            hashlib.sha256(candidate).hexdigest() == manifest["semantic.json"],
+            "Cached semantic hash drift",
+        )
+        if SemanticIndex(json.loads(candidate)).version == version:
+            snapshot = candidate
+    if snapshot is None:
+        with client.files.download(f"{VOLUME}/{version}.json").contents as stream:
+            snapshot = stream.read(80_000_001)
     require(len(snapshot) <= 80_000_000, "Semantic snapshot too large")
     SemanticIndex(json.loads(snapshot))
     wheels = list((ROOT / "build/phase10-wheels").glob("retail_hp_azure_databricks-*.whl"))

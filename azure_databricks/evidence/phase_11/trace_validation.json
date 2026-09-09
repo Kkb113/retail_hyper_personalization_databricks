@@ -1,0 +1,12 @@
+{
+  "status": "PASS_OBSERVED_TRACE_EXPORT",
+  "request_count": 4,
+  "event_count": 19,
+  "all_correlations_verified": true,
+  "raw_payloads_recorded": false,
+  "mlflow_run_id": "aa7e41f6c5f8401eab5ea6b22c33728f",
+  "mlflow_trace_id": "tr-f08cbcd17a503718231ce10c5c73ef7c",
+  "replay_not_live_span_timing": true,
+  "recovered_interrupted_finalization": true,
+  "compute_started": false
+}

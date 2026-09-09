@@ -19,6 +19,7 @@ STATE = ROOT / "build/phase10-live.local.json"
 LEDGER = ROOT / "build/phase10-cost.local.json"
 DEMO_LEDGER = ROOT / "build/phase10-owner-demo.local.json"
 CHAT_LEDGER = ROOT / "build/phase10-chat-validation.local.json"
+PHASE11_LEDGER = ROOT / "build/phase11-validation.local.json"
 APP = "retail-hp-poc-app"
 ENDPOINT = "retail-hp-poc-recommender"
 
@@ -86,7 +87,10 @@ def stopped(context, warehouse):
     require(endpoint["state"].get("suspend") == "STOPPED", "Endpoint running")
 
 
-def start(context, *, owner_demo=False, chat_upgrade=False):
+def start(context, *, owner_demo=False, chat_upgrade=False, phase11=False):
+    require(not phase11 or not (owner_demo or chat_upgrade), "Choose one launch purpose")
+    if phase11:
+        chat_upgrade = True  # Same bounded App-only upgrade, separate authorized ledger.
     require(not (owner_demo and chat_upgrade), "Choose one authorized launch purpose")
     preflight = json.loads(
         (ROOT / "azure_databricks/evidence/phase_10/release_preflight.json").read_text()
@@ -125,7 +129,15 @@ def start(context, *, owner_demo=False, chat_upgrade=False):
     require(_verify_budget(context)["current_spend_inr"] < 9000, "Monthly spend safety margin")
     # Explicit owner-requested demo is separate from completed validation history.
     # Neither ledger is reset; this option permits one bounded demo only.
-    ledger_path = CHAT_LEDGER if chat_upgrade else DEMO_LEDGER if owner_demo else LEDGER
+    ledger_path = (
+        PHASE11_LEDGER
+        if phase11
+        else CHAT_LEDGER
+        if chat_upgrade
+        else DEMO_LEDGER
+        if owner_demo
+        else LEDGER
+    )
     ledger = (
         json.loads(ledger_path.read_text())
         if ledger_path.exists()
@@ -143,7 +155,7 @@ def start(context, *, owner_demo=False, chat_upgrade=False):
     # Owner approved one additional INR 220 business-response deployment window
     # on 2026-09-09, followed by INR 220 for the durable customer-readiness rollout.
     # Preserve all three earlier chat reservations; no fifth window is authorized.
-    ceiling = 880 if chat_upgrade else 220 if owner_demo else 440
+    ceiling = 220 if phase11 else 880 if chat_upgrade else 220 if owner_demo else 440
     require(ledger["reserved_inr"] + reserve <= ceiling, "Phase 10 launch allowance exhausted")
     ticket = uuid4().hex
     ledger["reserved_inr"] += reserve
@@ -345,12 +357,21 @@ if __name__ == "__main__":
         action="store_true",
         help="One explicitly requested demo; preserve validation reservations",
     )
+    parser.add_argument(
+        "--phase11", action="store_true", help="One approved INR 220 Phase 11 window"
+    )
     args = parser.parse_args()
     require(not args.owner_demo or args.command == "start", "Demo flag requires start")
     require(not args.chat_upgrade or args.command == "start", "Upgrade flag requires start")
+    require(not args.phase11 or args.command == "start", "Phase 11 flag requires start")
     context = CloudContext(apply=args.command != "inspect", direct_operator_token=True)
     if args.command == "start":
-        result = start(context, owner_demo=args.owner_demo, chat_upgrade=args.chat_upgrade)
+        result = start(
+            context,
+            owner_demo=args.owner_demo,
+            chat_upgrade=args.chat_upgrade,
+            phase11=args.phase11,
+        )
     elif args.command == "stop":
         result = {"stop_job": arm(context, int(time.time()))}
     elif args.command == "redeploy":

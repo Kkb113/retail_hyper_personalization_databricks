@@ -1,6 +1,6 @@
 {
   "status": "PASS_CONVERSATIONAL_API",
-  "release": "34b91f434900c63f4741e10c5f95e74598278ebcb1cbc7a7786a57396dfdc2ee",
+  "release": "133248c7c08b4c35677ec522cffc310958d2e8ecd1d59bfec341cd276c29fe72",
   "checks": {
     "personalization": {
       "action": "get_recommendations",
@@ -18,10 +18,16 @@
     "general_retail": {
       "action": "retail_advice",
       "cards": 0,
-      "sections": 4,
+      "sections": 3,
       "mode": "llm"
     },
     "unauthorized_prompt_customer_denied": true
   },
+  "request_hashes": [
+    "e49ba0916407760d36463b969161b1c3fd389bc22604185639d59acb02df5577",
+    "8e75da8496fdaaf0265c9951abac6eddf3f4c7f53dbb09c93e49c982400c5ad9",
+    "4da3424b4dd47bcb223ee789cc85e72ec2c0a9f0f929ebbc552d9815dc64ce6a",
+    "2766fa6d02983f2f7dc2fb531755e348c6f065aaf8de39bbfb79d962d22b73cc"
+  ],
   "temporary_oauth_secret_revoked": true
 }

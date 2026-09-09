@@ -78,6 +78,7 @@ class AgentReply(Contract):
     evidence: list[dict[str, Any]] = Field(default_factory=list, max_length=8)
     sections: list[dict[str, Any]] = Field(default_factory=list, max_length=8)
     response_mode: str = "legacy"
+    request_hash: str | None = None
     agent_version: str = VERSION
     action: str
 

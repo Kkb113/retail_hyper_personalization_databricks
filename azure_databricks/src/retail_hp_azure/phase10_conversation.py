@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
+import threading
 import time
+from collections.abc import Callable
 from typing import Any
 
 from pydantic import Field
@@ -18,6 +21,7 @@ from retail_hp_azure.business_explanations import (
 from retail_hp_azure.phase8 import CATALOG, Contract, ToolContext, ToolResult
 from retail_hp_azure.phase9 import AgentReply, Plan, RetailAgent, Session
 from retail_hp_azure.phase9_llm import AzureLunaPlanner
+from retail_hp_azure.phase11 import TRACE_REQUEST
 from retail_hp_azure.safety import require
 
 ROUTING = """You assist with ALL retail topics: personalized recommendations, products,
@@ -146,6 +150,29 @@ class Narrative(Contract):
 
 
 class ConversationalPlanner(AzureLunaPlanner):
+    usage_sink: Callable[[dict[str, Any]], None] | None = None
+    _usage_lock = threading.Lock()
+
+    def _request(self, *args: Any, **kwargs: Any) -> Any:
+        require(self._usage_lock.acquire(blocking=False), "Concurrent LLM request")
+        self.last_usage = {}
+        try:
+            return super()._request(*args, **kwargs)
+        finally:
+            try:
+                if self.usage_sink is not None:
+                    self.usage_sink(
+                        {
+                            **self.last_usage,
+                            "event": "llm_call",
+                            "request_hash": TRACE_REQUEST.get(),
+                            "model_version": "gpt-5.6-luna",
+                            "status": "SUCCESS" if self.last_usage.get("success") else "FAILED",
+                        }
+                    )
+            finally:
+                self._usage_lock.release()
+
     def plan(self, text: str, state: dict[str, Any], *, timeout: float) -> Plan:
         return Plan.model_validate(
             self._request(
@@ -191,6 +218,32 @@ def fallback_plan(text: str, session: Session) -> Plan:
 
 
 class ConversationAgent(RetailAgent):
+    def run(
+        self, text: str, *, context: ToolContext, session: Session, request_id: str
+    ) -> AgentReply:
+        request_hash = hashlib.sha256(request_id.encode()).hexdigest()
+        token = TRACE_REQUEST.set(request_hash)
+        started = time.monotonic()
+        reply = None
+        try:
+            reply = super().run(text, context=context, session=session, request_id=request_id)
+            return reply.model_copy(update={"request_hash": request_hash})
+        finally:
+            self.trace_sink(
+                {
+                    "event": "agent_request",
+                    "request_hash": request_hash,
+                    "prompt_hash": hashlib.sha256((ROUTING + WRITING).encode()).hexdigest(),
+                    "agent_version": "retail_conversation_v2",
+                    "model_version": "gpt-5.6-luna",
+                    "status": reply.status if reply else "FAILED",
+                    "action": reply.action if reply else "not_planned",
+                    "response_mode": reply.response_mode if reply else "unavailable",
+                    "elapsed_ms": round((time.monotonic() - started) * 1000, 2),
+                }
+            )
+            TRACE_REQUEST.reset(token)
+
     def _run(
         self, text: str, *, context: ToolContext, session: Session, request_id: str
     ) -> AgentReply:
