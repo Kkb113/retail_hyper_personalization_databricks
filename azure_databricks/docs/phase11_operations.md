@@ -1,7 +1,8 @@
 # Phase 11 — Analytics, observability and operations
 
-Status: deployed; SQL reconciliation, manual opportunity job and live chat acceptance
-passed. Dashboard visual review is delegated to the user, not claimed verified.
+Status: deployed; SQL reconciliation, manual opportunity job, live chat acceptance and
+the governed business Genie Agent passed. Dashboard visual review is delegated to the
+user, not claimed verified.
 See `evidence/phase_11` for separate SQL, trace and shutdown acceptance records.
 
 ## Acceptance and handoff
@@ -127,5 +128,7 @@ delivered emails. Budget emails and the existing shutdown controller remain sepa
 - [MLflow tracing](https://mlflow.org/docs/latest/genai/tracing/faq/): manual spans avoid uncontrolled prompt capture.
 - [Trace archival](https://mlflow.org/docs/latest/genai/tracing/observe-with-traces/archive-traces/): retention must be explicitly operated; hiding old rows does not delete stored traces.
 
-Optional Genie is not activated or represented as free. No Lakebase, paid vector
-index, Log Analytics workspace, new cluster or dedicated serving endpoint is needed.
+The governed Genie Agent is deployed with a version-controlled configuration; its live
+business-question acceptance evidence is tracked separately in
+`phase11_genie_runbook.md`. No Lakebase, paid vector index, Log Analytics workspace,
+new cluster or dedicated serving endpoint is needed.

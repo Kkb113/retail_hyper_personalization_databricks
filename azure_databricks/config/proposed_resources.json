@@ -227,18 +227,21 @@
       "lifecycle_controls": ["on_demand_refresh", "shared_warehouse"]
     },
     {
-      "name": "retail-hp-poc-genie",
+      "name": "Retail Hyper-Personalization Business Analyst",
       "kind": "genie_space",
       "phase": 11,
-      "state": "optional_disabled",
+      "state": "deployed_validated",
       "azure_resource_group": "Databricks",
       "workspace": "intellify-databricks-demo",
-      "incremental_cost_class": "pricing_must_be_rechecked",
+      "incremental_cost_class": "user_usage_promotional; shared_sql_compute_usage_based",
       "enabled_by_default": false,
       "lifecycle_controls": [
-        "human_demo_only",
+        "business_user_access_only",
         "no_service_principal_automation",
-        "current_pricing_recheck"
+        "current_pricing_recheck",
+        "existing_xxsmall_warehouse_only",
+        "warehouse_auto_stop_1_minute",
+        "no_refresh_schedule"
       ]
     }
   ]

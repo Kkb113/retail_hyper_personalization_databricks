@@ -1,0 +1,27 @@
+{
+  "status": "PASS_GENIE_DEPLOYMENT",
+  "space_id": "01f1ac69031b1786b9b61fa434656e33",
+  "title": "Retail Hyper-Personalization Business Analyst",
+  "configuration_sha256": "97bd30e30f9f46a1a9316a7122dd5309d3496ce9295ed885eacbaa93ff9fe899",
+  "business_acceptance": {
+    "conversation_id": "01f1ac6b34d315b28d15585095e37c38",
+    "status": "COMPLETED",
+    "has_error": false,
+    "text_attachments": 1,
+    "answer_characters": 725,
+    "query_attachments": 1,
+    "visualizations": 0
+  },
+  "business_starter_questions": 6,
+  "stored_benchmarks": 0,
+  "raw_sql_examples": 0,
+  "viewer_group": "retail_hp_viewers",
+  "warehouse_state": "STOPPED",
+  "warehouse_auto_stop_minutes": 1,
+  "genie_user_promotion_checked_at": "2026-09-09",
+  "genie_user_usage_free_through": "2027-01-31",
+  "service_principal_usage_validated": false,
+  "new_azure_resources": 0,
+  "allowance_inr": 100,
+  "allowance_is_not_invoice_cap": true
+}

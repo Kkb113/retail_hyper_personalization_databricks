@@ -1476,8 +1476,11 @@ Implementation record: `azure_databricks/docs/phase11_operations.md` and
 `azure_databricks/evidence/phase_11`. The original design below is a target, not a
 claim that unavailable metrics or unsupported opportunity triggers are implemented.
 Current-release holdout ranking metrics, attributed feedback rate, continuous alerts
-and automatic physical retention remain explicitly unqualified or manual. Optional
-Genie was not activated. Only two evidence-supported opportunity rules are enabled.
+and automatic physical retention remain explicitly unqualified or manual. A governed,
+aggregate-only Genie Agent is deployed and version controlled; its completed
+business-acceptance status is recorded in
+`azure_databricks/docs/phase11_genie_runbook.md`. Only two
+evidence-supported opportunity rules are enabled.
 
 ### Objective
 
@@ -1501,9 +1504,10 @@ Build a native dashboard with:
 
 AI/BI dashboards are native governed assets, but their queries still consume compute.[R22] Use the one auto-stopped SQL warehouse.
 
-### Optional curated Genie Space
+### Governed retail Genie Agent
 
-A small Genie Space may expose trusted analyst questions:
+The **Retail Hyper-Personalization Business Analyst** exposes trusted business questions
+through curated aggregate views:
 
 - Which customer segments have the lowest recommendation hit rate?
 - Which categories have high demand but low inventory?
@@ -1511,7 +1515,13 @@ A small Genie Space may expose trusted analyst questions:
 - Where is cold-start feedback weakest?
 - Which promotions increase recommendation eligibility?
 
-Use certified tables, explicit instructions, trusted SQL, and benchmark questions.[R35][R36] Current documentation describes time-bounded promotional pricing for some human Genie usage; it must be rechecked immediately before activation and must not be treated as permanently free.[R37]
+It uses ten annotated Unity Catalog sources, explicit business definitions, six
+business-facing starter questions, least-privilege access, and a version-controlled
+serialized configuration. Per owner direction, stored raw SQL examples and benchmark
+questions are excluded; acceptance uses live business questions instead.[R35][R36]
+Current documentation
+describes time-bounded promotional pricing for human Genie Agent usage; it is rechecked
+before activation and is not treated as permanently free.[R37]
 
 ### Deterministic opportunity generation
 
@@ -1540,7 +1550,7 @@ The agent explains an opportunity; it does not decide whether the trigger occurr
 ### Deliverables
 
 - AI/BI dashboard.
-- Optional Genie Space and benchmark.
+- Governed Genie Agent and live business-question acceptance.
 - Opportunity job and table.
 - Monitoring views.
 - Alert thresholds and incident runbook.
@@ -1549,7 +1559,7 @@ The agent explains an opportunity; it does not decide whether the trigger occurr
 ### Tests
 
 - Dashboard figures reconcile to source tables.
-- Trusted Genie questions meet the agreed answer benchmark.
+- Live business questions return substantive answers backed by successfully executed governed data.
 - Opportunity triggers reproduce from source facts.
 - Every evaluated agent request can be traced across components.
 - Sensitive or unnecessary fields are absent from traces.
