@@ -1,0 +1,7 @@
+{
+  "status": "FAIL",
+  "release": "34b91f434900c63f4741e10c5f95e74598278ebcb1cbc7a7786a57396dfdc2ee",
+  "checks": {},
+  "last_http_status": 401,
+  "note": "Operator Azure CLI token rejected before App session creation; browser sign-in remains untested."
+}

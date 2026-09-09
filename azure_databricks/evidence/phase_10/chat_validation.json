@@ -1,11 +1,11 @@
 {
   "status": "PASS_CONVERSATIONAL_API",
-  "release": "060af8794ef109786e1c3f9627cda555c16e239c2e5fbed830fd1541f8151e77",
+  "release": "34b91f434900c63f4741e10c5f95e74598278ebcb1cbc7a7786a57396dfdc2ee",
   "checks": {
     "personalization": {
       "action": "get_recommendations",
       "cards": 5,
-      "sections": 5,
+      "sections": 4,
       "mode": "llm"
     },
     "business_narrative_no_internal_terminology": true,

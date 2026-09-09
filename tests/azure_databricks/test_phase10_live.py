@@ -137,7 +137,7 @@ def test_single_claim_deploy_or_restart(
     if owner_demo:
         assert json.loads(module.LEDGER.read_text())["reserved_inr"] == 440
     # An uncertain old reservation cannot silently disappear on a later run.
-    ledger.write_text(json.dumps({"reserved_inr": 660 if chat_upgrade else 440, "runs": []}))
+    ledger.write_text(json.dumps({"reserved_inr": 880 if chat_upgrade else 440, "runs": []}))
     client.apps.list_deployments.side_effect = None
     monkeypatch.setattr(module, "automation", lambda *args: {"properties": {"status": "Completed"}})
     with pytest.raises(SafetyError, match="allowance exhausted"):

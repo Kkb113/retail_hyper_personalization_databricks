@@ -1,7 +1,9 @@
 # Durable customer readiness and business evidence
 
-Status: implemented locally; live view migration and App acceptance are pending.
-The previously deployed business-language release is not this revision.
+Status: deployed on 2026-09-09; view migration, restricted-user conversational API
+checks and operator-identity runtime checks passed. Operator browser sign-in and
+multi-customer chat remain a user acceptance check: automated operator HTTP access
+returned 401, so that path is not claimed as passed.
 Staged release: `34b91f434900c63f4741e10c5f95e74598278ebcb1cbc7a7786a57396dfdc2ee`.
 Validation: 327 Python tests passed, 4 mutually exclusive launch cases skipped;
 6 frontend tests and production build passed; lint, type checks, credential scan,
@@ -42,8 +44,9 @@ Health/dependency probes verify identity without resolving the cohort or waking 
 Underlying Unity Catalog permissions still apply to each data query.
 
 No new Azure resources, SQL warehouses, serving endpoints, embeddings, or retraining
-are required. The existing launch, LLM and shutdown limits are unchanged. No further
-spending allowance has been added for this revision.
+are required. The existing launch duration, LLM and shutdown limits are unchanged.
+The user approved one additional INR 220 estimated validation window for this
+revision (cumulative chat-validation reservations INR 880, not actual invoiced cost).
 
 ## Release sequence
 
@@ -76,5 +79,20 @@ The existing on-behalf-of-user design is retained because Databricks applies the
 caller's Unity Catalog permissions to data access. See [Microsoft's Databricks App
 authorization guidance](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/databricks-apps/auth).
 Azure metadata inspection confirmed all six customer-context source schemas without
-starting compute. SQL execution, actual grant preservation, operator cohort access
-and live App behavior must still pass in the approved rollout window.
+starting compute. Live migration exposed 4,684 active customer profiles and verified
+95 complete active published customers (not all 100 batch IDs are active).
+Restricted-user App reads passed after migration without new grants. The operator
+runtime resolved all 95 under the existing operator identity. CUS003101 has 21
+purchase entries and CUS000151 has 17; both returned ten distinct recommendations
+and ten bounded recent purchase products. This verifies availability, not accuracy.
+
+Live chat acceptance passed five recommendations, follow-up, general retail advice,
+business narrative terminology and unauthorized customer denial. The operator HTTP
+test encountered 401 before a session was created; direct runtime checks do not
+replace browser sign-in or prove multi-customer chat end-to-end. The user should
+sign in normally and try ten products for CUS003101, then switch to CUS000151.
+
+Deployment: `01f1ac2d40c51d1dbd6b0fac99f08835`, SUCCEEDED. The App was intentionally
+left running for user testing, with its existing deadline 2026-09-09 09:18:29 UTC
+(14:48:29 IST). No early operator stop is requested. The real-time endpoint remains
+stopped; shutdown completion is not asserted before the deadline.

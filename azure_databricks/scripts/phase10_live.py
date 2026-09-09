@@ -141,8 +141,9 @@ def start(context, *, owner_demo=False, chat_upgrade=False):
     # Separate additional INR 220 chat-fix validation explicitly approved by owner.
     # Owner approved one further INR 220 chat test after the transition failure.
     # Owner approved one additional INR 220 business-response deployment window
-    # on 2026-09-09. Preserve both earlier chat reservations; no fourth is authorized.
-    ceiling = 660 if chat_upgrade else 220 if owner_demo else 440
+    # on 2026-09-09, followed by INR 220 for the durable customer-readiness rollout.
+    # Preserve all three earlier chat reservations; no fifth window is authorized.
+    ceiling = 880 if chat_upgrade else 220 if owner_demo else 440
     require(ledger["reserved_inr"] + reserve <= ceiling, "Phase 10 launch allowance exhausted")
     ticket = uuid4().hex
     ledger["reserved_inr"] += reserve
