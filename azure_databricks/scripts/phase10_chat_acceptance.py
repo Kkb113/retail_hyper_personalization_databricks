@@ -37,6 +37,9 @@ def validate(context):
         require(reply["status"] == "ok", f"{label}: response not ok")
         require(reply["response_mode"] == "llm", f"{label}: narrative fell back")
         require(reply["sections"], f"{label}: no rich sections")
+        if reply.get("request_hash"):
+            require(len(reply["request_hash"]) == 64, "Invalid request reference")
+            report.setdefault("request_hashes", []).append(reply["request_hash"])
         report["checks"][label] = {
             "action": reply["action"],
             "cards": len(reply["cards"]),
@@ -82,6 +85,8 @@ def validate(context):
         chat("general_retail", "How can a retailer improve loyalty without excessive discounting?")
         denied = post("/api/chat", {"text": "Recommend for CUS000002"})
         require(denied["status"] == "refused", "Unauthorized prompt customer not denied")
+        if denied.get("request_hash"):
+            report.setdefault("request_hashes", []).append(denied["request_hash"])
         report["checks"]["unauthorized_prompt_customer_denied"] = True
         report["status"] = "PASS_CONVERSATIONAL_API"
     finally:

@@ -476,7 +476,7 @@ The workspace already exposes governed foundation endpoints and managed storage.
 | 8 | Semantic intelligence and governed tools | Product semantics and deterministic, permission-aware tool layer | Not started |
 | 9 | Agent implementation and evaluation | Grounded retail concierge with model bake-off and safeguards | Not started |
 | 10 | Databricks App and wow experiences | Polished end-to-end user experience | Not started |
-| 11 | Analytics, observability, and operations | Quality, usage, cost, trace, and business dashboards | Not started |
+| 11 | Analytics, observability, and operations | Quality, usage, cost, trace, and business dashboards | Deployed; automated acceptance recorded; manual dashboard review pending |
 | 12 | Release qualification and demo freeze | Reproducible, tested, documented POC with rollback and shutdown | Not started |
 
 ---
@@ -1471,6 +1471,13 @@ All primary journeys are polished, grounded, resilient, permission-aware, and re
 ---
 
 ## Phase 11 — Analytics, observability, and operations
+
+Implementation record: `azure_databricks/docs/phase11_operations.md` and
+`azure_databricks/evidence/phase_11`. The original design below is a target, not a
+claim that unavailable metrics or unsupported opportunity triggers are implemented.
+Current-release holdout ranking metrics, attributed feedback rate, continuous alerts
+and automatic physical retention remain explicitly unqualified or manual. Optional
+Genie was not activated. Only two evidence-supported opportunity rules are enabled.
 
 ### Objective
 

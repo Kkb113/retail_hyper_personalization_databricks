@@ -1,6 +1,6 @@
 {
   "status": "PASS_METADATA_AND_CLAIM",
-  "release": "34b91f434900c63f4741e10c5f95e74598278ebcb1cbc7a7786a57396dfdc2ee",
+  "release": "133248c7c08b4c35677ec522cffc310958d2e8ecd1d59bfec341cd276c29fe72",
   "compute_started": false,
   "inference_calls": 0,
   "customer_context_sources_verified": true,

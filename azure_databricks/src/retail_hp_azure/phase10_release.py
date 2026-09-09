@@ -17,6 +17,7 @@ from retail_hp_azure.phase8 import ToolContext
 from retail_hp_azure.phase8_semantic import SemanticIndex
 from retail_hp_azure.phase10_app import create_app
 from retail_hp_azure.phase10_runtime import WorkbenchRuntime
+from retail_hp_azure.phase11 import TraceArchive
 from retail_hp_azure.safety import require
 
 STATE_VOLUME = "/Volumes/intellify_databricks_demo/agent/app_launches"
@@ -79,17 +80,7 @@ def build_app(root: Path, client: Any, config: str, actor_secret: str) -> Any:
         ledger=root / ".runtime" / f"{launch.ticket}.json",
         index=index,
         lease_expires=launch.expires,
-        trace_sink=lambda record: print(
-            json.dumps(
-                {
-                    "event": "retail_tool",
-                    "status": record.get("status"),
-                    "action": record.get("action"),
-                    "event_type": record.get("event"),
-                    "error_type": record.get("error_type"),
-                }
-            )
-        ),
+        trace_sink=TraceArchive(client, launch.ticket),
     )
     return create_app(runtime, static_dir=root / "static", lease_expires=launch.expires)
 
