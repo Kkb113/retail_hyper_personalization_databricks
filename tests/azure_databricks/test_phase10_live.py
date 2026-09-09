@@ -19,11 +19,15 @@ def load_script():
 
 
 @pytest.mark.parametrize("installed", [False, True])
-def test_single_claim_deploy_or_restart(tmp_path, monkeypatch, installed):
+@pytest.mark.parametrize("owner_demo", [False, True])
+def test_single_claim_deploy_or_restart(tmp_path, monkeypatch, installed, owner_demo):
     module = load_script()
     monkeypatch.setattr(module, "ROOT", tmp_path)
     monkeypatch.setattr(module, "STATE", tmp_path / "state.json")
     monkeypatch.setattr(module, "LEDGER", tmp_path / "ledger.json")
+    monkeypatch.setattr(module, "DEMO_LEDGER", tmp_path / "demo-ledger.json")
+    if owner_demo:
+        module.LEDGER.write_text(json.dumps({"reserved_inr": 440, "runs": []}))
     monkeypatch.setattr(module, "stopped", lambda *args: None)
     monkeypatch.setattr(module, "arm", lambda *args: "job")
     monkeypatch.setattr(module, "_verify_budget", lambda *args: {"current_spend_inr": 0})
@@ -73,16 +77,19 @@ def test_single_claim_deploy_or_restart(tmp_path, monkeypatch, installed):
     client.apps.list_deployments.return_value = [deployment] if installed else []
     client.api_client.do.return_value = {"deployment_id": "new"}
     context = SimpleNamespace(client=client)
-    module.start(context)
+    module.start(context, owner_demo=owner_demo)
     deploys = [
         call
         for call in client.api_client.do.call_args_list
         if call.args[:2] == ("POST", "/api/2.0/apps/retail-hp-poc-app/deployments")
     ]
     assert len(deploys) == (0 if installed else 1)
-    assert json.loads(module.LEDGER.read_text())["reserved_inr"] == 220
+    ledger = module.DEMO_LEDGER if owner_demo else module.LEDGER
+    assert json.loads(ledger.read_text())["reserved_inr"] == 220
+    if owner_demo:
+        assert json.loads(module.LEDGER.read_text())["reserved_inr"] == 440
     # An uncertain old reservation cannot silently disappear on a later run.
-    module.LEDGER.write_text(json.dumps({"reserved_inr": 440, "runs": []}))
+    ledger.write_text(json.dumps({"reserved_inr": 440, "runs": []}))
     monkeypatch.setattr(module, "automation", lambda *args: {"properties": {"status": "Completed"}})
     with pytest.raises(SafetyError, match="allowance exhausted"):
-        module.start(context)
+        module.start(context, owner_demo=owner_demo)

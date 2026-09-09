@@ -16,6 +16,7 @@ from retail_hp_azure.safety import require
 ROOT = Path(__file__).resolve().parents[2]
 STATE = ROOT / "build/phase10-live.local.json"
 LEDGER = ROOT / "build/phase10-cost.local.json"
+DEMO_LEDGER = ROOT / "build/phase10-owner-demo.local.json"
 APP = "retail-hp-poc-app"
 ENDPOINT = "retail-hp-poc-recommender"
 
@@ -83,7 +84,7 @@ def stopped(context, warehouse):
     require(endpoint["state"].get("suspend") == "STOPPED", "Endpoint running")
 
 
-def start(context):
+def start(context, *, owner_demo=False):
     preflight = json.loads(
         (ROOT / "azure_databricks/evidence/phase_10/release_preflight.json").read_text()
     )
@@ -118,17 +119,25 @@ def start(context):
     )
     _verify_warehouse_contract(client.warehouses.get(control["warehouse_id"]))
     require(_verify_budget(context)["current_spend_inr"] < 9000, "Monthly spend safety margin")
-    ledger = json.loads(LEDGER.read_text()) if LEDGER.exists() else {"reserved_inr": 0, "runs": []}
+    # Explicit owner-requested demo is separate from completed validation history.
+    # Neither ledger is reset; this option permits one bounded demo only.
+    ledger_path = DEMO_LEDGER if owner_demo else LEDGER
+    ledger = (
+        json.loads(ledger_path.read_text())
+        if ledger_path.exists()
+        else {"reserved_inr": 0, "runs": []}
+    )
     # 12-minute deadline + 5-minute stop allowance; 100 bounded LLM requests;
     # includes conservative tax/rate/storage margin, not an invoice guarantee.
     reserve = 220
     # Owner approved a cumulative INR 440 allowance on 2026-09-09 after the
     # first startup timeout. Reservations persist even when actual billing lags.
-    require(ledger["reserved_inr"] + reserve <= 440, "Phase 10 validation allowance exhausted")
+    ceiling = 220 if owner_demo else 440
+    require(ledger["reserved_inr"] + reserve <= ceiling, "Phase 10 launch allowance exhausted")
     ticket = uuid4().hex
     ledger["reserved_inr"] += reserve
     ledger["runs"].append({"ticket": ticket, "reserved_inr": reserve})
-    LEDGER.write_text(json.dumps(ledger))  # Retain reservation on any uncertain failure.
+    ledger_path.write_text(json.dumps(ledger))  # Retain reservation on any uncertain failure.
     principals = [p for p in client.service_principals.list() if p.display_name == IDENTITY_NAME]
     require(len(principals) == 1 and principals[0].active, "Existing test identity missing")
     tester = principals[0]
@@ -266,10 +275,16 @@ def redeploy(context):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("command", choices=["start", "inspect", "stop", "redeploy"])
+    parser.add_argument(
+        "--owner-demo",
+        action="store_true",
+        help="One explicitly requested demo; preserve validation reservations",
+    )
     args = parser.parse_args()
+    require(not args.owner_demo or args.command == "start", "Demo flag requires start")
     context = CloudContext(apply=args.command != "inspect", direct_operator_token=True)
     if args.command == "start":
-        result = start(context)
+        result = start(context, owner_demo=args.owner_demo)
     elif args.command == "stop":
         result = {"stop_job": arm(context, int(time.time()))}
     elif args.command == "redeploy":
