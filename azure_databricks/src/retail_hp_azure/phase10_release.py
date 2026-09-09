@@ -28,6 +28,9 @@ class Launch(BaseModel):
     expires: int
     warehouse_id: str = Field(pattern=r"^[0-9a-f]{16}$")
     entitlements: list[ToolContext] = Field(min_length=1, max_length=20)
+    # Explicit server-owned role: only these already allowlisted actors may use
+    # the complete published demo cohort. Other actors keep exact customer grants.
+    cohort_subjects: list[str] = Field(default_factory=list, max_length=20)
 
 
 def verify_files(root: Path) -> None:
@@ -64,12 +67,14 @@ def build_app(root: Path, client: Any, config: str, actor_secret: str) -> Any:
     require(len(actor_secret) >= 64, "Actor secret unavailable")
     entitlements = {entry.subject: entry for entry in launch.entitlements}
     require(len(entitlements) == len(launch.entitlements), "Duplicate actor mapping")
+    require(set(launch.cohort_subjects) <= entitlements.keys(), "Unknown cohort actor")
     index = SemanticIndex(json.loads((root / "semantic.json").read_text()))
     claim_launch(client, launch, now=time.time())
     runtime = WorkbenchRuntime(
         app_client=client,
         warehouse_id=launch.warehouse_id,
         entitlements=entitlements,
+        cohort_subjects=frozenset(launch.cohort_subjects),
         actor_secret=actor_secret.encode(),
         ledger=root / ".runtime" / f"{launch.ticket}.json",
         index=index,

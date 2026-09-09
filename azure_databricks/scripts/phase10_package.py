@@ -171,6 +171,7 @@ def prepare(context, *, active_window=False):
     me = client.current_user.me()
     require(me.id and me.active, "Operator identity unavailable")
     control = {
+        "customer_context_version": "customer_context_v2",
         "release": release,
         "source_path": remote,
         "warehouse_id": warehouse[0].id,

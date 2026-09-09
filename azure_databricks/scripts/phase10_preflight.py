@@ -6,6 +6,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from databricks.sdk.errors import AlreadyExists, ResourceAlreadyExists
+from retail_hp_azure.customer_context import REQUIRED_SOURCE_COLUMNS
 from retail_hp_azure.phase2 import CATALOG, CloudContext
 from retail_hp_azure.phase7_runtime import _workload_client
 from retail_hp_azure.phase10_release import STATE_VOLUME, verify_files
@@ -30,6 +31,13 @@ def verify(context):
         "inference_calls": 0,
     }
     try:
+        if control.get("customer_context_version") == "customer_context_v2":
+            for name, required in REQUIRED_SOURCE_COLUMNS.items():
+                columns = context.client.tables.get(f"{CATALOG}.{name}").columns or []
+                require(
+                    required <= {c.name for c in columns}, f"Customer source schema drift: {name}"
+                )
+            report["customer_context_sources_verified"] = True
         workload.files.upload(path, io.BytesIO(b"{}"), overwrite=False)
         created = True
         try:

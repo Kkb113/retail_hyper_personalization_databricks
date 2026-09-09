@@ -60,6 +60,15 @@ def test_preview_is_disconnected_and_health_never_starts_cloud():
         assert client.get("/version").json()["model"] == "gpt-5.6-luna"
 
 
+def test_customer_directory_failure_is_not_misreported_as_bad_login():
+    from retail_hp_azure.demo_cohort import CustomerDirectoryUnavailable
+
+    client, adapter, _, _ = suite()
+    adapter.authenticate.side_effect = CustomerDirectoryUnavailable("not exposed")
+    assert client.post("/api/session", json={}).status_code == 503
+    assert client.post("/api/chat", json={"text": "Retail advice"}).status_code == 503
+
+
 def test_authorized_action_and_secure_cookie():
     client, _, backend, _ = suite()
     response = client.post("/api/action", json=ACTION)

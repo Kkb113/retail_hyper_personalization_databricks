@@ -2,6 +2,7 @@
 
 import importlib.util
 import json
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
@@ -21,7 +22,10 @@ def load_script():
 @pytest.mark.parametrize("installed", [False, True])
 @pytest.mark.parametrize("owner_demo", [False, True])
 @pytest.mark.parametrize("chat_upgrade", [False, True])
-def test_single_claim_deploy_or_restart(tmp_path, monkeypatch, installed, owner_demo, chat_upgrade):
+@pytest.mark.parametrize("context_upgrade", [False, True])
+def test_single_claim_deploy_or_restart(
+    tmp_path, monkeypatch, installed, owner_demo, chat_upgrade, context_upgrade
+):
     if owner_demo and chat_upgrade:
         pytest.skip("mutually exclusive launch purposes")
     module = load_script()
@@ -55,10 +59,23 @@ def test_single_claim_deploy_or_restart(tmp_path, monkeypatch, installed, owner_
                 "source_path": "/Workspace/release",
                 "warehouse_id": "b" * 16,
                 "operator_id": "operator",
+                **({"customer_context_version": "customer_context_v2"} if context_upgrade else {}),
             }
         )
     )
     client = Mock()
+    client.warehouses.get.return_value.state.value = "RUNNING"
+    migrated = []
+
+    def migrate(context):
+        client.apps.start.assert_not_called()
+        client.warehouses.start.assert_called()
+        migrated.append(True)
+        return {"status": "PASS_VIEW_UPGRADE"}
+
+    monkeypatch.setitem(
+        sys.modules, "phase10_customer_context_migrate", SimpleNamespace(migrate=migrate)
+    )
     client.service_principals.list.return_value = [
         SimpleNamespace(
             display_name=module.IDENTITY_NAME,
@@ -95,6 +112,7 @@ def test_single_claim_deploy_or_restart(tmp_path, monkeypatch, installed, owner_
     client.api_client.do.return_value = {"deployment_id": "new"}
     context = SimpleNamespace(client=client)
     module.start(context, owner_demo=owner_demo, chat_upgrade=chat_upgrade)
+    assert bool(migrated) == context_upgrade
     deploys = [
         call
         for call in client.api_client.do.call_args_list

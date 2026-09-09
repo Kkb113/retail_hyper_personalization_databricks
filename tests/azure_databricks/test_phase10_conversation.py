@@ -125,7 +125,8 @@ def test_provider_failure_keeps_actual_recommendations_without_generic_safety_er
     planner.compose.side_effect = RuntimeError("provider unavailable")
     reply = run(agent, context, session, "Recommend for CUS000001")
     assert reply.status == "ok" and len(reply.cards) == 5
-    assert "verified" in reply.text
+    assert reply.response_mode == "verified_fallback"
+    assert "CUS000001" in reply.text
     assert "safely complete" not in reply.text
 
 
@@ -216,3 +217,48 @@ def test_shared_llm_allowance_blocks_before_paid_request(tmp_path, monkeypatch):
     with pytest.raises(SafetyError, match="spending gate"):
         planner.compose("Explain retail loyalty", {}, timeout=10)
     paid.assert_not_called()
+
+
+def test_ten_products_overrides_planner_default_and_preserves_order(monkeypatch):
+    from retail_hp_azure import phase9_evaluation
+
+    products = [dict(phase9_evaluation.PRODUCTS[0], product_id=f"PRO{i:06d}") for i in range(1, 11)]
+    monkeypatch.setattr(phase9_evaluation, "PRODUCTS", products)
+    agent, planner, context, session = setup()
+    reply = run(agent, context, session, "For CUS000001 recommend ten products")
+    assert len(reply.cards) == 10
+    assert [r["rank"] for r in reply.cards] == list(range(1, 11))
+    assert all(r["business_reason"] for r in reply.cards)
+
+
+def test_business_core_does_not_trust_generated_product_claims():
+    agent, planner, context, session = setup()
+    planner.compose.return_value = Narrative(
+        summary="Invented brand preference",
+        sections=[
+            Section(heading="Recommended products", text="Guaranteed to buy invented product"),
+            Section(heading="Before taking action", text="Everything is live"),
+        ],
+    )
+    reply = run(agent, context, session, "Recommend five products for CUS000001")
+    rendered = reply.text + json.dumps(reply.sections)
+    assert "Invented" not in rendered and "Guaranteed" not in rendered
+    assert "Everything is live" not in rendered
+    assert sum(s["heading"] == "Before taking action" for s in reply.sections) == 1
+
+
+def test_empty_batch_returns_clear_availability_not_llm_recommendations():
+    agent, planner, context, session = setup()
+    agent.tools.backend.read = Mock(return_value=([], PROVENANCE))
+    reply = run(agent, context, session, "Recommend for CUS000001")
+    assert reply.status == "clarify" and not reply.cards
+    assert "current demo publication" in reply.text
+    planner.compose.assert_not_called()
+
+
+def test_available_customers_come_only_from_authenticated_context():
+    agent, planner, context, session = setup()
+    reply = run(agent, context, session, "Which customer IDs are available?")
+    assert "CUS000001" in reply.text and "CUS000002" in reply.text
+    assert "CUS004951" not in reply.text
+    planner.plan.assert_not_called()

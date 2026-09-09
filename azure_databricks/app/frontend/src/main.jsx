@@ -137,12 +137,7 @@ function App() {
                       {card.active_discount_pct > 0 && (
                         <p>{card.active_discount_pct}% promotion</p>
                       )}
-                      {card.reason_codes && (
-                        <details>
-                          <summary>Recommendation details</summary>
-                          <p>{card.reason_codes}</p>
-                        </details>
-                      )}
+                      {card.business_reason && <p>{card.business_reason}</p>}
                     </div>
                   ))}
                 </div>

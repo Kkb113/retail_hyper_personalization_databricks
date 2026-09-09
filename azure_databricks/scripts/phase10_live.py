@@ -171,11 +171,12 @@ def start(context, *, owner_demo=False, chat_upgrade=False):
         "entitlements": [
             {
                 "subject": control["operator_id"],
-                "allowed_customers": [f"CUS{x:06d}" for x in range(1, 101)],
+                "allowed_customers": [],
                 "can_view_quality": True,
             },
             {"subject": str(tester.id), "allowed_customers": ["CUS000001"]},
         ],
+        "cohort_subjects": [control["operator_id"]],
     }
     Launch.model_validate_json(json.dumps(launch))
     job = arm(context, deadline)
@@ -198,6 +199,20 @@ def start(context, *, owner_demo=False, chat_upgrade=False):
     }
     STATE.write_text(json.dumps(state))
     try:
+        if control.get("customer_context_version") == "customer_context_v2":
+            # Upgrade the existing view before any new App process can read it.
+            # Reuse the same approved warehouse and independent deadline.
+            from phase10_customer_context_migrate import migrate
+
+            client.warehouses.start(control["warehouse_id"])
+            while client.warehouses.get(control["warehouse_id"]).state.value != "RUNNING":
+                require(time.time() < deadline - 480, "Customer view startup exceeded window")
+                time.sleep(3)
+            migration = migrate(context)
+            migration_report = (
+                ROOT / "azure_databricks/evidence/phase_10/customer_context_migration.json"
+            )
+            migration_report.write_text(json.dumps(migration, indent=2))
         client.apps.start(APP)
         while True:
             require(time.time() < deadline - 240, "App startup exceeded safe window")

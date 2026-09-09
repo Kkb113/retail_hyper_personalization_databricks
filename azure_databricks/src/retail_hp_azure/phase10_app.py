@@ -20,6 +20,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import Field
 
+from retail_hp_azure.demo_cohort import CustomerDirectoryUnavailable
 from retail_hp_azure.phase8 import Contract, GovernedTools, ToolContext
 from retail_hp_azure.phase9 import RetailAgent, Session
 
@@ -27,7 +28,7 @@ VERSION = "retail_workbench_v1"
 
 
 class Adapter(Protocol):
-    def authenticate(self, token: str) -> ToolContext: ...
+    def authenticate(self, token: str, *, metadata_only: bool = False) -> ToolContext: ...
     def dependencies(self) -> dict[str, str]: ...
     def tools(self, token: str) -> GovernedTools: ...
     def agent(self, token: str) -> RetailAgent: ...
@@ -123,8 +124,17 @@ def create_app(
         token = request.headers.get("x-forwarded-access-token", "")
         if not token or len(token) > 16_384:
             raise HTTPException(401, "Databricks user authorization is required.")
+        metadata_only = request.url.path == "/health/dependencies"
         try:
-            context = adapter.authenticate(token)
+            context = (
+                adapter.authenticate(token, metadata_only=True)
+                if metadata_only
+                else adapter.authenticate(token)
+            )
+        except CustomerDirectoryUnavailable:
+            raise HTTPException(
+                503, "Customer recommendations are temporarily unavailable."
+            ) from None
         except Exception:
             raise HTTPException(
                 401, "Databricks user authorization could not be verified."
@@ -134,7 +144,11 @@ def create_app(
                 if sessions[key].expires <= clock():
                     del sessions[key]
             session = sessions.get(request.cookies.get("retail_session", ""))
-        if session is None or session.context != context:
+        if session is None or (
+            session.context.subject != context.subject
+            if metadata_only
+            else session.context != context
+        ):
             raise HTTPException(401, "Open a new authorized session.")
         if write and not secrets.compare_digest(
             request.headers.get("x-csrf-token", ""), session.csrf
@@ -187,6 +201,10 @@ def create_app(
             raise HTTPException(401, "Databricks user authorization is required.")
         try:
             context = adapter.authenticate(token)
+        except CustomerDirectoryUnavailable:
+            raise HTTPException(
+                503, "Customer recommendations are temporarily unavailable."
+            ) from None
         except Exception:
             raise HTTPException(401, "User authorization failed.") from None
         with lock:

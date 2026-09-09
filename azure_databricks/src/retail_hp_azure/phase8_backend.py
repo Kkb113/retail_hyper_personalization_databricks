@@ -127,6 +127,27 @@ class DatabricksToolBackend:
             {"ids": json.dumps(ids)},
         )
 
+    def ready_customers(self) -> list[str]:
+        """Published complete batches only; Unity Catalog evaluates caller access."""
+        from pydantic import TypeAdapter
+
+        from retail_hp_azure.phase8 import CustomerID
+
+        rows = self._query(
+            f"SELECT r.customer_id FROM {RECOMMENDATIONS} r "
+            f"JOIN {PRODUCT_VIEW} p ON r.product_id = p.product_id "
+            f"JOIN {CUSTOMER_VIEW} c ON r.customer_id = c.customer_id "
+            "WHERE r.registered_model_version = '3' GROUP BY r.customer_id "
+            "HAVING count(*) = 10 AND count(DISTINCT r.product_id) = 10 "
+            "AND count(DISTINCT r.rank) = 10 AND min(r.rank) = 1 AND max(r.rank) = 10 "
+            "AND count(DISTINCT r.batch_id) = 1 ORDER BY r.customer_id LIMIT 5001",
+            {},
+        )
+        require(len(rows) <= 5000, "Published cohort exceeds validated population")
+        customers = [TypeAdapter(CustomerID).validate_python(row["customer_id"]) for row in rows]
+        require(len(customers) == len(set(customers)), "Duplicate cohort customer")
+        return customers
+
     def read(
         self,
         tool: str,
@@ -192,10 +213,16 @@ class DatabricksToolBackend:
             rows = self._query(
                 f"SELECT customer_id, customer_segment, loyalty_tier, preferred_channel, "
                 f"region_id, CAST(behavior_as_of AS STRING) AS behavior_as_of, "
-                f"purchase_count, browse_count FROM {CUSTOMER_VIEW} "
+                f"purchase_count, browse_count, favorite_category_name, favorite_brand_name, "
+                f"price_sensitivity, color_preference, preference_source, "
+                f"recent_purchases_json, evidence_version FROM {CUSTOMER_VIEW} "
                 "WHERE customer_id = :customer LIMIT 1",  # noqa: S608
                 {"customer": arguments["customer_id"]},
             )
+            for row in rows:
+                raw = row.pop("recent_purchases_json", "[]")
+                require(isinstance(raw, str) and len(raw.encode()) <= 16000, "Evidence too large")
+                row["recent_purchases"] = json.loads(raw)
         elif tool in {"get_recommendations", "explain_recommendation", "simulate_scenario"}:
             source, model = RECOMMENDATIONS, "3"
             if tool == "simulate_scenario" or arguments.get("mode") == "realtime":
