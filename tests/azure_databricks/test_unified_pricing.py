@@ -63,6 +63,16 @@ def test_exact_business_request_uses_deterministic_price():
     pricing.recommend.assert_called_once_with("PRO000001", "STO000001", "Web", None, None)
 
 
+def test_exact_ids_survive_llm_queue_failure():
+    agent, planner, context, session, pricing = unified({"action": "pricing"})
+    planner._request.side_effect = RuntimeError("LLM queue is busy")
+    reply = run(
+        agent, context, session, "Recommend a price for PRO000001 at STO000001 through Web."
+    )
+    assert reply.status == "ok"
+    pricing.recommend.assert_called_once_with("PRO000001", "STO000001", "Web", None, None)
+
+
 def test_pricing_role_required():
     agent, _, context, session, pricing = unified({"action": "pricing"}, allowed=False)
     assert run(agent, context, session, "Recommend a price").status == "unavailable"

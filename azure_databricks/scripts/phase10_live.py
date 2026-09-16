@@ -350,11 +350,18 @@ def redeploy(context, *, pricing_repair=False):
         evidence = json.loads((ROOT / "build/pricing-phase4-http.local.json").read_text())
         require(previous.status.state.value == "SUCCEEDED", "Expected deployed pricing failure")
         require(
-            evidence["checks"]["pricing"]["status"] == "unavailable",
+            evidence.get("status") == "FAIL"
+            and evidence.get("release", state["release"]) == state["release"]
+            and (
+                evidence["checks"]["pricing"]["status"] == "unavailable"
+                or evidence.get("five_concurrent_sessions", {}).get("successful", 5) < 5
+            ),
             "Pricing failure evidence required",
         )
         ledger = json.loads(PRICING_LEDGER.read_text())
-        require(ledger["reserved_inr"] == 250, "Existing approved pricing reservation required")
+        require(
+            ledger["reserved_inr"] in {250, 500}, "Existing approved pricing reservation required"
+        )
         require(not state.get("pricing_repair"), "Only one corrective deployment in this window")
     else:
         require(previous.status.state.value == "FAILED", "Only failed builds can be repaired")

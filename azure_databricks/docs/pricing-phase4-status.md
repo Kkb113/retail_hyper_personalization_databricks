@@ -1,48 +1,59 @@
-# Unified pricing App — Phase 4 status
+# Phase 4 — Unified business agent and App
 
-## Current completion run
+Status (2026-09-16): implemented, deployed, automated HTTP acceptance passed.
+Human business-user browser acceptance remains pending by the owner's explicit
+choice. Not every original Phase 4 exit gate is complete.
 
-Public PRs and merges are now authorized. The prerequisite Genie PR #22 passed
-all six CI checks and was merged. One additional estimated INR 250 validation
-window is authorized (cumulative reservation ceiling INR 500, no ledger reset).
-Browser acceptance remains pending by the owner's explicit choice.
-The App-only lazy-driver source adaptation passed six minimal-Linux tests, and
-381 retail tests passed. Registered pricing weights and source remain unchanged.
-The previous failed deployment record below is retained as historical evidence;
-final live verification is pending at this checkpoint.
+## Delivered
 
-2026-09-16: **Not accepted. Both coordinated branches remain local at the owner's request.**
-No push, PR or GitHub CI run was performed.
+The existing authenticated retail App supports pricing, exact-price simulations,
+explanations, scenario discovery, follow-ups and combined retail/pricing requests.
+Pricing remains default-off and server-authorized. Session isolation, bounded
+scoring, immutable manifests and business-only output projection are enforced.
 
-The existing App received the unified pricing package in one approved INR 250
-estimated validation window. The deadline was not extended; no new paid service
-was created. The App, SQL warehouse and recommendation endpoint were confirmed
-STOPPED after testing. Storage and baseline charges are not eliminated by stopping
-compute; the allowance is not a hard invoice cap.
+Registered model version 1 and trained weights are unchanged. The derived App
+copy records portable MLflow metadata and LAZY_DATABASE_DRIVER_IMPORT_V1 with
+original/adapted hashes. It is not byte-identical to the registered source.
+Real database access still requires the driver; pure inference does not.
 
-## Verified
+A live concurrency failure exposed a fallback bug: identifier digits were treated
+as candidate prices. The correction preserves exact-ID recommendations when the
+LLM queue is busy, but ambiguous numeric simulations still require clarification.
 
-- 380 retail tests passed, four skipped; lint and type checks passed.
-- Six frozen-pricing tests passed on Windows, including portable-path validation.
-- Non-admin HTTP access rejected the unauthorized customer and returned five
-  retail recommendations. Temporary test credentials were revoked.
-- The corrected immutable snapshot deployed successfully. Deployment success did
-  not establish pricing readiness: all live pricing checks still returned unavailable.
-- A local Linux probe reproduced a missing `libodbc.so.2` startup dependency via
-  a database-audit import in the frozen model package. The Windows-specific MLflow
-  entry-point metadata was separately normalized only in the derived App copy.
+## Validation
 
-## Remaining
+- Retail: 382 passed, four skipped; Ruff passed; mypy passed for 42 source files.
+  Includes the 24-case offline business matrix.
+- Actual pricing payload: six minimal-Linux tests passed without native ODBC or
+  network access. Full baseline business replay: 12,329 decisions, 49 fields,
+  zero mismatches. Baseline replay and adapted-payload tests are distinct checks.
+- Live non-admin HTTP: eight business checks passed, including expected price
+  61.28, explanations, simulation, unauthorized-customer rejection, five retail
+  products, combined requests, discovery and scenario selection.
+- Five independent concurrent sessions: 5/5 successful with exact price parity.
+  Durations: 2.328, 8.546, 11.000, 11.000, 15.843 seconds. Nearest-rank p95 for
+  this five-observation sample is its maximum, not a production benchmark.
+- Local uncached warm deterministic scoring p95: 0.829 seconds over ten calls.
+  First live retail request with stopped warehouse: 43.656 seconds; combined:
+  24.453 seconds. Do not claim every cold request meets the 30-second target.
+- Temporary validation credentials were revoked; no private inference records
+  or credentials are included in public evidence.
+- Final immutable App release:
+  fb0b96405de27bc4c8ceb821f4c839d71ce5f1d3cdab78c18a255e88bc8dd609.
+- Prerequisite retail PR #22 was reviewed, passed CI and merged.
+  Coordinated PRs are Dynamic-Pricing #14 and retail #23; their current check
+  and merge state is authoritative.
 
-1. Isolate SQL audit dependencies from inference with recorded source changes and
-   full accepted-model/business-policy parity evidence, then load the actual release
-   in a minimal Linux runtime matching the App dependency lock.
-2. Retest live pricing, combined requests, five concurrent sessions and latency
-   within a separately authorized window; the existing reservation must not reset.
-3. Owner browser acceptance remains pending by choice.
-4. Linux CI/publication are deferred by choice. Do not publish without approval.
+## Cost and remaining acceptance
 
-Private startup diagnostics have been added locally and release tests pass; that
-logging change is not in the deployed snapshot. Do not describe Phase 4 as complete
-or advance to Phase 5 yet. Detailed pricing-side findings are in the companion
-`azure_databricks/PHASE4_STATUS.md` on `codex/azure-phase4-unified-app`.
+Two separately approved INR 250 estimated windows were reserved (INR 500 cumulative).
+This is not measured invoice cost or a guaranteed billing cap. The corrective
+deployment retained the second window's original shutdown deadline. No new paid
+service, larger compute tier or deadline extension was introduced. Final stopped
+states are recorded in the accompanying sanitized live evidence.
+
+The normal signed-in browser journey remains for the owner to accept. API tests
+do not replace it. Pricing is advisory on historical synthetic data; currency is
+unverified, current inventory is not applied, no price writeback occurs, and
+modeled profit is not realized uplift. Phase 5 still owns the wider operational
+rehearsal and final POC acceptance.

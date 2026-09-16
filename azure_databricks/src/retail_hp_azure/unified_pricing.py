@@ -112,7 +112,7 @@ class UnifiedAgent(ConversationAgent):
         followup = bool(state) and bool(
             re.search(
                 r"\b(?:STO\d{6}|Web|Store|Mobile|Email|Kiosk|Online|why|instead|same|"
-                r"first|second|third|explain)\b",
+                r"first|second|third|fourth|fifth|explain)\b",
                 text,
                 re.I,
             )
@@ -167,7 +167,13 @@ class UnifiedAgent(ConversationAgent):
                 )
             )
         except Exception:
-            if re.search(r"what.if|simulat|\d|percent|%", text, re.I):
+            # Identifier digits are not candidate prices. Preserve exact-ID
+            # requests when the shared LLM queue is busy, but never guess a
+            # numeric simulation or date that the planner could not interpret.
+            non_identifier_text = re.sub(
+                r"\b(?:PRO|STO|CUS)[ _-]?\d{6}\b", "", text, flags=re.I
+            )
+            if re.search(r"what.if|simulat|\d|percent|%", non_identifier_text, re.I):
                 return AgentReply(
                     status="clarify",
                     text="Please retry with the product ID, store ID, sales channel and "

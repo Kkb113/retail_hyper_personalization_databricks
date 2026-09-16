@@ -1,0 +1,85 @@
+{
+  "status": "PASS_AUTOMATED_HTTP",
+  "checks": {
+    "pricing": {
+      "status": "ok",
+      "seconds": 2.891,
+      "passed": true,
+      "numeric_parity": true
+    },
+    "explain": {
+      "status": "ok",
+      "seconds": 5.625,
+      "passed": true
+    },
+    "simulation": {
+      "status": "ok",
+      "seconds": 6.453,
+      "passed": true
+    },
+    "unauthorized_customer": {
+      "status": "refused",
+      "seconds": 0.953,
+      "passed": true
+    },
+    "retail": {
+      "status": "ok",
+      "seconds": 43.656,
+      "passed": true
+    },
+    "combined": {
+      "status": "ok",
+      "seconds": 24.453,
+      "passed": true
+    },
+    "discovery": {
+      "status": "ok",
+      "seconds": 2.219,
+      "passed": true
+    },
+    "selected_scenario": {
+      "status": "ok",
+      "seconds": 6.922,
+      "passed": true
+    }
+  },
+  "browser_acceptance": "USER_MANUAL_PENDING",
+  "release": "fb0b96405de27bc4c8ceb821f4c839d71ce5f1d3cdab78c18a255e88bc8dd609",
+  "started_at_unix": 1789557062.597326,
+  "five_concurrent_sessions": {
+    "successful": 5,
+    "numeric_parity": true,
+    "seconds": [
+      2.328,
+      8.546,
+      11,
+      11,
+      15.843
+    ],
+    "p95_seconds": 15.843,
+    "target_seconds": 30
+  },
+  "temporary_secret_revoked": true,
+  "shutdown": {
+    "app": "STOPPED",
+    "sql_warehouse": "STOPPED",
+    "recommender_endpoint": "STOPPED",
+    "verified_date": "2026-09-16",
+    "verified_at_ist": "16:44"
+  },
+  "cost": {
+    "cumulative_reserved_estimate_inr": 500,
+    "new_paid_services": 0,
+    "deadline_extended": false,
+    "actual_invoice_cost": "NOT_MEASURED",
+    "hard_invoice_cap": false
+  },
+  "local": {
+    "retail_passed": 382,
+    "retail_skipped": 4,
+    "linux_payload_tests_passed": 6,
+    "baseline_replay_rows": 12329,
+    "baseline_replay_fields": 49,
+    "baseline_replay_mismatches": 0
+  }
+}

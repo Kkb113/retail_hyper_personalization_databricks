@@ -18,7 +18,13 @@ def validate(context):
     require(time.time() < state["deadline"] - 300, "Insufficient existing validation window")
     principal = context.client.service_principals.get(state["tester_id"])
     workload, secret, principal_id = _workload_client(context, principal)
-    report = {"status": "FAIL", "checks": {}, "browser_acceptance": "USER_MANUAL_PENDING"}
+    report = {
+        "status": "FAIL",
+        "checks": {},
+        "browser_acceptance": "USER_MANUAL_PENDING",
+        "release": state["release"],
+        "started_at_unix": time.time(),
+    }
     sessions = []
     headers = {**workload.config.authenticate(), "x-retail-request": "workbench-v1"}
 
@@ -68,6 +74,10 @@ def validate(context):
                 # Exact accepted-model result for the pinned historical scenario.
                 report["checks"][label]["numeric_parity"] = "61.28" in json.dumps(reply["sections"])
                 report["checks"][label]["passed"] &= report["checks"][label]["numeric_parity"]
+                require(
+                    report["checks"][label]["passed"],
+                    "Pricing startup/parity failed; stop further billable tests",
+                )
             if label == "retail":
                 report["checks"][label]["passed"] &= len(reply["cards"]) == 5
         parallel_sessions = [new_session() for _ in range(5)]
@@ -81,14 +91,21 @@ def validate(context):
                 )
             )
         times = sorted(elapsed for _, elapsed in results)
+        (ROOT / "build/pricing-phase4-concurrent-replies.local.json").write_text(
+            json.dumps(results)
+        )
         report["five_concurrent_sessions"] = {
             "successful": sum(r["status"] == "ok" for r, _ in results),
+            "numeric_parity": all("61.28" in json.dumps(r.get("sections", [])) for r, _ in results),
             "seconds": times,
             "p95_seconds": times[-1],
             "target_seconds": 30,
         }
         require(all(c["passed"] for c in report["checks"].values()), "Business acceptance failed")
         require(all(r["status"] == "ok" for r, _ in results), "Concurrency acceptance failed")
+        require(
+            report["five_concurrent_sessions"]["numeric_parity"], "Concurrent price parity failed"
+        )
         require(times[-1] <= 30, "End-to-end latency target not met")
         report["status"] = "PASS_AUTOMATED_HTTP"
     finally:
