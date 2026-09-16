@@ -99,6 +99,16 @@ class Product(Contract):
     inventory_snapshot_at: str = Field(max_length=64)
 
 
+class PurchaseEvidence(Contract):
+    position: int = Field(ge=1, le=10)
+    product_id: ProductID
+    product_name: str = Field(max_length=300)
+    category_name: str = Field(max_length=100)
+    brand_name: str = Field(max_length=100)
+    last_purchased_at: str = Field(max_length=64)
+    purchase_count: int = Field(ge=1)
+
+
 class Customer(Contract):
     customer_id: CustomerID
     customer_segment: str = Field(max_length=100)
@@ -108,6 +118,13 @@ class Customer(Contract):
     behavior_as_of: str = Field(max_length=64)
     purchase_count: int = Field(ge=0)
     browse_count: int = Field(ge=0)
+    favorite_category_name: str | None = Field(default=None, max_length=100)
+    favorite_brand_name: str | None = Field(default=None, max_length=100)
+    price_sensitivity: str | None = Field(default=None, max_length=50)
+    color_preference: str | None = Field(default=None, max_length=100)
+    preference_source: str = Field(default="unavailable", max_length=100)
+    recent_purchases: list[PurchaseEvidence] = Field(default_factory=list, max_length=10)
+    evidence_version: str = Field(default="customer_context_v1", max_length=50)
 
 
 class Recommendation(Contract):

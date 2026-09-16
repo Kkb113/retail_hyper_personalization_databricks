@@ -13,7 +13,6 @@ test("chat sends only the supplied payload with session and CSRF protection", as
     assert.equal(options.headers["x-retail-request"], "workbench-v1");
     assert.deepEqual(JSON.parse(options.body), {
       text: "Recommend something",
-      customer_id: null,
     });
     assert.ok(options.signal instanceof AbortSignal);
     return { ok: true, json: async () => ({ text: "Hello", cards: [] }) };
@@ -21,7 +20,7 @@ test("chat sends only the supplied payload with session and CSRF protection", as
   assert.deepEqual(
     await request(
       "/api/chat",
-      { text: "Recommend something", customer_id: null },
+      { text: "Recommend something" },
       "test-csrf",
     ),
     { text: "Hello", cards: [] },

@@ -476,7 +476,7 @@ The workspace already exposes governed foundation endpoints and managed storage.
 | 8 | Semantic intelligence and governed tools | Product semantics and deterministic, permission-aware tool layer | Not started |
 | 9 | Agent implementation and evaluation | Grounded retail concierge with model bake-off and safeguards | Not started |
 | 10 | Databricks App and wow experiences | Polished end-to-end user experience | Not started |
-| 11 | Analytics, observability, and operations | Quality, usage, cost, trace, and business dashboards | Not started |
+| 11 | Analytics, observability, and operations | Quality, usage, cost, trace, and business dashboards | Deployed; automated acceptance recorded; manual dashboard review pending |
 | 12 | Release qualification and demo freeze | Reproducible, tested, documented POC with rollback and shutdown | Not started |
 
 ---
@@ -1336,14 +1336,15 @@ The cheapest qualifying model passes all hard gates, the agent is fully grounded
 
 ## Phase 10 — Databricks App and wow experiences
 
-**Implementation checkpoint (2026-09-08): IN PROGRESS, not accepted.**
-The chat-first React App and private HTTP/runtime boundary are implemented locally.
-One Medium App definition exists with no active deployment and is STOPPED.
-The actual App identity passed a keyless Luna token/model-metadata test; no inference
-or paid compute was started. Independent shutdown deployment is gated on IT registering
-`Microsoft.Automation` at subscription scope. See
-[Phase 10 runbook](azure_databricks/docs/phase10_app_runbook.md) for all remaining
-live, identity, packaging, browser and cost acceptance gates. Do not start Phase 11 yet.
+**Implementation checkpoint (2026-09-09): BOUNDED POC ACCEPTANCE PASSED.**
+The native simple-chat App deployed and passed live App-identity Luna recommendations,
+semantic discovery, real-time scenarios, feedback replay, non-admin authorization and
+cross-customer denial. Operator browser chat, keyboard and source-expansion checks passed.
+The independent controller completed and all three compute resources are STOPPED.
+Two bounded validation windows retained INR 440 in owner-approved planning reservations;
+this is not measured spend or an invoice cap. New demo starts require allowance review.
+See [acceptance evidence, launch procedure and POC limitations](azure_databricks/docs/phase10_live_acceptance.md).
+Mobile/formal accessibility audits and a third live relaunch are not claimed.
 
 ### Objective
 
@@ -1354,11 +1355,11 @@ Deliver a polished native application that makes the model and agent capabilitie
 - Databricks App with MEDIUM compute, the smallest current app compute size.
 - React/Vite front end.
 - AgentServer/FastAPI back end.
-- App resource bindings for SQL warehouse, serving endpoint, Lakebase, and other supported resources.
+- App resource bindings for the existing SQL warehouse, serving endpoint and private secrets; no Lakebase.
 - App service principal for shared resources.
 - On-behalf-of user authorization for customer-specific governed data where supported.[R11][R12]
 - Pinned frontend and backend dependencies.
-- Git/bundle deployment and rollback.[R13][R14]
+- Git-reviewed, content-addressed deployment packages; separately reviewed upgrade/rollback.[R13][R14]
 
 ### Current UI scope — single chat
 
@@ -1471,6 +1472,16 @@ All primary journeys are polished, grounded, resilient, permission-aware, and re
 
 ## Phase 11 — Analytics, observability, and operations
 
+Implementation record: `azure_databricks/docs/phase11_operations.md` and
+`azure_databricks/evidence/phase_11`. The original design below is a target, not a
+claim that unavailable metrics or unsupported opportunity triggers are implemented.
+Current-release holdout ranking metrics, attributed feedback rate, continuous alerts
+and automatic physical retention remain explicitly unqualified or manual. A governed,
+aggregate-only Genie Agent is deployed and version controlled; its completed
+business-acceptance status is recorded in
+`azure_databricks/docs/phase11_genie_runbook.md`. Only two
+evidence-supported opportunity rules are enabled.
+
 ### Objective
 
 Make business value, model behavior, agent behavior, reliability, and cost visible in one governed operational view.
@@ -1493,9 +1504,10 @@ Build a native dashboard with:
 
 AI/BI dashboards are native governed assets, but their queries still consume compute.[R22] Use the one auto-stopped SQL warehouse.
 
-### Optional curated Genie Space
+### Governed retail Genie Agent
 
-A small Genie Space may expose trusted analyst questions:
+The **Retail Hyper-Personalization Business Analyst** exposes trusted business questions
+through curated aggregate views:
 
 - Which customer segments have the lowest recommendation hit rate?
 - Which categories have high demand but low inventory?
@@ -1503,7 +1515,13 @@ A small Genie Space may expose trusted analyst questions:
 - Where is cold-start feedback weakest?
 - Which promotions increase recommendation eligibility?
 
-Use certified tables, explicit instructions, trusted SQL, and benchmark questions.[R35][R36] Current documentation describes time-bounded promotional pricing for some human Genie usage; it must be rechecked immediately before activation and must not be treated as permanently free.[R37]
+It uses ten annotated Unity Catalog sources, explicit business definitions, six
+business-facing starter questions, least-privilege access, and a version-controlled
+serialized configuration. Per owner direction, stored raw SQL examples and benchmark
+questions are excluded; acceptance uses live business questions instead.[R35][R36]
+Current documentation
+describes time-bounded promotional pricing for human Genie Agent usage; it is rechecked
+before activation and is not treated as permanently free.[R37]
 
 ### Deterministic opportunity generation
 
@@ -1532,7 +1550,7 @@ The agent explains an opportunity; it does not decide whether the trigger occurr
 ### Deliverables
 
 - AI/BI dashboard.
-- Optional Genie Space and benchmark.
+- Governed Genie Agent and live business-question acceptance.
 - Opportunity job and table.
 - Monitoring views.
 - Alert thresholds and incident runbook.
@@ -1541,7 +1559,7 @@ The agent explains an opportunity; it does not decide whether the trigger occurr
 ### Tests
 
 - Dashboard figures reconcile to source tables.
-- Trusted Genie questions meet the agreed answer benchmark.
+- Live business questions return substantive answers backed by successfully executed governed data.
 - Opportunity triggers reproduce from source facts.
 - Every evaluated agent request can be traced across components.
 - Sensitive or unnecessary fields are absent from traces.

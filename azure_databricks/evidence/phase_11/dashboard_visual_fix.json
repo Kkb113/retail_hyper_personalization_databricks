@@ -1,0 +1,12 @@
+{
+  "status": "PASS_DASHBOARD_VISUAL_BINDINGS",
+  "dashboard_id": "01f1ac3b61e01a99b47a1636f584ac95",
+  "table_schema_version": 2,
+  "counter_widgets": 3,
+  "bar_widgets": 3,
+  "detail_tables": 4,
+  "embed_credentials": false,
+  "compute_started": false,
+  "new_resources": 0,
+  "browser_render_verified": false
+}

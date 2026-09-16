@@ -1,0 +1,76 @@
+{
+  "observed_at": "2026-09-09T11:18:05.816627+00:00",
+  "cloud_mutations": 0,
+  "state": {
+    "app_compute": "STOPPED",
+    "app_status": {
+      "message": "App status is unavailable.",
+      "state": "UNAVAILABLE"
+    },
+    "deployment": {
+      "deployment_id": "01f1ac3dc3e11bd883cc702a5fcf8e72",
+      "status": {
+        "message": "App started successfully",
+        "state": "SUCCEEDED"
+      },
+      "create_time": "2026-09-09T11:01:10Z",
+      "update_time": "2026-09-09T11:01:21Z"
+    },
+    "warehouse": "STOPPED",
+    "endpoint": {
+      "ready": "NOT_READY",
+      "config_update": "NOT_UPDATING",
+      "suspend": "STOPPED",
+      "system_update_failure": false
+    },
+    "seconds_left": -44
+  },
+  "billing_is_delayed": true,
+  "invoice_cap": false,
+  "managed_resource_group_cost_coverage": "Not verified",
+  "reported_rg_month_spend_inr": 12.3372439835244,
+  "shutdown_job_status": "Completed",
+  "jobs": [
+    {
+      "name": "retail-hp-poc-opportunity-refresh",
+      "schedule_present": false,
+      "continuous_present": false,
+      "trigger_present": false,
+      "timeout_seconds": 600
+    },
+    {
+      "name": "retail-hp-poc-semantic-build",
+      "schedule_present": false,
+      "continuous_present": false,
+      "trigger_present": false,
+      "timeout_seconds": 120
+    },
+    {
+      "name": "retail-hp-poc-feedback-export",
+      "schedule_present": false,
+      "continuous_present": false,
+      "trigger_present": false,
+      "timeout_seconds": 180
+    },
+    {
+      "name": "retail-hp-poc-batch-recommendations",
+      "schedule_present": false,
+      "continuous_present": false,
+      "trigger_present": false,
+      "timeout_seconds": 180
+    }
+  ],
+  "warehouse_auto_stop_minutes": 1,
+  "phase11_reserved_allowance_inr": 220,
+  "allowance_is_not_measured_spend": true,
+  "opportunity_job_validation": {
+    "run_id": 1113038707133805,
+    "state": {
+      "life_cycle_state": "TERMINATED",
+      "result_state": "SUCCESS",
+      "state_message": "",
+      "user_cancelled_or_timedout": false
+    },
+    "run_page_url": "https://adb-7405618180989330.10.azuredatabricks.net/?o=7405618180989330#job/497458351305918/run/1113038707133805"
+  }
+}

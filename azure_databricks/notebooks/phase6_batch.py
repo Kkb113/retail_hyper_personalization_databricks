@@ -9,6 +9,7 @@ import mlflow
 import pandas as pd
 from mlflow.tracking import MlflowClient
 from pyspark.sql import functions as F
+from retail_hp_azure.demo_cohort import select_demo_customers
 from threadpoolctl import threadpool_limits
 
 CATALOG = "intellify_databricks_demo"
@@ -25,7 +26,7 @@ runtime = model.unwrap_python_model().model
 customers = sorted(runtime.profiles.index.astype(str))
 assert len(customers) == 5000
 # An explicit representative demo cohort, never mislabeled as full-population coverage.
-customers = customers[::50]
+customers = select_demo_customers(customers)
 assert len(customers) == 100
 CHECKPOINT.mkdir(parents=True, exist_ok=True)
 started = time.monotonic()

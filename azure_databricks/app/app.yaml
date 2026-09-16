@@ -1,0 +1,8 @@
+command: ["python", "bootstrap.py"]
+env:
+  - name: RETAIL_HP_LAUNCH
+    valueFrom: launch-config
+  - name: RETAIL_HP_ACTOR_SECRET
+    valueFrom: actor-secret
+  - name: PYTHONDONTWRITEBYTECODE
+    value: "1"

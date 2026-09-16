@@ -1,0 +1,10 @@
+{
+  "status": "PASS_METADATA_AND_CLAIM",
+  "release": "133248c7c08b4c35677ec522cffc310958d2e8ecd1d59bfec341cd276c29fe72",
+  "compute_started": false,
+  "inference_calls": 0,
+  "customer_context_sources_verified": true,
+  "duplicate_launch_rejected": true,
+  "raw_table_read_grants_absent": true,
+  "temporary_oauth_secret_revoked": true
+}

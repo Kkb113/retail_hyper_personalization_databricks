@@ -1,7 +1,16 @@
 # Phase 10 — Retail chat assistant
 
-Status: **IN PROGRESS — live deployment blocked**. A stopped App definition is not
-a deployed application. Do not report Phase 10 acceptance or move to Phase 11 yet.
+The customer-selector and single-route behavior described below is superseded by the
+[conversational revision](phase10_conversational_revision.md). Its separate live
+acceptance record must be checked before claiming the new experience is accepted.
+
+Status: **POC live acceptance passed on 2026-09-09; compute stopped afterward.**
+Current evidence, launch instructions and limitations are in
+[Phase 10 live acceptance](phase10_live_acceptance.md).
+
+The remainder of this document is the HISTORICAL pre-release checkpoint. Its pending
+gates, zero-start counts, absent entrypoint and provider status are superseded by the
+live acceptance record; they must not be used as current operational status.
 
 ## Implemented in this branch
 
@@ -42,28 +51,35 @@ a deployed application. Do not report Phase 10 acceptance or move to Phase 11 ye
   GET succeeded. The temporary Databricks OAuth test secret was revoked in finally.
   This is **not** an inference acceptance test.
 
-## Required IT-admin action
+## Shutdown checkpoint (2026-09-09)
 
-The subscription reports `Microsoft.Automation` as `NotRegistered`. A subscription
-administrator must register that resource provider. This is outside the authorized
-resource-group-only mutation boundary, so this branch does not do it automatically.
+`Microsoft.Automation` registration is verified. The former registration blocker is cleared.
+One Basic Automation account, `retail-hp-poc-shutdown`, now exists in `Databricks`/West US
+with system-assigned managed identity, local authentication disabled and public webhook/
+agent access disabled. No hybrid worker, Log Analytics workspace or recurring schedule
+was created. The fixed-target `retail-hp-stop-demo` runbook was published.
 
-In Azure Portal: **Subscriptions → target subscription → Resource providers →
-Microsoft.Automation → Register**. Alternatively, the administrator can use:
+The controller has CAN_MANAGE on only the existing project App, SQL warehouse and model
+endpoint. Databricks does not provide a stop-only role for this combination. Existing
+direct ACLs are retained and checked after additive updates; no workspace-admin or UC
+data grants were made. The runbook itself contains no compute-start operations.
 
-```powershell
-az provider register --namespace Microsoft.Automation --wait
-```
+Its first stopped-state cloud test failed because warehouse APIs require the
+`databricks-sql-access` entitlement. The user explicitly approved it, and the additive
+entitlement has now been applied to the existing shutdown identity. The second cloud
+test completed in approximately 5.8 seconds and emitted `CONTROLLER_ARMED` and
+`ALL_TARGETS_STOPPED`. No new resources or data/admin grants were added during this retry.
+This verifies managed-identity metadata access and stopped-state checks, **not** a
+running-to-stopped transition or failure recovery. Those acceptance tests remain pending.
 
-They must first select the correct subscription. Registration is not deployment of
-an Automation account, and does not itself implement shutdown.
+Two short Automation test jobs ran (first failed, second passed); no Databricks compute or inference was
+started. Automation free units are subscription-wide and eligibility/remaining units
+have not been confirmed, so do not claim the job is guaranteed free.
 
 ## Remaining release gates after registration
 
-1. Create one Basic Azure Automation account in the approved RG and a dedicated
-   managed-identity stop-only runbook. No hybrid worker VM, Log Analytics workspace,
-   public webhook or recurring idle job. Verify current pricing and provider availability
-   before creation. The subscription-wide free minute allowance may be shared.
+1. The SQL-access approval and stopped-state identity test are complete. Reuse the
+   existing Basic account/runbook; do not create duplicates or add workspace-admin/data grants.
 2. Test the runbook's identity and exact App/warehouse/endpoint stop permissions.
    Arm and verify the independent controller before any paid start. Prefer a short,
    fixed demo window (initially 10 minutes), not an always-on service. Keep stop

@@ -162,7 +162,7 @@ def apply_budget(context: CloudContext, recipients: tuple[str, str]) -> dict[str
 class CloudContext:
     """Authenticate only after checking the pinned Azure account and resource scope."""
 
-    def __init__(self, *, apply: bool = False) -> None:
+    def __init__(self, *, apply: bool = False, direct_operator_token: bool = False) -> None:
         self.apply = apply
         check_environment(os.environ)
         az = shutil.which("az")
@@ -189,6 +189,18 @@ class CloudContext:
         from databricks.sdk import WorkspaceClient
         from databricks.sdk.core import Config
 
+        if direct_operator_token:
+            # Operator scripts only, after all scope fingerprints above. Avoid the
+            # SDK's slow subscription-token fallback; never used in App runtime.
+            token = self.az_json([
+                "account", "get-access-token", "--subscription", self.subscription,
+                "--resource", "2ff814a6-3304-4ab8-85cb-cd0e6f879c1d",
+            ])["accessToken"]
+            self.client = WorkspaceClient(config=Config(
+                host=HOST, token=token, auth_type="pat", config_file=os.devnull,
+                http_timeout_seconds=30, retry_timeout_seconds=30,
+            ))
+            return
         self.client = WorkspaceClient(config=Config(
             host=HOST, auth_type="azure-cli", config_file=os.devnull,
             azure_workspace_resource_id=self.workspace["id"],

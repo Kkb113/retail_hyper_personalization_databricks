@@ -1,0 +1,541 @@
+{
+  "status": "PASS_SQL_RECONCILIATION",
+  "figures": {
+    "coverage": [
+      {
+        "published_rows": "1000",
+        "published_customers": "100",
+        "active_published_customers": "95",
+        "recommended_eligible_products": "373",
+        "active_customer_population": "4684",
+        "eligible_product_population": "2860",
+        "customer_coverage": "0.020281810418445772",
+        "product_coverage": "0.13041958041958043",
+        "inventory_validity": "1.0",
+        "oldest_inventory_snapshot": "2025-12-31T00:00:00.000Z",
+        "checked_at": "2026-09-09T11:03:32.247Z"
+      }
+    ],
+    "routes": [
+      {
+        "route": "adaptive_blend",
+        "recommendation_rows": "960",
+        "customers": "96"
+      },
+      {
+        "route": "cold_only",
+        "recommendation_rows": "40",
+        "customers": "4"
+      }
+    ],
+    "candidate_sources": [
+      {
+        "source_combination": "copurchase",
+        "recommendation_rows": "43"
+      },
+      {
+        "source_combination": "als;copurchase",
+        "recommendation_rows": "52"
+      },
+      {
+        "source_combination": "als;metadata;preferred_category",
+        "recommendation_rows": "14"
+      },
+      {
+        "source_combination": "als",
+        "recommendation_rows": "57"
+      },
+      {
+        "source_combination": "content",
+        "recommendation_rows": "115"
+      },
+      {
+        "source_combination": "als;copurchase;preferred_category;segment_popularity",
+        "recommendation_rows": "2"
+      },
+      {
+        "source_combination": "global_popularity;regional_popularity;segment_popularity",
+        "recommendation_rows": "131"
+      },
+      {
+        "source_combination": "als;content;preferred_category",
+        "recommendation_rows": "9"
+      },
+      {
+        "source_combination": "als;metadata",
+        "recommendation_rows": "12"
+      },
+      {
+        "source_combination": "als;preferred_category",
+        "recommendation_rows": "22"
+      },
+      {
+        "source_combination": "als;segment_popularity",
+        "recommendation_rows": "3"
+      },
+      {
+        "source_combination": "als;content",
+        "recommendation_rows": "30"
+      },
+      {
+        "source_combination": "als;content;metadata;preferred_category;segment_popularity",
+        "recommendation_rows": "3"
+      },
+      {
+        "source_combination": "preferred_category",
+        "recommendation_rows": "6"
+      },
+      {
+        "source_combination": "content;preferred_category;segment_popularity",
+        "recommendation_rows": "3"
+      },
+      {
+        "source_combination": "preferred_category;segment_popularity",
+        "recommendation_rows": "4"
+      },
+      {
+        "source_combination": "als;global_popularity;metadata;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "3"
+      },
+      {
+        "source_combination": "als;content;preferred_category;segment_popularity",
+        "recommendation_rows": "5"
+      },
+      {
+        "source_combination": "als;content;global_popularity;metadata;preferred_category;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;copurchase;metadata",
+        "recommendation_rows": "4"
+      },
+      {
+        "source_combination": "content;metadata;preferred_category",
+        "recommendation_rows": "4"
+      },
+      {
+        "source_combination": "metadata;segment_popularity",
+        "recommendation_rows": "5"
+      },
+      {
+        "source_combination": "als;metadata;regional_popularity",
+        "recommendation_rows": "5"
+      },
+      {
+        "source_combination": "metadata;preferred_category",
+        "recommendation_rows": "26"
+      },
+      {
+        "source_combination": "als;metadata;segment_popularity",
+        "recommendation_rows": "4"
+      },
+      {
+        "source_combination": "metadata",
+        "recommendation_rows": "15"
+      },
+      {
+        "source_combination": "als;global_popularity;metadata;regional_popularity;segment_popularity",
+        "recommendation_rows": "50"
+      },
+      {
+        "source_combination": "metadata;preferred_category;segment_popularity",
+        "recommendation_rows": "12"
+      },
+      {
+        "source_combination": "als;global_popularity;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "2"
+      },
+      {
+        "source_combination": "metadata;regional_popularity;segment_popularity",
+        "recommendation_rows": "5"
+      },
+      {
+        "source_combination": "content;metadata;preferred_category;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "global_popularity;metadata;regional_popularity;segment_popularity",
+        "recommendation_rows": "114"
+      },
+      {
+        "source_combination": "metadata;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "6"
+      },
+      {
+        "source_combination": "preferred_category;regional_popularity",
+        "recommendation_rows": "3"
+      },
+      {
+        "source_combination": "als;content;metadata",
+        "recommendation_rows": "9"
+      },
+      {
+        "source_combination": "content;metadata",
+        "recommendation_rows": "4"
+      },
+      {
+        "source_combination": "als;preferred_category;segment_popularity",
+        "recommendation_rows": "9"
+      },
+      {
+        "source_combination": "global_popularity;metadata;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "9"
+      },
+      {
+        "source_combination": "als;metadata;preferred_category;segment_popularity",
+        "recommendation_rows": "5"
+      },
+      {
+        "source_combination": "als;content;copurchase;preferred_category",
+        "recommendation_rows": "2"
+      },
+      {
+        "source_combination": "als;copurchase;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "content;global_popularity;metadata;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "3"
+      },
+      {
+        "source_combination": "als;content;regional_popularity;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "global_popularity;metadata;regional_popularity",
+        "recommendation_rows": "6"
+      },
+      {
+        "source_combination": "copurchase;global_popularity;metadata;preferred_category;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;content;metadata;preferred_category",
+        "recommendation_rows": "4"
+      },
+      {
+        "source_combination": "als;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "3"
+      },
+      {
+        "source_combination": "als;global_popularity;regional_popularity;segment_popularity",
+        "recommendation_rows": "57"
+      },
+      {
+        "source_combination": "copurchase;preferred_category",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;global_popularity;regional_popularity",
+        "recommendation_rows": "7"
+      },
+      {
+        "source_combination": "global_popularity;metadata;segment_popularity",
+        "recommendation_rows": "5"
+      },
+      {
+        "source_combination": "als;regional_popularity",
+        "recommendation_rows": "2"
+      },
+      {
+        "source_combination": "als;regional_popularity;segment_popularity",
+        "recommendation_rows": "4"
+      },
+      {
+        "source_combination": "als;content;global_popularity;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "5"
+      },
+      {
+        "source_combination": "global_popularity;metadata;preferred_category;segment_popularity",
+        "recommendation_rows": "6"
+      },
+      {
+        "source_combination": "regional_popularity;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;global_popularity;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "content;preferred_category",
+        "recommendation_rows": "4"
+      },
+      {
+        "source_combination": "content;copurchase;global_popularity;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "metadata;preferred_category;regional_popularity",
+        "recommendation_rows": "4"
+      },
+      {
+        "source_combination": "global_popularity;metadata;preferred_category;regional_popularity",
+        "recommendation_rows": "2"
+      },
+      {
+        "source_combination": "als;preferred_category;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;content;copurchase",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "content;copurchase;preferred_category",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;global_popularity;metadata;segment_popularity",
+        "recommendation_rows": "3"
+      },
+      {
+        "source_combination": "als;copurchase;metadata;regional_popularity;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "global_popularity;metadata",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "copurchase;global_popularity;regional_popularity;segment_popularity",
+        "recommendation_rows": "12"
+      },
+      {
+        "source_combination": "content;global_popularity;regional_popularity;segment_popularity",
+        "recommendation_rows": "2"
+      },
+      {
+        "source_combination": "content;global_popularity;metadata;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;content;metadata;preferred_category;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "copurchase;global_popularity;regional_popularity",
+        "recommendation_rows": "2"
+      },
+      {
+        "source_combination": "copurchase;global_popularity;metadata",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;copurchase;global_popularity;metadata",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "global_popularity;regional_popularity",
+        "recommendation_rows": "9"
+      },
+      {
+        "source_combination": "als;content;preferred_category;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "global_popularity;segment_popularity",
+        "recommendation_rows": "2"
+      },
+      {
+        "source_combination": "als;global_popularity;preferred_category;segment_popularity",
+        "recommendation_rows": "3"
+      },
+      {
+        "source_combination": "als;copurchase;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "content;copurchase;global_popularity;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;copurchase;global_popularity;regional_popularity;segment_popularity",
+        "recommendation_rows": "6"
+      },
+      {
+        "source_combination": "als;content;global_popularity;preferred_category;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;metadata;regional_popularity;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;global_popularity;metadata;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;content;global_popularity;regional_popularity;segment_popularity",
+        "recommendation_rows": "4"
+      },
+      {
+        "source_combination": "als;content;global_popularity;metadata;preferred_category;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;metadata;preferred_category;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "content;global_popularity;regional_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;content;global_popularity;metadata;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "3"
+      },
+      {
+        "source_combination": "als;content;copurchase;global_popularity;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "content;global_popularity;metadata;regional_popularity;segment_popularity",
+        "recommendation_rows": "2"
+      },
+      {
+        "source_combination": "als;copurchase;global_popularity;preferred_category;regional_popularity;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "copurchase;global_popularity;metadata;regional_popularity;segment_popularity",
+        "recommendation_rows": "1"
+      },
+      {
+        "source_combination": "als;copurchase;global_popularity;metadata;regional_popularity;segment_popularity",
+        "recommendation_rows": "2"
+      }
+    ],
+    "quality": [
+      {
+        "checked_customers": "100",
+        "invalid_customer_batches": "0",
+        "checked_at": "2026-09-09T11:04:04.967Z"
+      }
+    ],
+    "feedback": [
+      {
+        "feedback_events": "3",
+        "positive_events": "3",
+        "positive_feedback_rate": "1.0",
+        "recorded_impressions": "0",
+        "feedback_rate": null,
+        "limitation": "Feedback attribution is not verified; rate unavailable"
+      }
+    ],
+    "opportunities": [
+      {
+        "opportunity_type": "ACTIVE_PROMOTION",
+        "opportunities": "173",
+        "evaluated_at": "2026-09-09T11:02:45.579Z"
+      },
+      {
+        "opportunity_type": "BROWSE_OR_CART_WITHOUT_PURCHASE",
+        "opportunities": "150",
+        "evaluated_at": "2026-09-09T11:02:45.579Z"
+      }
+    ],
+    "evaluation": [
+      {
+        "metric": "selection_pass",
+        "value": "0.9925925925925926",
+        "scope": "Historical Phase 9 fixtures; not Phase 10 chat",
+        "source": "full_gpt-5.6-luna_20260908T081333.json",
+        "observed_at": "2026-09-08T08:13:33Z"
+      },
+      {
+        "metric": "arguments_pass",
+        "value": "1.0",
+        "scope": "Historical Phase 9 fixtures; not Phase 10 chat",
+        "source": "full_gpt-5.6-luna_20260908T081333.json",
+        "observed_at": "2026-09-08T08:13:33Z"
+      },
+      {
+        "metric": "behavior_pass",
+        "value": "0.9925925925925926",
+        "scope": "Historical Phase 9 fixtures; not Phase 10 chat",
+        "source": "full_gpt-5.6-luna_20260908T081333.json",
+        "observed_at": "2026-09-08T08:13:33Z"
+      },
+      {
+        "metric": "grounding_pass",
+        "value": "1.0",
+        "scope": "Historical Phase 9 fixtures; not Phase 10 chat",
+        "source": "full_gpt-5.6-luna_20260908T081333.json",
+        "observed_at": "2026-09-08T08:13:33Z"
+      },
+      {
+        "metric": "safety_pass",
+        "value": "1.0",
+        "scope": "Historical Phase 9 fixtures; not Phase 10 chat",
+        "source": "full_gpt-5.6-luna_20260908T081333.json",
+        "observed_at": "2026-09-08T08:13:33Z"
+      },
+      {
+        "metric": "trace_pass",
+        "value": "1.0",
+        "scope": "Historical Phase 9 fixtures; not Phase 10 chat",
+        "source": "full_gpt-5.6-luna_20260908T081333.json",
+        "observed_at": "2026-09-08T08:13:33Z"
+      },
+      {
+        "metric": "ndcg",
+        "value": null,
+        "scope": "Unavailable: no qualified future holdout for current release",
+        "source": "Not measured",
+        "observed_at": null
+      },
+      {
+        "metric": "recall",
+        "value": null,
+        "scope": "Unavailable: no qualified future holdout for current release",
+        "source": "Not measured",
+        "observed_at": null
+      },
+      {
+        "metric": "hit_rate",
+        "value": null,
+        "scope": "Unavailable: no qualified future holdout for current release",
+        "source": "Not measured",
+        "observed_at": null
+      },
+      {
+        "metric": "purchase_hit_rate",
+        "value": null,
+        "scope": "Unavailable: no qualified future holdout for current release",
+        "source": "Not measured",
+        "observed_at": null
+      },
+      {
+        "metric": "historical_endpoint_resume_seconds",
+        "value": "99.062",
+        "scope": "Historical Phase 6 test; not current App or idle timer latency",
+        "source": "cold_resume.json",
+        "observed_at": null
+      },
+      {
+        "metric": "historical_endpoint_warm_p95_seconds",
+        "value": "3.236",
+        "scope": "Historical Phase 6 test; not current App or idle timer latency",
+        "source": "live_inference.json",
+        "observed_at": null
+      }
+    ],
+    "requests": []
+  },
+  "opportunity_rows": "323",
+  "opportunity_idempotent": true,
+  "source_reconciliation": {
+    "mismatches": "0"
+  },
+  "findings": [],
+  "dashboard_id": "01f1ac3b61e01a99b47a1636f584ac95",
+  "embed_credentials": false,
+  "new_compute": 0,
+  "schedules_created": 0,
+  "browser_render_verified": false
+}

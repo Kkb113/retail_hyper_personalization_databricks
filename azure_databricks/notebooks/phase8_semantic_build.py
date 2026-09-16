@@ -11,6 +11,7 @@ from pathlib import Path
 
 from databricks.sdk import WorkspaceClient
 from pyspark.sql import functions as F
+from retail_hp_azure.customer_context import customer_view_sql
 
 started = time.monotonic()
 CATALOG = "intellify_databricks_demo"
@@ -44,7 +45,8 @@ views = {
         FROM {CATALOG}.serving.customer_recommendations WHERE registered_model_version = '3'""",
 }
 for name, select in views.items():
-    spark.sql(f"CREATE OR REPLACE VIEW {CATALOG}.serving.{name} AS {select}")
+    spark.sql(customer_view_sql() if name == "tool_customers"
+              else f"CREATE OR REPLACE VIEW {CATALOG}.serving.{name} AS {select}")
     spark.sql(f"ALTER VIEW {CATALOG}.serving.{name} OWNER TO `retail_hp_admins`")
     spark.sql(f"GRANT SELECT ON TABLE {CATALOG}.serving.{name} TO `retail_hp_app_runtime`")
 

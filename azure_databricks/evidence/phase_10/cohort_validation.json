@@ -1,0 +1,22 @@
+{
+  "status": "PASS_OPERATOR_RUNTIME",
+  "release": "34b91f434900c63f4741e10c5f95e74598278ebcb1cbc7a7786a57396dfdc2ee",
+  "inference_calls": 0,
+  "browser_sign_in_tested": false,
+  "customers": [
+    {
+      "customer_id": "CUS003101",
+      "purchase_entries": 21,
+      "recent_purchase_products": 10,
+      "distinct_recommendations": 10
+    },
+    {
+      "customer_id": "CUS000151",
+      "purchase_entries": 17,
+      "recent_purchase_products": 10,
+      "distinct_recommendations": 10
+    }
+  ],
+  "authorized_published_customers": 95,
+  "temporary_oauth_secret_revoked": true
+}

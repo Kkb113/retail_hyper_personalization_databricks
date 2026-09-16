@@ -1,0 +1,15 @@
+{
+  "status": "PASS_GENIE_PLAN",
+  "configuration_version": "retail_genie_v1",
+  "tables": 10,
+  "sample_questions": 6,
+  "raw_sql_examples": 0,
+  "stored_benchmarks": 0,
+  "live_business_acceptance_questions": 1,
+  "aggregate_only": true,
+  "new_azure_resources": 0,
+  "new_compute": 0,
+  "warehouse_auto_stop_minutes": 1,
+  "validation_allowance_inr": 100,
+  "allowance_is_not_invoice_cap": true
+}

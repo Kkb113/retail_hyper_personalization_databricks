@@ -1,0 +1,14 @@
+{
+  "status": "PASS_API_ONLY",
+  "checks": {
+    "authenticated_non_admin_session": true,
+    "luna_app_identity_chat": true,
+    "recommendation_cards": 3,
+    "cross_customer_denied": true,
+    "semantic_discovery": true,
+    "feedback_write_and_replay": true,
+    "realtime_scenario": true
+  },
+  "compute_started": false,
+  "temporary_oauth_secret_revoked": true
+}

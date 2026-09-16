@@ -1,0 +1,87 @@
+{
+  "status": "PASS_LOCAL_MODEL_REVIEW",
+  "live_validated": false,
+  "scope": "synthetic_demo_cohort",
+  "reviewed_customers": 100,
+  "selection_basis": "product category diversity and recorded purchase entries; not accuracy",
+  "repeat_customer_examples": [
+    {
+      "customer_id": "CUS003101",
+      "segment": "Premium Professional",
+      "purchase_entries": 21,
+      "unique_products": 10,
+      "categories": 9,
+      "products": [
+        "NorthNova Unisex Everyday Herbal Tea",
+        "NorthPeak Men's Organic Running Shoes",
+        "AeroNova Kids' Premium Jacket",
+        "HomeSound Kids' Premium Dumbbell Set",
+        "PulsePure Women's Classic Hiking Boots",
+        "UrbanPure Women's Premium Sunglasses",
+        "PulseSound Kids' Compact Fragrance Spray",
+        "PulseSound Women's Classic Lip Color",
+        "PulseField Kids' Performance Fragrance Spray",
+        "TrailForge Unisex Everyday Training Shoes"
+      ]
+    },
+    {
+      "customer_id": "CUS000151",
+      "segment": "Seasonal Gift Shopper",
+      "purchase_entries": 17,
+      "unique_products": 10,
+      "categories": 9,
+      "products": [
+        "AeroPeak Women's Lightweight Jacket",
+        "TrailNest Women's Performance Fragrance Spray",
+        "PulseLiving Women's Premium Sweater",
+        "UrbanLiving Unisex Lightweight Table Lamp",
+        "NorthNova Unisex Everyday Herbal Tea",
+        "LumaHaven Kids' Modern Training Leggings",
+        "HomeWave Unisex Organic Electrolyte Mix",
+        "TrailLabs Unisex Insulated Bath Towel Set",
+        "TrailLabs Kids' Everyday Bath Towel Set",
+        "PulseSound Women's Classic Lip Color"
+      ]
+    },
+    {
+      "customer_id": "CUS004851",
+      "segment": "Home and Lifestyle Shopper",
+      "purchase_entries": 3,
+      "unique_products": 10,
+      "categories": 9,
+      "products": [
+        "PulseQuest Unisex Performance Watch",
+        "HomePure Kids' Performance Watch",
+        "NorthNova Unisex Everyday Herbal Tea",
+        "PulseSound Women's Classic Lip Color",
+        "TechLane Unisex Compact Training Shoes",
+        "LumaNova Kids' Premium Winter Boots",
+        "NorthQuest Unisex Organic Facial Roller",
+        "UrbanCraft Kids' Insulated Dress Shoes",
+        "NorthSound Unisex Compact Dress",
+        "TechLane Kids' Compact Table Lamp"
+      ]
+    }
+  ],
+  "new_customer_example": [
+    {
+      "customer_id": "CUS000401",
+      "segment": "Home and Lifestyle Shopper",
+      "purchase_entries": 0,
+      "unique_products": 10,
+      "categories": 8,
+      "products": [
+        "AeroNova Kids' Premium Jacket",
+        "NorthLiving Men's Lightweight Jacket",
+        "NorthSound Men's Everyday Jacket",
+        "NorthNova Unisex Everyday Herbal Tea",
+        "PulseSound Women's Classic Lip Color",
+        "NorthQuest Unisex Organic Facial Roller",
+        "TechPeak Men's Classic Table Lamp",
+        "LumaLiving Kids' Compact Commuter Backpack",
+        "NorthSound Unisex Compact Dress",
+        "PulsePure Women's Classic Hiking Boots"
+      ]
+    }
+  ]
+}

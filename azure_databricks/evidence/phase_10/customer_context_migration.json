@@ -1,0 +1,18 @@
+{
+  "status": "PASS_VIEW_UPGRADE",
+  "rows": [
+    {
+      "evidence_version": "customer_context_v2",
+      "customers": "4684"
+    }
+  ],
+  "compute_started": false,
+  "new_resources": 0,
+  "new_grants": 0,
+  "ready_customers": 95,
+  "sample_customer_contracts_passed": [
+    "CUS000001",
+    "CUS002551",
+    "CUS004951"
+  ]
+}
