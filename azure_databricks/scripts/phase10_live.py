@@ -20,6 +20,7 @@ LEDGER = ROOT / "build/phase10-cost.local.json"
 DEMO_LEDGER = ROOT / "build/phase10-owner-demo.local.json"
 CHAT_LEDGER = ROOT / "build/phase10-chat-validation.local.json"
 PHASE11_LEDGER = ROOT / "build/phase11-validation.local.json"
+PRICING_LEDGER = ROOT / "build/pricing-phase4-validation.local.json"
 APP = "retail-hp-poc-app"
 ENDPOINT = "retail-hp-poc-recommender"
 
@@ -87,7 +88,13 @@ def stopped(context, warehouse):
     require(endpoint["state"].get("suspend") == "STOPPED", "Endpoint running")
 
 
-def start(context, *, owner_demo=False, chat_upgrade=False, phase11=False):
+def start(context, *, owner_demo=False, chat_upgrade=False, phase11=False, pricing_phase4=False):
+    require(
+        not pricing_phase4 or not (owner_demo or chat_upgrade or phase11),
+        "Choose one launch purpose",
+    )
+    if pricing_phase4:
+        chat_upgrade = True
     require(not phase11 or not (owner_demo or chat_upgrade), "Choose one launch purpose")
     if phase11:
         chat_upgrade = True  # Same bounded App-only upgrade, separate authorized ledger.
@@ -130,7 +137,9 @@ def start(context, *, owner_demo=False, chat_upgrade=False, phase11=False):
     # Explicit owner-requested demo is separate from completed validation history.
     # Neither ledger is reset; this option permits one bounded demo only.
     ledger_path = (
-        PHASE11_LEDGER
+        PRICING_LEDGER
+        if pricing_phase4
+        else PHASE11_LEDGER
         if phase11
         else CHAT_LEDGER
         if chat_upgrade
@@ -147,7 +156,7 @@ def start(context, *, owner_demo=False, chat_upgrade=False, phase11=False):
     # XXSmall warehouse with 1-minute idle stop, no real-time endpoint start.
     # Other launches retain 12 minutes. Tax/rate/storage margin is a planning
     # assumption, not a guaranteed Azure invoice ceiling.
-    reserve = 220
+    reserve = 250 if pricing_phase4 else 220
     # Owner approved a cumulative INR 440 allowance on 2026-09-09 after the
     # first startup timeout. Reservations persist even when actual billing lags.
     # Separate additional INR 220 chat-fix validation explicitly approved by owner.
@@ -156,6 +165,8 @@ def start(context, *, owner_demo=False, chat_upgrade=False, phase11=False):
     # on 2026-09-09, followed by INR 220 for the durable customer-readiness rollout.
     # Preserve all three earlier chat reservations; no fifth window is authorized.
     ceiling = 220 if phase11 else 880 if chat_upgrade else 220 if owner_demo else 440
+    if pricing_phase4:
+        ceiling = 500  # Two explicitly approved INR 250 windows; never reset reservations.
     require(ledger["reserved_inr"] + reserve <= ceiling, "Phase 10 launch allowance exhausted")
     ticket = uuid4().hex
     ledger["reserved_inr"] += reserve
@@ -176,7 +187,7 @@ def start(context, *, owner_demo=False, chat_upgrade=False, phase11=False):
     )
     # Owner asked to test too: one shared 20-minute window, not immediate teardown.
     # Chat uses batch recommendations; the real-time endpoint stays stopped.
-    deadline = int(time.time()) + (1200 if chat_upgrade else 720)
+    deadline = int(time.time()) + (1500 if pricing_phase4 else 1200 if chat_upgrade else 720)
     launch = {
         "ticket": ticket,
         "expires": deadline,
@@ -192,6 +203,11 @@ def start(context, *, owner_demo=False, chat_upgrade=False, phase11=False):
         "cohort_subjects": [control["operator_id"]],
     }
     Launch.model_validate_json(json.dumps(launch))
+    if pricing_phase4:
+        launch.update(
+            pricing_enabled=True, pricing_subjects=[control["operator_id"], str(tester.id)]
+        )
+        Launch.model_validate_json(json.dumps(launch))
     job = arm(context, deadline)
     require(time.time() < deadline - 480, "Insufficient safe launch window")
     # An installed old release can restart automatically with App compute. Give
@@ -319,7 +335,7 @@ def inspect(context):
     }
 
 
-def redeploy(context):
+def redeploy(context, *, pricing_repair=False):
     """Repair a failed build inside the existing lease; never start any compute."""
     state = json.loads(STATE.read_text())
     require(time.time() < state["deadline"] - 180, "Insufficient existing release window")
@@ -330,9 +346,54 @@ def redeploy(context):
     )
     require(context.client.apps.get(APP).compute_status.state.value == "ACTIVE", "App not active")
     previous = context.client.apps.get_deployment(APP, state["deployment_id"])
-    require(previous.status.state.value == "FAILED", "Only failed builds can be repaired")
+    if pricing_repair:
+        evidence = json.loads((ROOT / "build/pricing-phase4-http.local.json").read_text())
+        require(previous.status.state.value == "SUCCEEDED", "Expected deployed pricing failure")
+        require(
+            evidence.get("status") == "FAIL"
+            and evidence.get("release", state["release"]) == state["release"]
+            and (
+                evidence["checks"]["pricing"]["status"] == "unavailable"
+                or evidence.get("five_concurrent_sessions", {}).get("successful", 5) < 5
+            ),
+            "Pricing failure evidence required",
+        )
+        ledger = json.loads(PRICING_LEDGER.read_text())
+        require(
+            ledger["reserved_inr"] in {250, 500}, "Existing approved pricing reservation required"
+        )
+        require(not state.get("pricing_repair"), "Only one corrective deployment in this window")
+    else:
+        require(previous.status.state.value == "FAILED", "Only failed builds can be repaired")
     control = json.loads((ROOT / "build/phase10-release.local.json").read_text())
     verify_files(Path(control["local_package"]))
+    if pricing_repair:
+        ticket = uuid4().hex
+        launch = Launch.model_validate(
+            {
+                "ticket": ticket,
+                "expires": state["deadline"],
+                "warehouse_id": state["warehouse_id"],
+                "entitlements": [
+                    {
+                        "subject": state["operator_id"],
+                        "allowed_customers": [],
+                        "can_view_quality": True,
+                    },
+                    {"subject": state["tester_id"], "allowed_customers": ["CUS000001"]},
+                ],
+                "cohort_subjects": [state["operator_id"]],
+                "pricing_enabled": True,
+                "pricing_subjects": [state["operator_id"], state["tester_id"]],
+            }
+        )
+        # Preserve the same controller, deadline and reserved allowance. The
+        # fresh one-use claim is only for this explicitly recorded repair.
+        state.update(ticket=ticket, pricing_repair=True)
+        STATE.write_text(json.dumps(state))
+        context.client.secrets.put_secret(
+            "retail-hp-app-private", "launch", string_value=launch.model_dump_json()
+        )
     result = context.client.api_client.do(
         "POST",
         f"/api/2.0/apps/{APP}/deployments",
@@ -360,7 +421,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "--phase11", action="store_true", help="One approved INR 220 Phase 11 window"
     )
+    parser.add_argument("--pricing-phase4", action="store_true")
+    parser.add_argument("--pricing-repair", action="store_true")
     args = parser.parse_args()
+    require(not args.pricing_repair or args.command == "redeploy", "Repair requires redeploy")
+    require(not args.pricing_phase4 or args.command == "start", "Pricing flag requires start")
     require(not args.owner_demo or args.command == "start", "Demo flag requires start")
     require(not args.chat_upgrade or args.command == "start", "Upgrade flag requires start")
     require(not args.phase11 or args.command == "start", "Phase 11 flag requires start")
@@ -371,11 +436,12 @@ if __name__ == "__main__":
             owner_demo=args.owner_demo,
             chat_upgrade=args.chat_upgrade,
             phase11=args.phase11,
+            pricing_phase4=args.pricing_phase4,
         )
     elif args.command == "stop":
         result = {"stop_job": arm(context, int(time.time()))}
     elif args.command == "redeploy":
-        result = redeploy(context)
+        result = redeploy(context, pricing_repair=args.pricing_repair)
     else:
         result = inspect(context)
     print(json.dumps(result, indent=2))

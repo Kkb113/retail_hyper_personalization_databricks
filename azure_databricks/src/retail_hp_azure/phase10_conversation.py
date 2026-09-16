@@ -154,7 +154,10 @@ class ConversationalPlanner(AzureLunaPlanner):
     _usage_lock = threading.Lock()
 
     def _request(self, *args: Any, **kwargs: Any) -> Any:
-        require(self._usage_lock.acquire(blocking=False), "Concurrent LLM request")
+        started = time.monotonic()
+        budget = float(kwargs.get("timeout", 15))
+        require(self._usage_lock.acquire(timeout=min(10, budget)), "LLM queue is busy")
+        kwargs["timeout"] = max(0.1, budget - (time.monotonic() - started))
         self.last_usage = {}
         try:
             return super()._request(*args, **kwargs)

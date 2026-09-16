@@ -96,6 +96,7 @@ class Session:
     history: list[dict[str, str]] = field(default_factory=list)
     verified_evidence: list[dict[str, Any]] = field(default_factory=list)
     evidence_customers: set[str] = field(default_factory=set)
+    pricing_state: dict[str, Any] = field(default_factory=dict)
     lock: Any = field(default_factory=threading.Lock, repr=False, compare=False)
 
 

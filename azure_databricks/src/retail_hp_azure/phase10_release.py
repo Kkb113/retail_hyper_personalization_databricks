@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+import logging
 import os
 import time
 from pathlib import Path
@@ -32,11 +33,13 @@ class Launch(BaseModel):
     # Explicit server-owned role: only these already allowlisted actors may use
     # the complete published demo cohort. Other actors keep exact customer grants.
     cohort_subjects: list[str] = Field(default_factory=list, max_length=20)
+    pricing_enabled: bool = False
+    pricing_subjects: list[str] = Field(default_factory=list, max_length=20)
 
 
 def verify_files(root: Path) -> None:
     manifest = json.loads((root / "manifest.json").read_text())
-    require(0 < len(manifest) < 100, "Invalid release manifest")
+    require(0 < len(manifest) < 512, "Invalid release manifest")
     for name, digest in manifest.items():
         path = (root / name).resolve()
         require(path.is_relative_to(root.resolve()) and path.is_file(), "Release path drift")
@@ -70,19 +73,42 @@ def build_app(root: Path, client: Any, config: str, actor_secret: str) -> Any:
     require(len(entitlements) == len(launch.entitlements), "Duplicate actor mapping")
     require(set(launch.cohort_subjects) <= entitlements.keys(), "Unknown cohort actor")
     index = SemanticIndex(json.loads((root / "semantic.json").read_text()))
+    pricing = None
+    require(set(launch.pricing_subjects) <= entitlements.keys(), "Unknown pricing actor")
+    if launch.pricing_enabled:
+        try:
+            from dynamic_pricing_app.runtime import PricingRuntime
+
+            pricing = PricingRuntime.load(root / "pricing")
+        except Exception:
+            # Withhold pricing on any missing or invalid artifact. Retail remains
+            # available; never fall back to an unverified model or invented price.
+            logging.getLogger(__name__).exception(
+                "Pricing initialization failed; retail remains available"
+            )
+            pricing = None
     claim_launch(client, launch, now=time.time())
     runtime = WorkbenchRuntime(
         app_client=client,
         warehouse_id=launch.warehouse_id,
         entitlements=entitlements,
         cohort_subjects=frozenset(launch.cohort_subjects),
+        pricing=pricing,
+        pricing_subjects=frozenset(launch.pricing_subjects)
+        if launch.pricing_enabled
+        else frozenset(),
         actor_secret=actor_secret.encode(),
         ledger=root / ".runtime" / f"{launch.ticket}.json",
         index=index,
         lease_expires=launch.expires,
         trace_sink=TraceArchive(client, launch.ticket),
     )
-    return create_app(runtime, static_dir=root / "static", lease_expires=launch.expires)
+    return create_app(
+        runtime,
+        static_dir=root / "static",
+        lease_expires=launch.expires,
+        max_concurrent=5 if launch.pricing_enabled else 1,
+    )
 
 
 def main() -> None:

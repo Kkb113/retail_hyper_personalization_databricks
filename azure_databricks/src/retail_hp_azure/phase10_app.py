@@ -78,6 +78,7 @@ def create_app(
     static_dir: Path | None = None,
     lease_expires: float = 0,
     clock: Callable[[], float] = time.time,
+    max_concurrent: int = 1,
 ) -> FastAPI:
     """One worker only. Absolute external lease cannot be extended by browser traffic.
 
@@ -88,7 +89,9 @@ def create_app(
     app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
     sessions: dict[str, BrowserSession] = {}
     lock = threading.Lock()
-    capacity = threading.BoundedSemaphore(1)
+    if not 1 <= max_concurrent <= 5:
+        raise ValueError("App concurrency must be between one and five")
+    capacity = threading.BoundedSemaphore(max_concurrent)
     remaining = 100
 
     @app.middleware("http")

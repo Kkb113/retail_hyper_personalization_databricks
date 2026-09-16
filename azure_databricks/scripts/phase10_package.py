@@ -23,7 +23,7 @@ SCOPE = "retail-hp-app-private"
 REMOTE = "/Workspace/Shared/retail-hp-poc-app-releases"
 
 
-def prepare(context, *, active_window=False):
+def prepare(context, *, active_window=False, pricing_payload=None, pricing_wheel=None):
     require(context.apply, "Explicit apply required")
     client = context.client
     app = client.apps.get("retail-hp-poc-app")
@@ -85,6 +85,23 @@ def prepare(context, *, active_window=False):
     shutil.copyfile(ROOT / "azure_databricks/app/app.yaml", directory / "app.yaml")
     shutil.copyfile(ROOT / "azure_databricks/app/bootstrap.py", directory / "bootstrap.py")
     shutil.copyfile(wheels[0], directory / wheels[0].name)
+    if pricing_payload is not None:
+        from dynamic_pricing_app.runtime import PricingRuntime
+
+        payload = Path(pricing_payload).resolve()
+        pricing_artifact = Path(pricing_wheel).resolve()
+        require(
+            pricing_artifact.is_file() and pricing_artifact.suffix == ".whl",
+            "Pricing wheel required",
+        )
+        # Verify the complete immutable payload before copying any model or context.
+        PricingRuntime.load(payload)
+        pricing_manifest = json.loads((payload / "pricing-manifest.json").read_text())
+        for name in [*pricing_manifest["files"], "pricing-manifest.json"]:
+            target = directory / "pricing" / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(payload / name, target)
+        shutil.copyfile(pricing_artifact, directory / pricing_artifact.name)
     (directory / "semantic.json").write_bytes(snapshot)
     for offset in range(0, len(snapshot), 8_000_000):
         (directory / f"semantic-part-{offset // 8_000_000:03d}").write_bytes(
@@ -94,6 +111,9 @@ def prepare(context, *, active_window=False):
     # Databricks' pip installer is Python 3.11. Use its supported uv strategy
     # to retain the project's tested Python 3.12 runtime without changing SKU.
     pins = re.findall(r"^([A-Za-z0-9_.-]+==[^\s;\\]+)", lock, re.MULTILINE)
+    if pricing_payload is not None:
+        # MLflow 3.16 excludes anyio 4.15.0; 4.15.1 is the accepted pricing runtime.
+        pins = ["anyio==4.15.1" if pin.startswith("anyio==") else pin for pin in pins]
     require(pins, "Missing pinned App dependencies")
     project = (
         '[project]\nname = "retail-hp-app-release"\nversion = "0.1.0"\n'
@@ -104,6 +124,12 @@ def prepare(context, *, active_window=False):
         + json.dumps(wheels[0].name)
         + " }\n"
     )
+    if pricing_payload is not None:
+        project = project.replace(
+            '"retail-hp-azure-databricks[app]==0.1.0"]',
+            '"retail-hp-azure-databricks[app]==0.1.0", "intellify-pricing-app==0.1.0"]',
+        )
+        project += "intellify-pricing-app = { path = " + json.dumps(pricing_artifact.name) + " }\n"
     (directory / "pyproject.toml").write_text(project)
     uv = shutil.which("uv")
     require(uv is not None, "Install uv before packaging")
@@ -175,7 +201,8 @@ def prepare(context, *, active_window=False):
     )
     remote = REMOTE + "/" + release
     client.workspace.mkdirs(remote)
-    for path in directory.rglob("*"):
+
+    def upload_file(path):
         if path.is_file() and path.name != "semantic.json":
             require(path.stat().st_size < 10_485_760, "App export file too large")
             relative = str(path.relative_to(directory)).replace("\\", "/")
@@ -188,6 +215,11 @@ def prepare(context, *, active_window=False):
             except ResourceAlreadyExists:
                 with client.workspace.download(target, format=ExportFormat.AUTO) as stream:
                     require(stream.read() == path.read_bytes(), "Immutable remote file differs")
+
+    from concurrent.futures import ThreadPoolExecutor
+
+    with ThreadPoolExecutor(max_workers=4) as uploads:
+        list(uploads.map(upload_file, directory.rglob("*")))
     me = client.current_user.me()
     require(me.id and me.active, "Operator identity unavailable")
     control = {
@@ -212,12 +244,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true", required=True)
     parser.add_argument("--active-window", action="store_true")
+    parser.add_argument("--pricing-payload", type=Path)
+    parser.add_argument("--pricing-wheel", type=Path)
     args = parser.parse_args()
     print(
         json.dumps(
             prepare(
                 CloudContext(apply=True, direct_operator_token=True),
                 active_window=args.active_window,
+                pricing_payload=args.pricing_payload,
+                pricing_wheel=args.pricing_wheel,
             ),
             indent=2,
         )
