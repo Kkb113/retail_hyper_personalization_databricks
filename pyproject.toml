@@ -36,7 +36,7 @@ strict = true
 files = ["azure_databricks/src"]
 
 [[tool.mypy.overrides]]
-module = ["mlflow.*"]
+module = ["mlflow.*", "dynamic_pricing_app.*"]
 ignore_missing_imports = true
 follow_imports = "skip"
 

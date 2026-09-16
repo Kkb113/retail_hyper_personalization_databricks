@@ -232,7 +232,7 @@ def test_phase0_outputs_do_not_commit_raw_ids_credentials_or_personal_email():
             "dist",
             "node_modules",
             "__pycache__",
-        }.intersection(path.parts)
+        }.intersection(path.relative_to(AZURE_ROOT).parts)
         and not path.name.endswith(".local.json")
     ]
     assert output_paths

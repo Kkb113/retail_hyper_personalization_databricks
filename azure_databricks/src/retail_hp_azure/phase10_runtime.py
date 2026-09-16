@@ -85,6 +85,8 @@ class WorkbenchRuntime:
         trace_sink: Callable[[dict[str, Any]], None],
         user_client_factory: Callable[[str], Any] | None = None,
         cohort_subjects: frozenset[str] = frozenset(),
+        pricing: Any = None,
+        pricing_subjects: frozenset[str] = frozenset(),
     ) -> None:
         require(app_client.config.host.rstrip("/") == HOST, "Workspace scope drift")
         require(app_client.config.auth_type == "oauth-m2m", "App must use native workload OAuth")
@@ -98,6 +100,8 @@ class WorkbenchRuntime:
         self.entitlements, self.actor_secret = entitlements, actor_secret
         require(cohort_subjects <= entitlements.keys(), "Unknown cohort actor")
         self.cohort_subjects = cohort_subjects
+        require(pricing_subjects <= entitlements.keys(), "Unknown pricing actor")
+        self.pricing, self.pricing_subjects = pricing, pricing_subjects
         self._cohort_lock = threading.Lock()
         self._cohort_reads = 0
         self.index, self.lease_expires, self.trace_sink = index, lease_expires, trace_sink
@@ -196,6 +200,17 @@ class WorkbenchRuntime:
 
     def agent(self, token: str) -> RetailAgent:
         self._admit()
+        if self.pricing_subjects:
+            from retail_hp_azure.unified_pricing import UnifiedAgent
+
+            subject = str(self.user_client_factory(token).current_user.me().id)
+            return UnifiedAgent(
+                self.planner,
+                self.tools(token),
+                self.trace_sink,
+                self.pricing,
+                pricing_allowed=subject in self.pricing_subjects,
+            )
         return ConversationAgent(self.planner, self.tools(token), self.trace_sink)
 
     lease_expires: float = 0
